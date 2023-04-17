@@ -94,33 +94,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget AnButton(String text, bool isSlelected) {
-    return AnimatedButton(
-      width: 200,
-      text: text,
-      selectedTextColor: Colors.black,
-      transitionType: TransitionType.LEFT_TO_RIGHT,
-      isSelected: isSlelected,
-      backgroundColor: _btnColor,
-      selectedBackgroundColor: _bgColor,
-      borderRadius: 15,
-      textStyle: const TextStyle(
-          fontSize: 15,
-          letterSpacing: 5,
-          color: Colors.white,
-          fontWeight: FontWeight.w300),
-      onPress: () async {
-        setState(() {
-          isSlelected = !isSlelected;
-        });
-        await Future.delayed(const Duration(milliseconds: 2000));
-        setState(() {
-          isSlelected = !isSlelected;
-        });
-      },
-    );
-  }
-
   Widget PartyButtons() {
     return Expanded(
         child: Column(
@@ -138,6 +111,8 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: _btnColor,
             selectedBackgroundColor: _bgColor,
             borderRadius: 15,
+            borderWidth: 2,
+            borderColor: _btnColor,
             textStyle: const TextStyle(
                 fontSize: 15,
                 letterSpacing: 5,
@@ -166,6 +141,8 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: _btnColor,
             selectedBackgroundColor: _bgColor,
             borderRadius: 15,
+            borderWidth: 2,
+            borderColor: _btnColor,
             textStyle: const TextStyle(
                 fontSize: 15,
                 letterSpacing: 5,
@@ -194,6 +171,8 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: _btnColor,
             selectedBackgroundColor: _bgColor,
             borderRadius: 15,
+            borderWidth: 2,
+            borderColor: _btnColor,
             textStyle: const TextStyle(
                 fontSize: 15,
                 letterSpacing: 5,
