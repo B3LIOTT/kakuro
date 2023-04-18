@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       transitionType: transitionType,
-      transitionDuration: const Duration(milliseconds: 800),
+      transitionDuration: const Duration(milliseconds: 600),
         openBuilder: (BuildContext context, _) => const Menu(),
         closedBuilder: (context, VoidCallback openContainer) => Container(
       height: MediaQuery.of(context).size.width / 6,
