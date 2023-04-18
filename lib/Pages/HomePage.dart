@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
-
+import 'package:kakuro/Pages/StartPage.dart';
 import 'Menu.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Color _btnColor = const Color(0xFF61524D);
-  final Color _bgColor = const Color(0xFFFFDFC8);
+  final Color _bgBtn = const Color(0xFFFFDFC8);
+  final Color _bgColor = const Color(0xFFFFFFFF);
   late bool _isSlelected1;
   late bool _isSlelected2;
   late bool _isSlelected3;
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   Widget TopMenu() {
     return OpenContainer(
       closedElevation: 0,
-      closedColor: _btnColor,
+      closedColor: _bgBtn,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
@@ -41,10 +42,10 @@ class _HomePageState extends State<HomePage> {
       transitionDuration: const Duration(milliseconds: 800),
         openBuilder: (BuildContext context, _) => const Menu(),
         closedBuilder: (context, VoidCallback openContainer) => Container(
-      height: MediaQuery.of(context).size.width / 5,
+      height: MediaQuery.of(context).size.width / 6,
       width: MediaQuery.of(context).size.width / 2,
       decoration: BoxDecoration(
-        color: _btnColor,
+        color: _bgBtn,
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       child: ButtonBar(
@@ -100,12 +101,13 @@ class _HomePageState extends State<HomePage> {
        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
-          height: 50,
+          height: 60,
           width: 200,
           child: AnimatedButton(
+            height: 60,
             width: 200,
-            text: "NOUVELLE SOLO",
-            selectedTextColor: Colors.black,
+            text: "SOLO",
+            selectedTextColor: _btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected1,
             backgroundColor: _btnColor,
@@ -113,16 +115,17 @@ class _HomePageState extends State<HomePage> {
             borderRadius: 15,
             borderWidth: 2,
             borderColor: _btnColor,
-            textStyle: const TextStyle(
-                fontSize: 15,
-                letterSpacing: 5,
-                color: Colors.white,
-                fontWeight: FontWeight.w300),
+            textStyle: TextStyle(
+                fontSize: 30,
+                letterSpacing: 1,
+                color: _bgColor,
+                fontWeight: FontWeight.w400),
             onPress: () async {
               setState(() {
                 _isSlelected1 = !_isSlelected1;
               });
-              await Future.delayed(const Duration(milliseconds: 2000));
+              await Future.delayed(const Duration(milliseconds: 500));
+              Navigator.of(context).push(_startPageRoute("SOLO"));
               setState(() {
                 _isSlelected1 = !_isSlelected1;
               });
@@ -130,12 +133,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SizedBox(
-          height: 50,
-          width: 150,
+          height: 60,
+          width: 200,
           child: AnimatedButton(
+            height: 60,
             width: 200,
             text: "CREER",
-            selectedTextColor: Colors.black,
+            selectedTextColor: _btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected2,
             backgroundColor: _btnColor,
@@ -143,16 +147,17 @@ class _HomePageState extends State<HomePage> {
             borderRadius: 15,
             borderWidth: 2,
             borderColor: _btnColor,
-            textStyle: const TextStyle(
-                fontSize: 15,
-                letterSpacing: 5,
-                color: Colors.white,
-                fontWeight: FontWeight.w300),
+            textStyle: TextStyle(
+                fontSize: 30,
+                letterSpacing: 1,
+                color: _bgColor,
+                fontWeight: FontWeight.w400),
             onPress: () async {
               setState(() {
                 _isSlelected2 = !_isSlelected2;
               });
-              await Future.delayed(const Duration(milliseconds: 2000));
+              await Future.delayed(const Duration(milliseconds: 500));
+              Navigator.of(context).push(_startPageRoute("CREER"));
               setState(() {
                 _isSlelected2 = !_isSlelected2;
               });
@@ -160,12 +165,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         SizedBox(
-          height: 50,
-          width: 150,
+          height: 60,
+          width: 200,
           child: AnimatedButton(
+            height: 60,
             width: 200,
             text: "REJOINDRE",
-            selectedTextColor: Colors.black,
+            selectedTextColor: _btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected3,
             backgroundColor: _btnColor,
@@ -173,16 +179,17 @@ class _HomePageState extends State<HomePage> {
             borderRadius: 15,
             borderWidth: 2,
             borderColor: _btnColor,
-            textStyle: const TextStyle(
-                fontSize: 15,
-                letterSpacing: 5,
-                color: Colors.white,
-                fontWeight: FontWeight.w300),
+            textStyle: TextStyle(
+                fontSize: 30,
+                letterSpacing: 1,
+                color: _bgColor,
+                fontWeight: FontWeight.w400),
             onPress: () async {
               setState(() {
                 _isSlelected3 = !_isSlelected3;
               });
-              await Future.delayed(const Duration(milliseconds: 2000));
+              await Future.delayed(const Duration(milliseconds: 500));
+              Navigator.of(context).push(_startPageRoute("REJOINDRE"));
               setState(() {
                 _isSlelected3 = !_isSlelected3;
               });
@@ -206,6 +213,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _bgColor,
@@ -228,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ),
                 Container(
-                  color: Colors.black45,
+                  color: _bgColor,
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height / 2,
                 ),
@@ -236,4 +244,23 @@ class _HomePageState extends State<HomePage> {
               ])),
     );
   }
+
+  Route _startPageRoute(String source) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => StartPage(source),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
 }
