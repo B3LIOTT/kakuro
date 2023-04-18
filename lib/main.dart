@@ -25,6 +25,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static const Color btnColor = Color(0xFF61524D);
+  static const Color bgBtn = Color(0xFFFFDFC8);
+  static const Color bgColor = Color(0xFFFFFFFF);
 
   // This widget is the root of your application.
   @override

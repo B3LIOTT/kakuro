@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
 import 'package:kakuro/Pages/StartPage.dart';
+import 'package:kakuro/main.dart';
 import 'Menu.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final Color _btnColor = const Color(0xFF61524D);
-  final Color _bgBtn = const Color(0xFFFFDFC8);
-  final Color _bgColor = const Color(0xFFFFFFFF);
   late bool _isSlelected1;
   late bool _isSlelected2;
   late bool _isSlelected3;
@@ -34,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   Widget TopMenu() {
     return OpenContainer(
       closedElevation: 0,
-      closedColor: _bgBtn,
+      closedColor: MyApp.bgColor,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
@@ -44,9 +42,9 @@ class _HomePageState extends State<HomePage> {
         closedBuilder: (context, VoidCallback openContainer) => Container(
       height: MediaQuery.of(context).size.width / 6,
       width: MediaQuery.of(context).size.width / 2,
-      decoration: BoxDecoration(
-        color: _bgBtn,
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      decoration: const BoxDecoration(
+        color: MyApp.bgBtn,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: ButtonBar(
         alignment: MainAxisAlignment.spaceAround,
@@ -102,23 +100,23 @@ class _HomePageState extends State<HomePage> {
       children: [
         SizedBox(
           height: 60,
-          width: 200,
+          width: MediaQuery.of(context).size.width / 2,
           child: AnimatedButton(
             height: 60,
-            width: 200,
+            width: MediaQuery.of(context).size.width / 2,
             text: "SOLO",
-            selectedTextColor: _btnColor,
+            selectedTextColor: MyApp.btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected1,
-            backgroundColor: _btnColor,
-            selectedBackgroundColor: _bgColor,
+            backgroundColor: MyApp.btnColor,
+            selectedBackgroundColor: MyApp.bgColor,
             borderRadius: 15,
             borderWidth: 2,
-            borderColor: _btnColor,
-            textStyle: TextStyle(
+            borderColor: MyApp.btnColor,
+            textStyle: const TextStyle(
                 fontSize: 30,
                 letterSpacing: 1,
-                color: _bgColor,
+                color: MyApp.bgColor,
                 fontWeight: FontWeight.w400),
             onPress: () async {
               setState(() {
@@ -134,23 +132,23 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(
           height: 60,
-          width: 200,
+          width: MediaQuery.of(context).size.width / 2,
           child: AnimatedButton(
             height: 60,
-            width: 200,
+            width: MediaQuery.of(context).size.width / 2,
             text: "CREER",
-            selectedTextColor: _btnColor,
+            selectedTextColor: MyApp.btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected2,
-            backgroundColor: _btnColor,
-            selectedBackgroundColor: _bgColor,
+            backgroundColor: MyApp.btnColor,
+            selectedBackgroundColor: MyApp.bgColor,
             borderRadius: 15,
             borderWidth: 2,
-            borderColor: _btnColor,
-            textStyle: TextStyle(
+            borderColor: MyApp.btnColor,
+            textStyle: const TextStyle(
                 fontSize: 30,
                 letterSpacing: 1,
-                color: _bgColor,
+                color: MyApp.bgColor,
                 fontWeight: FontWeight.w400),
             onPress: () async {
               setState(() {
@@ -166,23 +164,23 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(
           height: 60,
-          width: 200,
+          width: MediaQuery.of(context).size.width / 2,
           child: AnimatedButton(
             height: 60,
-            width: 200,
+            width: MediaQuery.of(context).size.width / 2,
             text: "REJOINDRE",
-            selectedTextColor: _btnColor,
+            selectedTextColor: MyApp.btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected3,
-            backgroundColor: _btnColor,
-            selectedBackgroundColor: _bgColor,
+            backgroundColor: MyApp.btnColor,
+            selectedBackgroundColor: MyApp.bgColor,
             borderRadius: 15,
             borderWidth: 2,
-            borderColor: _btnColor,
-            textStyle: TextStyle(
+            borderColor: MyApp.btnColor,
+            textStyle: const TextStyle(
                 fontSize: 30,
                 letterSpacing: 1,
-                color: _bgColor,
+                color: MyApp.bgColor,
                 fontWeight: FontWeight.w400),
             onPress: () async {
               setState(() {
@@ -216,7 +214,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _bgColor,
+      backgroundColor: MyApp.bgColor,
       body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -236,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ),
                 Container(
-                  color: _bgColor,
+                  color: MyApp.bgColor,
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height / 2,
                 ),
