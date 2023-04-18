@@ -53,7 +53,7 @@ class _StartPageState extends State<StartPage> {
                 textAlign: TextAlign.center,
                 cursorColor: Colors.black,
                 style: const TextStyle(
-                  fontSize: 40,
+                  fontSize: 35,
                   //fontFamily:
                 ),
                 controller: textFieldController,
@@ -79,7 +79,7 @@ class _StartPageState extends State<StartPage> {
                     hintText: 'XXXXX-YYYY',
                     hintStyle: TextStyle(
                       color: Colors.grey.withOpacity(0.8),
-                      fontSize: 40,
+                      fontSize: 30,
                     ))),
           ),
 
