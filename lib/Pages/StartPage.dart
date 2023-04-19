@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import '../main.dart';
 import 'Menu.dart';
+import 'dart:io';
+import 'dart:convert';
 
 class StartPage extends StatefulWidget {
   late String _source;
@@ -20,6 +22,7 @@ class _StartPageState extends State<StartPage> {
   final transitionType = ContainerTransitionType.fadeThrough;
   late Alignment _menuAlignment;
   final TextEditingController textFieldController = TextEditingController();
+  String _KeySTR = "";
 
   @override
   void initState() {
@@ -69,7 +72,13 @@ class _StartPageState extends State<StartPage> {
         ];
         break;
       case "CREER":
-        children = [];
+        children = [
+          (_KeySTR != "")? Text("Clé: " + _KeySTR, style: const TextStyle(
+            fontSize: 30,
+            color: MyApp.btnColor,
+            fontWeight: FontWeight.w400,
+          ),): Text("Attente de la clé du serveur privé"),
+        ];
         break;
 
       case "REJOINDRE":
@@ -237,8 +246,9 @@ class _StartPageState extends State<StartPage> {
             _isSlelected = !_isSlelected;
           });
           await Future.delayed(const Duration(milliseconds: 500));
-
+          final json = await createParty();
           setState(() {
+            _KeySTR = json["key"] + "-" + json["port"].toString();
             _isSlelected = !_isSlelected;
           });
         },
@@ -310,5 +320,115 @@ class _StartPageState extends State<StartPage> {
         );
       },
     );
+  }
+
+
+  /*-------------------------------------Creation de partie multi-------------------------------------*/
+  late Socket socket;
+  final String _IP_SERVER = "192.168.106.36";
+  final int _MAIN_SERVER_PORT = 8080;
+  List<List<int>> _gameMatrix = [];
+
+  dynamic createParty() async {
+    late final jsonData;
+    try {
+      final socket = await Socket.connect(_IP_SERVER, _MAIN_SERVER_PORT);
+      print("Connexion au serveur principal sur le port $_MAIN_SERVER_PORT");
+
+      final input = Utf8Decoder().bind(socket).take(1);
+      final responseBytes = await input.first;
+      jsonData = json.decode(responseBytes);
+
+      // Fermeture de la connexion avec le serveur principal
+      socket.destroy();
+    } catch (e) {
+      print("Erreur lors de la connexion au serveur : $e");
+      exit(1);
+    }
+
+    // Connexion au serveur privé
+    connexionHandlerFromCreate(jsonData);
+
+    return jsonData;
+  }
+
+  void connexionHandlerFromCreate(jsonData) {
+    // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
+
+    print("Serveur privé => $jsonData");
+
+    // Connexion au serveur privé
+    try {
+      Socket.connect(_IP_SERVER, jsonData["port"]).then((Socket sock) {
+        socket = sock;
+        final input = Utf8Decoder().bind(sock);
+
+        // Envoi de la clé au serveur privé
+        final key = jsonEncode(jsonData["key"]);
+        socket.write(key);
+
+        input.listen(dataHandler,
+            onError: errorHandler, onDone: doneHandler, cancelOnError: false);
+      });
+    } catch (e) {
+      print("Erreur lors de la connexion au serveur privé : $e");
+      exit(1);
+    }
+  }
+
+  void dataHandler(String data) {
+    // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
+
+    // Conversion de la liste d'entiers en matrice de jeu
+    final dynamicMatrix = jsonDecode(data);
+    List<List<int>> matrix = List<List<int>>.generate(
+        dynamicMatrix.length,
+            (i) => List<int>.generate(
+            dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
+
+    updateGame(matrix);
+    print("Matrice du jeu : $_gameMatrix");
+  }
+
+  void updateGame(List<List<int>> matrix) {
+    // Actualisation de la matrice du jeu
+    _gameMatrix = matrix;
+  }
+
+  void errorHandler(error, StackTrace trace) {
+    print(error);
+  }
+
+  void doneHandler() {
+    socket.destroy();
+    exit(0);
+  }
+
+  /*-------------------------------------Rejoindre de partie multi-------------------------------------*/
+  late final int _PORT;
+  late final String _KEY;
+
+  void joinParty() {
+    print("Entrez le port du serveur privé : ");
+    _PORT = int.parse(stdin.readLineSync()!);
+    print("Entrez la clé du serveur privé :");
+    _KEY = stdin.readLineSync()!;
+
+    try {
+      Socket.connect(_IP_SERVER, _PORT).then((Socket sock) {
+        socket = sock;
+        final input = Utf8Decoder().bind(sock);
+
+        // Envoi de la clé au serveur privé
+        final key = jsonEncode(_KEY);
+        socket.write(key);
+
+        input.listen(dataHandler,
+            onError: errorHandler, onDone: doneHandler, cancelOnError: false);
+      });
+    } catch (e) {
+      print("Erreur lors de la connexion au serveur : $e");
+      exit(1);
+    }
   }
 }
