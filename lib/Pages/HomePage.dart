@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
@@ -18,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   late bool _isSlelected3;
   final transitionType = ContainerTransitionType.fadeThrough;
   late Alignment _menuAlignment;
+  int _count = 0;
 
   @override
   void initState() {
@@ -237,6 +240,15 @@ class _HomePageState extends State<HomePage> {
                   color: MyApp.bgColor,
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height / 2.5,
+                  child: !(_count == 10)? InkWell(onTap: (){setState((){_count++;});}, child:Image.asset("lib/assets/images/logo.png", height: MediaQuery.of(context).size.height / 3.3))
+                      : Container(
+                    height: MediaQuery.of(context).size.height / 3.3,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipOval(child:Image.asset("lib/assets/images/easterEgg.png", fit: BoxFit.cover)),
+                  ),
                 ),
                 PartyButtons(),
               ])),
