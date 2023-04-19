@@ -114,7 +114,7 @@ class _StartPageState extends State<StartPage> {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       transitionType: transitionType,
-      transitionDuration: const Duration(milliseconds: 600),
+      transitionDuration: const Duration(milliseconds: 500),
       openBuilder: (BuildContext context, _) => const Menu(),
       closedBuilder: (context, VoidCallback openContainer) => Container(
         height: MediaQuery.of(context).size.width / 6,
@@ -131,7 +131,7 @@ class _StartPageState extends State<StartPage> {
                 setState(() {
                   _menuAlignment = Alignment.centerLeft;
                 });
-                await Future.delayed(const Duration(milliseconds: 400));
+                await Future.delayed(const Duration(milliseconds: 200));
                 setState(() {
                   _menuAlignment = Alignment.centerRight;
                 });
@@ -143,7 +143,7 @@ class _StartPageState extends State<StartPage> {
                 setState(() {
                   _menuAlignment = Alignment.centerLeft;
                 });
-                await Future.delayed(const Duration(milliseconds: 400));
+                await Future.delayed(const Duration(milliseconds: 200));
                 setState(() {
                   _menuAlignment = Alignment.centerRight;
                 });
@@ -155,7 +155,7 @@ class _StartPageState extends State<StartPage> {
                 setState(() {
                   _menuAlignment = Alignment.centerLeft;
                 });
-                await Future.delayed(const Duration(milliseconds: 400));
+                await Future.delayed(const Duration(milliseconds: 200));
                 openContainer();
                 await Future.delayed(const Duration(milliseconds: 100));
                 setState(() {
@@ -237,7 +237,7 @@ class _StartPageState extends State<StartPage> {
                     AnimatedContainer(
                       width: MediaQuery.of(context).size.width /1.5,
                       curve: Curves.easeInOut,
-                      duration: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 200),
                       alignment: _menuAlignment,
                       child: TopMenu(),
                     )
