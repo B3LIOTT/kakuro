@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   color: MyApp.bgColor,
                   alignment: Alignment.center,
-                  height: MediaQuery.of(context).size.height / 2,
+                  height: MediaQuery.of(context).size.height / 2.5,
                 ),
                 PartyButtons(),
               ])),

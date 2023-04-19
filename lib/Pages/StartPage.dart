@@ -54,7 +54,6 @@ class _StartPageState extends State<StartPage> {
                 cursorColor: Colors.black,
                 style: const TextStyle(
                   fontSize: 35,
-                  //fontFamily:
                 ),
                 controller: textFieldController,
                 decoration: InputDecoration(
