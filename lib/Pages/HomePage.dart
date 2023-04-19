@@ -41,65 +41,85 @@ class _HomePageState extends State<HomePage> {
       ),
       transitionType: transitionType,
       transitionDuration: const Duration(milliseconds: 600),
-        openBuilder: (BuildContext context, _) => const Menu(),
-        closedBuilder: (context, VoidCallback openContainer) => Container(
-      height: MediaQuery.of(context).size.width / 6,
-      width: MediaQuery.of(context).size.width / 2,
-      decoration: const BoxDecoration(
-        color: MyApp.bgBtn,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+      openBuilder: (BuildContext context, _) => const Menu(),
+      closedBuilder: (context, VoidCallback openContainer) => Container(
+        height: MediaQuery.of(context).size.width / 6,
+        width: MediaQuery.of(context).size.width / 2,
+        decoration: const BoxDecoration(
+          color: MyApp.bgBtn,
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        child: ButtonBar(
+          alignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: MyApp.btnColor,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.leaderboard,
+                  color : Colors.white,
+                ),
+                onPressed: () {
+                },
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: MyApp.btnColor,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const ImageIcon(
+                  AssetImage('lib/assets/images/info.png'),
+                  color : Colors.white,
+                ),
+                onPressed: () async {
+                  setState(() {
+                    _menuAlignment = Alignment.center;
+                  });
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  setState(() {
+                    _menuAlignment = Alignment.centerRight;
+                  });
+                },
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: MyApp.btnColor,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const ImageIcon(
+                  AssetImage('lib/assets/images/settings.png'),
+                  color : Colors.white,
+                ),
+                onPressed: () async {
+                  setState(() {
+                    _menuAlignment = Alignment.center;
+                  });
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  openContainer();
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  setState(() {
+                    _menuAlignment = Alignment.centerRight;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-      child: ButtonBar(
-        alignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            onPressed: () async {
-                setState(() {
-                  _menuAlignment = Alignment.center;
-                });
-                await Future.delayed(const Duration(milliseconds: 400));
-                setState(() {
-                  _menuAlignment = Alignment.centerRight;
-                });
-            },
-            icon: const Icon(Icons.home),
-          ),
-          IconButton(
-            onPressed: () async {
-              setState(() {
-                _menuAlignment = Alignment.center;
-              });
-              await Future.delayed(const Duration(milliseconds: 400));
-              setState(() {
-                _menuAlignment = Alignment.centerRight;
-              });
-            },
-            icon: const Icon(Icons.home),
-          ),
-          IconButton(
-            onPressed: () async {
-                setState(() {
-                _menuAlignment = Alignment.center;
-                });
-                await Future.delayed(const Duration(milliseconds: 400));
-                openContainer();
-                await Future.delayed(const Duration(milliseconds: 100));
-                setState(() {
-                _menuAlignment = Alignment.centerRight;
-                });
-              },
-            icon: const Icon(Icons.home),
-          )
-        ],
-      ),
-     ),
     );
   }
 
   Widget PartyButtons() {
     return Expanded(
         child: Column(
-       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
           height: 60,
@@ -197,21 +217,9 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
-        Container(
-          alignment: Alignment.center,
-          margin: const EdgeInsets.only(top: 10),
-          height: MediaQuery.of(context).padding.bottom + 15,
-          child: const Text("Made by 3 INSA Hauts De France students",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300
-              )
-          )
-        )
+
       ],
-      )
-    );
+    ));
   }
 
   @override
@@ -221,49 +229,58 @@ class _HomePageState extends State<HomePage> {
       body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height / 5,
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top + 10, right: 20),
-                  alignment: Alignment.topRight,
-                  child: AnimatedContainer(
-                    curve: Curves.easeInOut,
-                    duration: const Duration(milliseconds: 400),
-                    alignment: _menuAlignment,
-                    child: TopMenu(),
-                  )
-                ),
-                Container(
-                  color: MyApp.bgColor,
-                  alignment: Alignment.center,
-                  height: MediaQuery.of(context).size.height / 2.5,
-                  child: !(_count == 10)? InkWell(onTap: (){setState((){_count++;});}, child:Image.asset("lib/assets/images/logo.png", height: MediaQuery.of(context).size.height / 3.3))
-                      : Container(
-                    height: MediaQuery.of(context).size.height / 3.3,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Container(
+                height: MediaQuery.of(context).size.height / 5,
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 10, right: 20),
+                alignment: Alignment.topRight,
+                child: AnimatedContainer(
+                  curve: Curves.easeInOut,
+                  duration: const Duration(milliseconds: 400),
+                  alignment: _menuAlignment,
+                  child: TopMenu(),
+                )),
+            Container(
+              color: MyApp.bgColor,
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height / 2.25,
+              child: !(_count == 10)
+                  ? InkWell(
+                      onTap: () {
+                        setState(() {
+                          _count++;
+                        });
+                      },
+                      child: Image.asset("lib/assets/images/logo.png",
+                          height: MediaQuery.of(context).size.height / 3.3))
+                  : Container(
+                      height: MediaQuery.of(context).size.height / 3.3,
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipOval(
+                          child: Image.asset("lib/assets/images/easterEgg.png",
+                              fit: BoxFit.cover)),
                     ),
-                    child: ClipOval(child:Image.asset("lib/assets/images/easterEgg.png", fit: BoxFit.cover)),
-                  ),
-                ),
-                PartyButtons(),
-              ])),
+            ),
+            PartyButtons(),
+          ])),
     );
   }
 
   Route _startPageRoute(String source) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => StartPage(source),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          StartPage(source),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -272,5 +289,4 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
 }
