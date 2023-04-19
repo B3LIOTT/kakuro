@@ -1,10 +1,8 @@
 import 'package:animations/animations.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-
-
 import '../main.dart';
 import 'Menu.dart';
 
@@ -36,13 +34,42 @@ class _StartPageState extends State<StartPage> {
     switch (source) {
       case "SOLO":
         children = [
+          SizedBox(
+            height: 60,
+            width: MediaQuery.of(context).size.width / 2,
+            child: AnimatedButton(
+              height: 60,
+              width: MediaQuery.of(context).size.width / 2,
+              text: "CONTINUER",
+              selectedTextColor: MyApp.btnColor,
+              transitionType: TransitionType.LEFT_TO_RIGHT,
+              isSelected: _isSlelected,
+              backgroundColor: MyApp.btnColor,
+              selectedBackgroundColor: MyApp.bgColor,
+              borderRadius: 15,
+              borderWidth: 2,
+              borderColor: MyApp.btnColor,
+              textStyle: const TextStyle(
+                  fontSize: 30,
+                  letterSpacing: 1,
+                  color: MyApp.bgColor,
+                  fontWeight: FontWeight.w400),
+              onPress: () async {
+                setState(() {
+                  _isSlelected = !_isSlelected;
+                });
+                await Future.delayed(const Duration(milliseconds: 500));
 
+                setState(() {
+                  _isSlelected = !_isSlelected;
+                });
+              },
+            ),
+          )
         ];
         break;
       case "CREER":
-        children = [
-
-        ];
+        children = [];
         break;
 
       case "REJOINDRE":
@@ -51,7 +78,7 @@ class _StartPageState extends State<StartPage> {
             height: 100,
             width: MediaQuery.of(context).size.width / 1.5,
             child: TextField(
-              textCapitalization: TextCapitalization.characters,
+                textCapitalization: TextCapitalization.characters,
                 textAlign: TextAlign.center,
                 cursorColor: Colors.black,
                 style: const TextStyle(
@@ -200,11 +227,11 @@ class _StartPageState extends State<StartPage> {
         borderRadius: 15,
         borderWidth: 2,
         borderColor: MyApp.btnColor,
-        textStyle: TextStyle(
-            fontSize: 30 * MediaQuery.of(context).size.height / 1000,
-            letterSpacing: 0,
+        textStyle: const TextStyle(
+            fontSize: 30,
+            letterSpacing: 1,
             color: MyApp.bgColor,
-            fontWeight: FontWeight.w300),
+            fontWeight: FontWeight.w400),
         onPress: () async {
           setState(() {
             _isSlelected = !_isSlelected;
