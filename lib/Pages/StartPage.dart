@@ -88,7 +88,24 @@ class _StartPageState extends State<StartPage> {
     return children;
   }
 
-  @override
+  Widget returnBtn() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: MyApp.bgBtn,
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
   Widget TopMenu() {
     return OpenContainer(
       closedElevation: 0,
@@ -112,7 +129,7 @@ class _StartPageState extends State<StartPage> {
             IconButton(
               onPressed: () async {
                 setState(() {
-                  _menuAlignment = Alignment.center;
+                  _menuAlignment = Alignment.centerLeft;
                 });
                 await Future.delayed(const Duration(milliseconds: 400));
                 setState(() {
@@ -124,7 +141,7 @@ class _StartPageState extends State<StartPage> {
             IconButton(
               onPressed: () async {
                 setState(() {
-                  _menuAlignment = Alignment.center;
+                  _menuAlignment = Alignment.centerLeft;
                 });
                 await Future.delayed(const Duration(milliseconds: 400));
                 setState(() {
@@ -136,7 +153,7 @@ class _StartPageState extends State<StartPage> {
             IconButton(
               onPressed: () async {
                 setState(() {
-                  _menuAlignment = Alignment.center;
+                  _menuAlignment = Alignment.centerLeft;
                 });
                 await Future.delayed(const Duration(milliseconds: 400));
                 openContainer();
@@ -210,16 +227,23 @@ class _StartPageState extends State<StartPage> {
           width: MediaQuery.of(context).size.width,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Container(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10),
                 height: MediaQuery.of(context).size.height / 5,
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 10, right: 20),
                 alignment: Alignment.topRight,
-                child: AnimatedContainer(
-                  curve: Curves.easeInOut,
-                  duration: const Duration(milliseconds: 400),
-                  alignment: _menuAlignment,
-                  child: TopMenu(),
-                )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    returnBtn(),
+                    AnimatedContainer(
+                      width: MediaQuery.of(context).size.width /1.5,
+                      curve: Curves.easeInOut,
+                      duration: const Duration(milliseconds: 400),
+                      alignment: _menuAlignment,
+                      child: TopMenu(),
+                    )
+                  ],
+                )
+                ),
             midWidget(widget._source),
             playButton(),
             (widget._source == "REJOINDRE")? const Expanded(
