@@ -246,9 +246,22 @@ class _StartPageState extends State<StartPage> {
             _isSlelected = !_isSlelected;
           });
           await Future.delayed(const Duration(milliseconds: 500));
-          final json = await createParty();
+
+          switch(widget._source){
+            case "CREER":
+              final json = await createParty();
+              setState(() {
+                _KeySTR = json["key"] + "-" + json["port"].toString();
+              });
+              break;
+            case "REJOINDRE":
+              _KeySTR = textFieldController.text.split("-")[0];
+              joinParty(_KeySTR, int.parse(textFieldController.text.split("-")[1]));
+              break;
+            case "Play":
+              break;
+          }
           setState(() {
-            _KeySTR = json["key"] + "-" + json["port"].toString();
             _isSlelected = !_isSlelected;
           });
         },
@@ -408,12 +421,9 @@ class _StartPageState extends State<StartPage> {
   late final int _PORT;
   late final String _KEY;
 
-  void joinParty() {
-    print("Entrez le port du serveur privé : ");
-    _PORT = int.parse(stdin.readLineSync()!);
-    print("Entrez la clé du serveur privé :");
-    _KEY = stdin.readLineSync()!;
-
+  void joinParty(String KEY, int PORT) {
+    _PORT = PORT;
+    _KEY = KEY;
     try {
       Socket.connect(_IP_SERVER, _PORT).then((Socket sock) {
         socket = sock;
