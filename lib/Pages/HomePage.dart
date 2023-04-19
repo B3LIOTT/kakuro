@@ -116,8 +116,8 @@ class _HomePageState extends State<HomePage> {
             borderRadius: 15,
             borderWidth: 2,
             borderColor: MyApp.btnColor,
-            textStyle: const TextStyle(
-                fontSize: 30,
+            textStyle: TextStyle(
+                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
                 letterSpacing: 1,
                 color: MyApp.bgColor,
                 fontWeight: FontWeight.w400),
@@ -148,8 +148,8 @@ class _HomePageState extends State<HomePage> {
             borderRadius: 15,
             borderWidth: 2,
             borderColor: MyApp.btnColor,
-            textStyle: const TextStyle(
-                fontSize: 30,
+            textStyle: TextStyle(
+                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
                 letterSpacing: 1,
                 color: MyApp.bgColor,
                 fontWeight: FontWeight.w400),
@@ -180,8 +180,8 @@ class _HomePageState extends State<HomePage> {
             borderRadius: 15,
             borderWidth: 2,
             borderColor: MyApp.btnColor,
-            textStyle: const TextStyle(
-                fontSize: 30,
+            textStyle: TextStyle(
+                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
                 letterSpacing: 1,
                 color: MyApp.bgColor,
                 fontWeight: FontWeight.w400),
