@@ -2,6 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
 
 import '../main.dart';
 import 'Menu.dart';
@@ -198,11 +200,11 @@ class _StartPageState extends State<StartPage> {
         borderRadius: 15,
         borderWidth: 2,
         borderColor: MyApp.btnColor,
-        textStyle: const TextStyle(
-            fontSize: 30,
-            letterSpacing: 1,
+        textStyle: TextStyle(
+            fontSize: 30 * MediaQuery.of(context).size.height / 1000,
+            letterSpacing: 0,
             color: MyApp.bgColor,
-            fontWeight: FontWeight.w400),
+            fontWeight: FontWeight.w300),
         onPress: () async {
           setState(() {
             _isSlelected = !_isSlelected;
@@ -249,7 +251,7 @@ class _StartPageState extends State<StartPage> {
             (widget._source == "REJOINDRE")? const Expanded(
                 child: Padding(
                     padding: EdgeInsets.all(40),
-                    child: Text(
+                    child: AutoSizeText(
                       "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXXX-YYYY \navec X une lettre majuscule et Y un chiffre",
                       textAlign: TextAlign.center,
                       style: TextStyle(
