@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -15,20 +16,61 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late bool _isSlelected1;
-  late bool _isSlelected2;
-  late bool _isSlelected3;
+  late List<bool> _isSlelected;
   final transitionType = ContainerTransitionType.fadeThrough;
   late Alignment _menuAlignment;
   int _count = 0;
+  StreamController<bool> _clickController = StreamController();
 
   @override
   void initState() {
     super.initState();
-    _isSlelected1 = false;
-    _isSlelected2 = false;
-    _isSlelected3 = false;
+    _isSlelected = [false, false, false];
     _menuAlignment = Alignment.centerRight;
+    _clickController.add(false);
+  }
+
+  void openPage(String page) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    Navigator.of(context).push(_startPageRoute(page));
+    _clickController.add(false);
+  }
+
+  Widget bouton(String text, int i, snapshot) {
+        return SizedBox(
+          height: 60,
+          width: MediaQuery.of(context).size.width / 2,
+          child: AnimatedButton(
+            height: 60,
+            width: MediaQuery.of(context).size.width / 2,
+            text: text,
+            selectedTextColor: MyApp.btnColor,
+            transitionType: TransitionType.LEFT_TO_RIGHT,
+            isSelected: _isSlelected[i],
+            backgroundColor: MyApp.btnColor,
+            selectedBackgroundColor: MyApp.bgColor,
+            borderRadius: 15,
+            borderWidth: 2,
+            borderColor: MyApp.btnColor,
+            textStyle: TextStyle(
+                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
+                letterSpacing: 1,
+                color: MyApp.bgColor,
+                fontWeight: FontWeight.w400),
+            onPress:  snapshot.hasData && snapshot.data == false ? () async {
+              _clickController.add(true);
+              setState(() {
+                _isSlelected[i] = !_isSlelected[i];
+              });
+              await Future.delayed(const Duration(milliseconds: 500));
+              Navigator.of(context).push(_startPageRoute(text));
+              _clickController.add(false);
+              setState(() {
+                _isSlelected[i] = !_isSlelected[i];
+              });
+            } : null,
+          )
+        );
   }
 
   @override
@@ -118,108 +160,20 @@ class _HomePageState extends State<HomePage> {
 
   Widget PartyButtons() {
     return Expanded(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          height: 60,
-          width: MediaQuery.of(context).size.width / 2,
-          child: AnimatedButton(
-            height: 60,
-            width: MediaQuery.of(context).size.width / 2,
-            text: "SOLO",
-            selectedTextColor: MyApp.btnColor,
-            transitionType: TransitionType.LEFT_TO_RIGHT,
-            isSelected: _isSlelected1,
-            backgroundColor: MyApp.btnColor,
-            selectedBackgroundColor: MyApp.bgColor,
-            borderRadius: 15,
-            borderWidth: 2,
-            borderColor: MyApp.btnColor,
-            textStyle: TextStyle(
-                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
-                letterSpacing: 1,
-                color: MyApp.bgColor,
-                fontWeight: FontWeight.w400),
-            onPress: () async {
-              setState(() {
-                _isSlelected1 = !_isSlelected1;
-              });
-              await Future.delayed(const Duration(milliseconds: 500));
-              Navigator.of(context).push(_startPageRoute("SOLO"));
-              setState(() {
-                _isSlelected1 = !_isSlelected1;
-              });
-            },
-          ),
-        ),
-        SizedBox(
-          height: 60,
-          width: MediaQuery.of(context).size.width / 2,
-          child: AnimatedButton(
-            height: 60,
-            width: MediaQuery.of(context).size.width / 2,
-            text: "CREER",
-            selectedTextColor: MyApp.btnColor,
-            transitionType: TransitionType.LEFT_TO_RIGHT,
-            isSelected: _isSlelected2,
-            backgroundColor: MyApp.btnColor,
-            selectedBackgroundColor: MyApp.bgColor,
-            borderRadius: 15,
-            borderWidth: 2,
-            borderColor: MyApp.btnColor,
-            textStyle: TextStyle(
-                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
-                letterSpacing: 1,
-                color: MyApp.bgColor,
-                fontWeight: FontWeight.w400),
-            onPress: () async {
-              setState(() {
-                _isSlelected2 = !_isSlelected2;
-              });
-              await Future.delayed(const Duration(milliseconds: 500));
-              Navigator.of(context).push(_startPageRoute("CREER"));
-              setState(() {
-                _isSlelected2 = !_isSlelected2;
-              });
-            },
-          ),
-        ),
-        SizedBox(
-          height: 60,
-          width: MediaQuery.of(context).size.width / 2,
-          child: AnimatedButton(
-            height: 60,
-            width: MediaQuery.of(context).size.width / 2,
-            text: "REJOINDRE",
-            selectedTextColor: MyApp.btnColor,
-            transitionType: TransitionType.LEFT_TO_RIGHT,
-            isSelected: _isSlelected3,
-            backgroundColor: MyApp.btnColor,
-            selectedBackgroundColor: MyApp.bgColor,
-            borderRadius: 15,
-            borderWidth: 2,
-            borderColor: MyApp.btnColor,
-            textStyle: TextStyle(
-                fontSize: 36 * MediaQuery.of(context).size.height / 1000,
-                letterSpacing: 1,
-                color: MyApp.bgColor,
-                fontWeight: FontWeight.w400),
-            onPress: () async {
-              setState(() {
-                _isSlelected3 = !_isSlelected3;
-              });
-              await Future.delayed(const Duration(milliseconds: 500));
-              Navigator.of(context).push(_startPageRoute("REJOINDRE"));
-              setState(() {
-                _isSlelected3 = !_isSlelected3;
-              });
-            },
-          ),
-        ),
-
-      ],
-    ));
+        child: StreamBuilder<bool>(
+          stream: _clickController.stream,
+          builder: (context, snapshot) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                bouton("SOLO", 0, snapshot),
+                bouton("CREER", 1, snapshot),
+                bouton("REJOINDRE", 2, snapshot),
+              ],
+            );
+          }
+        )
+        );
   }
 
   @override
