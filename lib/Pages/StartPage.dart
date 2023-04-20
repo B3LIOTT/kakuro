@@ -1,16 +1,13 @@
-import 'dart:ffi';
-
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import '../main.dart';
-import 'Menu.dart';
 import 'dart:io';
 import 'dart:convert';
-
 import 'PaletteSettings.dart';
+import 'TopMenu.dart';
 
 class StartPage extends StatefulWidget {
   late String _source;
@@ -293,70 +290,6 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  Widget TopMenu() {
-    return OpenContainer(
-      closedElevation: 0,
-      closedColor: MyApp.bgColor,
-      closedShape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
-      transitionType: transitionType,
-      transitionDuration: const Duration(milliseconds: 500),
-      openBuilder: (BuildContext context, _) => const PaletteSettings(),
-      closedBuilder: (context, VoidCallback openContainer) => Container(
-        height: MediaQuery.of(context).size.width / 6,
-        width: MediaQuery.of(context).size.width / 2,
-        decoration: const BoxDecoration(
-          color: MyApp.bgBtn,
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        child: ButtonBar(
-          alignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () async {
-                setState(() {
-                  _menuAlignment = Alignment.centerLeft;
-                });
-                await Future.delayed(const Duration(milliseconds: 200));
-                setState(() {
-                  _menuAlignment = Alignment.centerRight;
-                });
-              },
-              icon: const Icon(Icons.home),
-            ),
-            IconButton(
-              onPressed: () async {
-                setState(() {
-                  _menuAlignment = Alignment.centerLeft;
-                });
-                await Future.delayed(const Duration(milliseconds: 200));
-                setState(() {
-                  _menuAlignment = Alignment.centerRight;
-                });
-              },
-              icon: const Icon(Icons.home),
-            ),
-            IconButton(
-              onPressed: () async {
-                setState(() {
-                  _menuAlignment = Alignment.centerLeft;
-                });
-                await Future.delayed(const Duration(milliseconds: 200));
-                openContainer();
-                await Future.delayed(const Duration(milliseconds: 100));
-                setState(() {
-                  _menuAlignment = Alignment.centerRight;
-                });
-              },
-              icon: const Icon(Icons.home),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget midWidget(String source) {
     return Container(
         color: MyApp.bgColor,
@@ -429,24 +362,16 @@ class _StartPageState extends State<StartPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Container(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 10),
-                height: MediaQuery.of(context).size.height / 5,
-                alignment: Alignment.topRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    returnBtn(),
-                    AnimatedContainer(
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      curve: Curves.easeInOut,
-                      duration: const Duration(milliseconds: 200),
-                      alignment: _menuAlignment,
-                      child: TopMenu(),
-                    )
-                  ],
-                )),
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 15, right: 20, left: 20),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  returnBtn(),
+                  const TopMenu()
+                ],
+              ),
+            ),
             midWidget(widget._source),
             playButton(),
             (widget._source == "REJOINDRE")

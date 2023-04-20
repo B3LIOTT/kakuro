@@ -8,6 +8,7 @@ import 'package:kakuro/Pages/StartPage.dart';
 import 'package:kakuro/main.dart';
 import 'Menu.dart';
 import 'PaletteSettings.dart';
+import 'TopMenu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -76,102 +77,6 @@ class _HomePageState extends State<HomePage> {
         );
   }
 
-  Widget TopMenu() {
-    return OpenContainer(
-      closedElevation: 0,
-      closedColor: MyApp.bgColor,
-      closedShape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
-      transitionType: transitionType,
-      transitionDuration: const Duration(milliseconds: 600),
-      openBuilder: (BuildContext context, _) => const PaletteSettings(),
-      closedBuilder: (context, VoidCallback openContainer) => Container(
-        height: MediaQuery.of(context).size.width / 6,
-        width: MediaQuery.of(context).size.width / 2,
-        decoration: const BoxDecoration(
-          color: MyApp.bgBtn,
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        child: StreamBuilder(
-          stream: _clickController1.stream,
-          builder: (context, snapshot) {
-            return ButtonBar(
-              alignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    color: MyApp.btnColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.leaderboard,
-                      color : Colors.white,
-                    ),
-                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
-                      _clickController1.add(true);
-                      await Future.delayed(const Duration(milliseconds: 400));
-                      _clickController1.add(false);
-                    } : null,
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: MyApp.btnColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const ImageIcon(
-                      AssetImage('lib/assets/images/info.png'),
-                      color : Colors.white,
-                    ),
-                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
-                      _clickController1.add(true);
-                      setState(() {
-                        _menuAlignment = Alignment.center;
-                      });
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      _clickController1.add(false);
-                      setState(() {
-                        _menuAlignment = Alignment.centerRight;
-                      });
-                    } : null,
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: MyApp.btnColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const ImageIcon(
-                      AssetImage('lib/assets/images/settings.png'),
-                      color : Colors.white,
-                    ),
-                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
-                      _clickController1.add(true);
-                      setState(() {
-                        _menuAlignment = Alignment.center;
-                      });
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      openContainer();
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      _clickController1.add(false);
-                      setState(() {
-                        _menuAlignment = Alignment.centerRight;
-                      });
-                    } : null,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-
   Widget PartyButtons() {
     return Expanded(
         child: StreamBuilder<bool>(
@@ -198,17 +103,10 @@ class _HomePageState extends State<HomePage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Container(
-                height: MediaQuery.of(context).size.height / 5,
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 10, right: 20),
-                alignment: Alignment.topRight,
-                child: AnimatedContainer(
-                  curve: Curves.easeInOut,
-                  duration: const Duration(milliseconds: 200),
-                  alignment: _menuAlignment,
-                  child: TopMenu(),
-                )),
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 15, right: 20, left: 20),
+              child: const TopMenu(),
+            ),
             Container(
               color: MyApp.bgColor,
               alignment: Alignment.center,
