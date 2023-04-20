@@ -29,6 +29,12 @@ class UserPreferences {
         bgColor = const Color(0xFFFFE1E1);
         logoPath = 'lib/assets/images/logo_red.png';
         break;
+      case 'orange' :
+        btnColor = const Color(0xFFC6753B);
+        bgBtn = const Color(0xFFF7D0B4);
+        bgColor = const Color(0xFFFFE6E1);
+        logoPath = 'lib/assets/images/logo_red.png';
+        break;
     }
   }
 

@@ -93,7 +93,7 @@ class _StartPageState extends State<StartPage> {
             child: TextField(
                 textCapitalization: TextCapitalization.characters,
                 textAlign: TextAlign.center,
-                cursorColor: Colors.black,
+                cursorColor: UserPreferences.btnColor,
                 style: const TextStyle(
                   fontSize: 35,
                 ),
@@ -119,7 +119,7 @@ class _StartPageState extends State<StartPage> {
                     ),
                     hintText: 'XXXX-YYYY',
                     hintStyle: TextStyle(
-                      color: Colors.grey.withOpacity(0.8),
+                      color: UserPreferences.bgBtn,
                       fontSize: 30,
                     ))),
           ),
@@ -150,9 +150,9 @@ class _StartPageState extends State<StartPage> {
             shape: BoxShape.circle,
           ),
           child: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios_rounded,
-              color: Colors.black,
+              color: UserPreferences.btnColor,
             ),
             onPressed: () {
               setState(() {
@@ -189,9 +189,9 @@ class _StartPageState extends State<StartPage> {
             shape: BoxShape.circle,
           ),
           child: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_forward_ios_rounded,
-              color: Colors.black,
+              color: UserPreferences.btnColor,
             ),
             onPressed: () {
               setState(() {
@@ -220,9 +220,9 @@ class _StartPageState extends State<StartPage> {
             shape: BoxShape.circle,
           ),
           child: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios_rounded,
-              color: Colors.black,
+              color: UserPreferences.btnColor,
             ),
             onPressed: () {
               setState(() {
@@ -259,9 +259,9 @@ class _StartPageState extends State<StartPage> {
             shape: BoxShape.circle,
           ),
           child: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_forward_ios_rounded,
-              color: Colors.black,
+              color: UserPreferences.btnColor,
             ),
             onPressed: () {
               setState(() {
@@ -287,9 +287,9 @@ class _StartPageState extends State<StartPage> {
         shape: BoxShape.circle,
       ),
       child: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back_ios_rounded,
-          color: Colors.black,
+          color: UserPreferences.btnColor,
         ),
         onPressed: () {
           Navigator.pop(context);

@@ -115,9 +115,9 @@ class _PaletteSettingsState extends State<PaletteSettings> {
         shape: BoxShape.circle,
       ),
       child: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back_ios_rounded,
-          color: Colors.black,
+          color: UserPreferences.btnColor,
         ),
         onPressed: () {
           Navigator.pop(context);
