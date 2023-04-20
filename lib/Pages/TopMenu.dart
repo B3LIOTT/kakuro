@@ -41,7 +41,7 @@ class _TopMenuState extends State<TopMenu> {
       closedBuilder: (context, VoidCallback openContainer) => Container(
         height: MediaQuery.of(context).size.width / 6,
         width: MediaQuery.of(context).size.width / 2,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: UserPreferences.bgBtn,
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
@@ -52,7 +52,7 @@ class _TopMenuState extends State<TopMenu> {
               alignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: UserPreferences.btnColor,
                     shape: BoxShape.circle,
                   ),
@@ -69,7 +69,7 @@ class _TopMenuState extends State<TopMenu> {
                   ),
                 ),
                 Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: UserPreferences.btnColor,
                     shape: BoxShape.circle,
                   ),
@@ -92,7 +92,7 @@ class _TopMenuState extends State<TopMenu> {
                   ),
                 ),
                 Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: UserPreferences.btnColor,
                     shape: BoxShape.circle,
                   ),

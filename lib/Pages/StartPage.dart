@@ -1,17 +1,15 @@
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import '../Objects/UserPreferences.dart';
-import '../main.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'GamePage.dart';
 import 'TopMenu.dart';
 
 class StartPage extends StatefulWidget {
-  late String _source;
+  late final String _source;
 
   StartPage(this._source, {super.key});
 
@@ -76,14 +74,14 @@ class _StartPageState extends State<StartPage> {
         children = [
           (_KeySTR != "")
               ? Text(
-                  "Clé: " + _KeySTR,
-                  style: const TextStyle(
+                  "Clé: $_KeySTR",
+                  style: TextStyle(
                     fontSize: 30,
                     color: UserPreferences.btnColor,
                     fontWeight: FontWeight.w400,
                   ),
                 )
-              : Text("Attente de la clé du serveur privé"),
+              : const Text("Attente de la clé du serveur privé"),
         ];
         break;
 
@@ -107,14 +105,14 @@ class _StartPageState extends State<StartPage> {
                     filled: true,
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
+                      borderSide: BorderSide(
                         color: UserPreferences.btnColor,
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
+                      borderSide: BorderSide(
                         color: UserPreferences.btnColor,
                         width: 2.0,
                       ),
@@ -125,8 +123,8 @@ class _StartPageState extends State<StartPage> {
                       fontSize: 30,
                     ))),
           ),
-          const Padding(
-                  padding: EdgeInsets.all(40),
+          Padding(
+                  padding: const EdgeInsets.all(40),
                   child: AutoSizeText(
                     "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
                     textAlign: TextAlign.center,
@@ -147,7 +145,7 @@ class _StartPageState extends State<StartPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
@@ -177,7 +175,7 @@ class _StartPageState extends State<StartPage> {
             child: AutoSizeText(
               _diffList[_diffInd],
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 30,
                 color: UserPreferences.btnColor,
                 fontWeight: FontWeight.w400,
@@ -186,7 +184,7 @@ class _StartPageState extends State<StartPage> {
           ),
         ),
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
@@ -217,7 +215,7 @@ class _StartPageState extends State<StartPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
@@ -247,7 +245,7 @@ class _StartPageState extends State<StartPage> {
             child: AutoSizeText(
               _sizeList[_sizeInd],
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 30,
                 color: UserPreferences.btnColor,
                 fontWeight: FontWeight.w400,
@@ -256,7 +254,7 @@ class _StartPageState extends State<StartPage> {
           ),
         ),
         Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
@@ -284,7 +282,7 @@ class _StartPageState extends State<StartPage> {
 
   Widget returnBtn() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: UserPreferences.bgBtn,
         shape: BoxShape.circle,
       ),
@@ -329,7 +327,7 @@ class _StartPageState extends State<StartPage> {
         borderRadius: 15,
         borderWidth: 2,
         borderColor: UserPreferences.btnColor,
-        textStyle: const TextStyle(
+        textStyle: TextStyle(
             fontSize: 30,
             letterSpacing: 1,
             color: UserPreferences.bgColor,
@@ -422,7 +420,7 @@ class _StartPageState extends State<StartPage> {
       final socket = await Socket.connect(_IP_SERVER, _MAIN_SERVER_PORT);
       print("Connexion au serveur principal sur le port $_MAIN_SERVER_PORT");
 
-      final input = Utf8Decoder().bind(socket).take(1);
+      final input = const Utf8Decoder().bind(socket).take(1);
       final responseBytes = await input.first;
       jsonData = json.decode(responseBytes);
 
@@ -447,7 +445,7 @@ class _StartPageState extends State<StartPage> {
     try {
       Socket.connect(_IP_SERVER, jsonData["port"]).then((Socket sock) {
         socket = sock;
-        final input = Utf8Decoder().bind(sock);
+        final input = const Utf8Decoder().bind(sock);
 
         // Envoi de la clé au serveur privé
         final key = jsonEncode(jsonData["key"]);

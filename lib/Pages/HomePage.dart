@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
 import 'package:kakuro/Pages/StartPage.dart';
-import 'package:kakuro/main.dart';
 import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 

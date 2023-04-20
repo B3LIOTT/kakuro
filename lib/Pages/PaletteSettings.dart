@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
-import 'package:animations/animations.dart';
-import 'package:kakuro/Pages/StartPage.dart';
-import 'package:kakuro/main.dart';
 import '../Objects/UserPreferences.dart';
-import 'Menu.dart';
 
 class PaletteSettings extends StatefulWidget {
   const PaletteSettings({super.key});
@@ -103,7 +98,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
 
   Widget returnBtn() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: UserPreferences.bgBtn,
         shape: BoxShape.circle,
       ),
