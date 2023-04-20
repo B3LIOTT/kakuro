@@ -12,10 +12,17 @@ class PaletteSettings extends StatefulWidget {
 
 class _PaletteSettingsState extends State<PaletteSettings> {
   late List<bool> _whatsSelected;
+  late List<String> themes;
 
   @override
   void initState() {
-    _whatsSelected = [true, false, false, false, false, false, false, false];
+    themes = ["default", "red", "orange", "yellow", "green", "blue", "purple", "dark"];
+    _whatsSelected = List.filled(themes.length, false);
+    for (int i = 0; i < themes.length; i++) {
+      if (UserPreferences.getTheme() == themes[i]) {
+        _whatsSelected[i] = true;
+      }
+    }
     super.initState();
   }
 
@@ -134,7 +141,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
           height: MediaQuery.of(context).size.height / 2,
           width: MediaQuery.of(context).size.height/ 3.3,
           child: Image(
-              image: const AssetImage("lib/assets/images/logo_brown.png"),
+              image: AssetImage(UserPreferences.logoPath),
               height: MediaQuery.of(context).size.height / 3.3),
         ),
         palette()

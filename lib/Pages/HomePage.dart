@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                             _count++;
                           });
                         },
-                        child: Image.asset("lib/assets/images/logo_brown.png",
+                        child: Image.asset(UserPreferences.logoPath,
                             height: MediaQuery.of(context).size.height / 3.3))
                     : Container(
                         height: MediaQuery.of(context).size.height / 3.3,

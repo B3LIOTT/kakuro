@@ -7,6 +7,7 @@ class UserPreferences {
   static Color btnColor = const Color(0xFF61524D);
   static Color bgBtn = const Color(0xFFF7D0B4);
   static Color bgColor = const Color(0xFFFFE6E1);
+  static String logoPath = 'lib/assets/images/logo_brown.png';
 
   Future initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
@@ -20,17 +21,18 @@ class UserPreferences {
         btnColor = const Color(0xFF61524D);
         bgBtn = const Color(0xFFF7D0B4);
         bgColor = const Color(0xFFFFE6E1);
+        logoPath = 'lib/assets/images/logo_brown.png';
         break;
       case 'red' :
         btnColor = const Color(0xFFB64549);
         bgBtn = const Color(0xFFE6B0B0);
-        bgColor = const Color(0xFFFFE6E1);
+        bgColor = const Color(0xFFFFE1E1);
+        logoPath = 'lib/assets/images/logo_red.png';
         break;
     }
   }
 
-  static void getTheme(){
-    _prefs!.getString('theme');
+  static String getTheme(){
+    return _prefs!.getString('theme') ?? 'default';
   }
-
 }
