@@ -452,11 +452,18 @@ class _StartPageState extends State<StartPage> {
 
   dynamic createParty() async {
     late final jsonData;
+    final data = {
+      "difficulty": _diffList[_diffInd],
+      "size": _sizeList[_sizeInd],
+      // Ajouter la matrice du jeu génére par le créateur de la partie (c'est le client qui la génère car cela pourrai surcharger le serveur)
+    };
+    final jData = jsonEncode(data);
     try {
       final socket = await Socket.connect(_IP_SERVER, _MAIN_SERVER_PORT);
       print("Connexion au serveur principal sur le port $_MAIN_SERVER_PORT");
 
-      final input = const Utf8Decoder().bind(socket).take(1);
+      final input = const Utf8Decoder().bind(socket);
+      socket.write(jData);
       final responseBytes = await input.first;
       jsonData = json.decode(responseBytes);
 
