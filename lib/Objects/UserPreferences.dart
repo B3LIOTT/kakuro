@@ -40,6 +40,30 @@ class UserPreferences {
         bgColor = const Color(0xFFFFFCEF);
         logoPath = 'lib/assets/images/logo_yellow.png';
         break;
+      case 'green' :
+        btnColor = const Color(0xFF5ECC69);
+        bgBtn = const Color(0xFFC4EDC8);
+        bgColor = const Color(0xFFF0FFEF);
+        logoPath = 'lib/assets/images/logo_green.png';
+        break;
+      case 'blue' :
+        btnColor = const Color(0xFF2CAAF1);
+        bgBtn = const Color(0xFFB3E0FF);
+        bgColor = const Color(0xFFE6F7FF);
+        logoPath = 'lib/assets/images/logo_blue.png';
+        break;
+      case 'purple' :
+        btnColor = const Color(0xFF955AE0);
+        bgBtn = const Color(0xFFD9C4FF);
+        bgColor = const Color(0xFFF7E6FF);
+        logoPath = 'lib/assets/images/logo_purple.png';
+        break;
+      case 'dark' :
+        btnColor = const Color(0xFF393939);
+        bgBtn = const Color(0xFFB3B3B3);
+        bgColor = const Color(0xFFE7E7E7);
+        logoPath = 'lib/assets/images/logo_round.png';
+        break;
     }
     _prefs!.setString('theme', color);
   }
