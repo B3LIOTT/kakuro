@@ -14,14 +14,14 @@ class GamePage extends StatefulWidget {
   late final int _PORT;
   late final String _KEY;
 
-  GamePage(this._diff, this._size, this._KEY, this._PORT, this._source, {super.key});
+  GamePage(this._diff, this._size, this._KEY, this._PORT, this._source,
+      {super.key});
 
   @override
   _GamePageState createState() => _GamePageState();
 }
 
 class _GamePageState extends State<GamePage> {
-
   @override
   void initState() {
     super.initState();
@@ -52,21 +52,62 @@ class _GamePageState extends State<GamePage> {
 
   Widget kakuro() {
     return Container(
-      alignment: Alignment.center,
-      height: MediaQuery.of(context).size.height / 2,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: UserPreferences.bgColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Container(
-        margin: const EdgeInsets.all(10),
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height / 2,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: UserPreferences.bgBtn,
+          color: UserPreferences.bgColor,
           borderRadius: BorderRadius.circular(20),
         ),
-      )
-    );
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: UserPreferences.bgBtn,
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ));
+  }
+
+  Widget numPad() {
+    return Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: UserPreferences.bgBtn,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: GridView.count(
+            crossAxisCount: 5,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(10),
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            children: List.generate(10, (index) =>
+              Container(
+                decoration: BoxDecoration(
+                  color: UserPreferences.bgBtn,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: UserPreferences.btnColor,
+                    width: 2,
+                  ),
+                ),
+                child: IconButton(
+                  icon: Text(
+                    (index != 9)? (index+1).toString() : "X",
+                    style: TextStyle(
+                      color: UserPreferences.btnColor,
+                      fontSize: 30,
+                    ),
+                  ),
+                  onPressed: () {
+
+                  },
+                ),
+            )
+          ),
+        ));
   }
 
   @override
@@ -90,8 +131,19 @@ class _GamePageState extends State<GamePage> {
                   children: [returnBtn(), const TopMenu()],
                 ),
               ),
-                  kakuro(),
-
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.width,
+                child: kakuro(),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 20, bottom: MediaQuery.of(context).padding.bottom + 20),
+                  alignment: Alignment.bottomCenter,
+                  child: numPad(),
+                ),
+              ),
             ])),
       );
     });
@@ -133,7 +185,7 @@ class _GamePageState extends State<GamePage> {
     final dynamicMatrix = jsonDecode(data);
     List<List<int>> matrix = List<List<int>>.generate(
         dynamicMatrix.length,
-            (i) => List<int>.generate(
+        (i) => List<int>.generate(
             dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
 
     updateGame(matrix);
@@ -172,5 +224,4 @@ class _GamePageState extends State<GamePage> {
       print("Erreur lors de la connexion au serveur : $e");
     }
   }
-
 }
