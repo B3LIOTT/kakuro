@@ -116,7 +116,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
       ),
       child: IconButton(
         icon: const Icon(
-          Icons.arrow_back,
+          Icons.arrow_back_ios_rounded,
           color: Colors.black,
         ),
         onPressed: () {
