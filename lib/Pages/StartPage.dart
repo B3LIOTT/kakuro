@@ -11,7 +11,7 @@ import 'GamePage.dart';
 import 'TopMenu.dart';
 
 class StartPage extends StatefulWidget {
-  late final String _source;
+  late String _source;
 
   StartPage(this._source, {super.key});
 
@@ -31,6 +31,7 @@ class _StartPageState extends State<StartPage> {
   late double _currentOpacityDiff;
   late double _currentOpacitySize;
   late List<String> _kakuroListBySize;
+  late String _sourceText;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _StartPageState extends State<StartPage> {
       "lib/assets/images/kakuro8x8.png",
       "lib/assets/images/kakuro8x8.png"
     ];
+    _sourceText = widget._source;
   }
 
   List<Widget> childrenList(String source) {
@@ -343,7 +345,7 @@ class _StartPageState extends State<StartPage> {
       child: AnimatedButton(
         height: 60,
         width: MediaQuery.of(context).size.width / 2,
-        text: widget._source,
+        text: _sourceText,
         selectedTextColor: UserPreferences.btnColor,
         transitionType: TransitionType.LEFT_TO_RIGHT,
         isSelected: _isSlelected,
@@ -363,11 +365,15 @@ class _StartPageState extends State<StartPage> {
           });
           await Future.delayed(const Duration(milliseconds: 500));
 
-          switch (widget._source) {
+          switch (_sourceText) {
+            case "LANCER":
+              Navigator.of(context).push(_gamePageRoute());
+              break;
             case "CREER":
               final json = await createParty();
               setState(() {
                 _KeySTR = json["key"] + "-" + json["port"].toString();
+                _sourceText = "LANCER";
               });
               break;
             case "REJOINDRE":
@@ -437,7 +443,7 @@ class _StartPageState extends State<StartPage> {
 
   /*-------------------------------------Creation de partie multi-------------------------------------*/
   late Socket socket;
-  final String _IP_SERVER = "192.168.106.36";
+  final String _IP_SERVER = "192.168.1.21";
   final int _MAIN_SERVER_PORT = 8080;
   List<List<int>> _gameMatrix = [];
 
