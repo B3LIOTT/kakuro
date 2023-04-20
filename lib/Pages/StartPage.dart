@@ -72,6 +72,20 @@ class _StartPageState extends State<StartPage> {
         break;
       case "CREER":
         children = [
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 1.5,
+            height: MediaQuery.of(context).size.height / 3,
+            child: AnimatedOpacity(
+              opacity: _currentOpacitySize,
+              duration: const Duration(milliseconds: 200),
+              child: Image.asset(
+                _kakuroListBySize[_sizeInd],
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          diffSelector(),
+          sizeSelector(),
           (_KeySTR != "")
               ? Text(
                   "Clé: $_KeySTR",
@@ -81,7 +95,16 @@ class _StartPageState extends State<StartPage> {
                     fontWeight: FontWeight.w400,
                   ),
                 )
-              : const Text("Attente de la clé du serveur privé"),
+              : _isSlelected
+                  ? SizedBox(
+                      height: 40,
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: UserPreferences.btnColor,
+                      )))
+                  : const SizedBox(
+                      height: 40,
+                    ),
         ];
         break;
 
@@ -124,16 +147,16 @@ class _StartPageState extends State<StartPage> {
                     ))),
           ),
           Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: AutoSizeText(
-                    "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: UserPreferences.btnColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ))
+              padding: const EdgeInsets.all(40),
+              child: AutoSizeText(
+                "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: UserPreferences.btnColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
+              ))
         ];
         break;
     }
@@ -331,8 +354,7 @@ class _StartPageState extends State<StartPage> {
             fontSize: 30,
             letterSpacing: 1,
             color: UserPreferences.bgColor,
-            fontWeight: FontWeight.w400
-        ),
+            fontWeight: FontWeight.w400),
         onPress: () async {
           setState(() {
             _isSlelected = !_isSlelected;
@@ -373,13 +395,13 @@ class _StartPageState extends State<StartPage> {
           width: MediaQuery.of(context).size.width,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 15, right: 20, left: 20),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top + 15,
+                  right: 20,
+                  left: 20),
               child: Stack(
                 alignment: Alignment.centerLeft,
-                children: [
-                  returnBtn(),
-                  const TopMenu()
-                ],
+                children: [returnBtn(), const TopMenu()],
               ),
             ),
             midWidget(widget._source),
@@ -398,7 +420,7 @@ class _StartPageState extends State<StartPage> {
         const curve = Curves.ease;
 
         var tween =
-        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
