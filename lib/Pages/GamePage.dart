@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../Objects/UserPreferences.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({super.key});
+  late final String _diff;
+  late final String _size;
+  GamePage(this._diff, this._size, {super.key});
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -13,10 +14,10 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: UserPreferences.bgColor,
         body: Center(
-          child: Text("fesses"),
+          child: Text("Difficulté: ${widget._diff} | Taille: ${widget._size}"),
         )
       );
   }

@@ -393,7 +393,7 @@ class _StartPageState extends State<StartPage> {
   Route _gamePageRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          GamePage(),
+          GamePage(_diffList[_diffInd], _sizeList[_sizeInd]),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;

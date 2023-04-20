@@ -19,4 +19,5 @@ class UserPreferences {
   static void getTheme(){
     _prefs!.getString('theme');
   }
+
 }
