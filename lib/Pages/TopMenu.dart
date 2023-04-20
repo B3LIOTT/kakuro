@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kakuro/Objects/AppProvider.dart';
+import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
 import '../main.dart';
 import 'PaletteSettings.dart';
@@ -126,12 +128,13 @@ class _TopMenuState extends State<TopMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
+    return Consumer<AppProvider>(builder: (context, appProvider, child) {
+      return AnimatedContainer(
       width: MediaQuery.of(context).size.width,
           curve: Curves.easeInOut,
           duration: const Duration(milliseconds: 200),
           alignment: _menuAlignment,
           child: topMenu(),
-        );
+      );});
   }
 }
