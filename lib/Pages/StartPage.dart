@@ -55,38 +55,7 @@ class _StartPageState extends State<StartPage> {
         children = [
           diffSelector(),
           sizeSelector(),
-          SizedBox(
-            height: 60,
-            width: MediaQuery.of(context).size.width / 2,
-            child: AnimatedButton(
-              height: 60,
-              width: MediaQuery.of(context).size.width / 2,
-              text: "CONTINUER",
-              selectedTextColor: MyApp.btnColor,
-              transitionType: TransitionType.LEFT_TO_RIGHT,
-              isSelected: _isSlelected,
-              backgroundColor: MyApp.btnColor,
-              selectedBackgroundColor: MyApp.bgColor,
-              borderRadius: 15,
-              borderWidth: 2,
-              borderColor: MyApp.btnColor,
-              textStyle: const TextStyle(
-                  fontSize: 30,
-                  letterSpacing: 1,
-                  color: MyApp.bgColor,
-                  fontWeight: FontWeight.w400),
-              onPress: () async {
-                setState(() {
-                  _isSlelected = !_isSlelected;
-                });
-                await Future.delayed(const Duration(milliseconds: 500));
 
-                setState(() {
-                  _isSlelected = !_isSlelected;
-                });
-              },
-            ),
-          ),
         ];
         break;
       case "CREER":
@@ -376,7 +345,8 @@ class _StartPageState extends State<StartPage> {
         height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: childrenList(source),
         ));
   }
@@ -465,7 +435,7 @@ class _StartPageState extends State<StartPage> {
                     child: Padding(
                         padding: EdgeInsets.all(40),
                         child: AutoSizeText(
-                          "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXXX-YYYY \navec X une lettre majuscule et Y un chiffre",
+                          "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: MyApp.btnColor,
