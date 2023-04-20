@@ -156,12 +156,22 @@ class _StartPageState extends State<StartPage> {
             },
           ),
         ),
-        Text(_diffList[_diffInd],
-            style: const TextStyle(
-              fontSize: 30,
-              color: MyApp.btnColor,
-              fontWeight: FontWeight.w400,
-            )),
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 4,
+          child: AnimatedOpacity(
+    opacity: 1,
+    duration: const Duration(milliseconds: 200),
+    child: Text(
+      _diffList[_diffInd],
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 30,
+        color: MyApp.btnColor,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+    ),
+        ),
         Container(
           decoration: const BoxDecoration(
             color: MyApp.bgBtn,
