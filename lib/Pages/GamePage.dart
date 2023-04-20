@@ -22,6 +22,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+
   @override
   void initState() {
     super.initState();
@@ -52,19 +53,16 @@ class _GamePageState extends State<GamePage> {
 
   Widget kakuro() {
     return Container(
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: UserPreferences.bgColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
         child: Container(
           margin: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: UserPreferences.bgBtn,
-            borderRadius: BorderRadius.circular(20),
-          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Image.asset("lib/assets/images/kakuro8x8.png"),
+              Text("${widget._diff} - ${widget._size}"),
+            ],
+          )
         ));
   }
 
@@ -134,7 +132,7 @@ class _GamePageState extends State<GamePage> {
               Container(
                 margin: const EdgeInsets.only(top: 20),
                 alignment: Alignment.center,
-                height: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 2,
                 child: kakuro(),
               ),
               Expanded(
