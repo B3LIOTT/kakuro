@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
         body: SizedBox(
             height: MediaQuery.of(context).size.height,
