@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Objects/UserPreferences.dart';
 import '../main.dart';
 import 'PaletteSettings.dart';
 
@@ -30,7 +31,7 @@ class _TopMenuState extends State<TopMenu> {
   Widget topMenu() {
     return OpenContainer(
       closedElevation: 0,
-      closedColor: MyApp.bgColor,
+      closedColor: UserPreferences.bgColor,
       closedShape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
@@ -41,7 +42,7 @@ class _TopMenuState extends State<TopMenu> {
         height: MediaQuery.of(context).size.width / 6,
         width: MediaQuery.of(context).size.width / 2,
         decoration: const BoxDecoration(
-          color: MyApp.bgBtn,
+          color: UserPreferences.bgBtn,
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: StreamBuilder(
@@ -52,7 +53,7 @@ class _TopMenuState extends State<TopMenu> {
               children: [
                 Container(
                   decoration: const BoxDecoration(
-                    color: MyApp.btnColor,
+                    color: UserPreferences.btnColor,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -69,7 +70,7 @@ class _TopMenuState extends State<TopMenu> {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                    color: MyApp.btnColor,
+                    color: UserPreferences.btnColor,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -92,7 +93,7 @@ class _TopMenuState extends State<TopMenu> {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                    color: MyApp.btnColor,
+                    color: UserPreferences.btnColor,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(

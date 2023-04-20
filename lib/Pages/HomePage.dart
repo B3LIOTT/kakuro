@@ -5,6 +5,7 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
 import 'package:kakuro/Pages/StartPage.dart';
 import 'package:kakuro/main.dart';
+import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 
 class HomePage extends StatefulWidget {
@@ -43,18 +44,18 @@ class _HomePageState extends State<HomePage> {
             height: 60,
             width: MediaQuery.of(context).size.width / 2,
             text: text,
-            selectedTextColor: MyApp.btnColor,
+            selectedTextColor: UserPreferences.btnColor,
             transitionType: TransitionType.LEFT_TO_RIGHT,
             isSelected: _isSlelected[i],
-            backgroundColor: MyApp.btnColor,
-            selectedBackgroundColor: MyApp.bgColor,
+            backgroundColor: UserPreferences.btnColor,
+            selectedBackgroundColor: UserPreferences.bgColor,
             borderRadius: 15,
             borderWidth: 2,
-            borderColor: MyApp.btnColor,
+            borderColor: UserPreferences.btnColor,
             textStyle: TextStyle(
                 fontSize: 36 * MediaQuery.of(context).size.height / 1000,
                 letterSpacing: 1,
-                color: MyApp.bgColor,
+                color: UserPreferences.bgColor,
                 fontWeight: FontWeight.w400),
             onPress:  snapshot.hasData && snapshot.data == false ? () async {
               _clickController.add(true);
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyApp.bgColor,
+      backgroundColor: UserPreferences.bgColor,
       body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
               child: const TopMenu(),
             ),
             Container(
-              color: MyApp.bgColor,
+              color: UserPreferences.bgColor,
               alignment: Alignment.center,
               height: MediaQuery.of(context).size.height / 2.25,
               child: !(_count == 10)

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../main.dart';
+import '../Objects/UserPreferences.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -13,8 +13,8 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        backgroundColor: MyApp.bgColor,
+      return const Scaffold(
+        backgroundColor: UserPreferences.bgColor,
         body: Center(
           child: Text("fesses"),
         )

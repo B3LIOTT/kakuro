@@ -3,6 +3,7 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
 import 'package:kakuro/Pages/StartPage.dart';
 import 'package:kakuro/main.dart';
+import '../Objects/UserPreferences.dart';
 import 'Menu.dart';
 
 class PaletteSettings extends StatefulWidget {
@@ -77,7 +78,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
       width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: MyApp.bgBtn,
+        color: UserPreferences.bgBtn,
       ),
       child: GridView.count(
         crossAxisCount: 4,
@@ -103,7 +104,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
   Widget returnBtn() {
     return Container(
       decoration: const BoxDecoration(
-        color: MyApp.bgBtn,
+        color: UserPreferences.bgBtn,
         shape: BoxShape.circle,
       ),
       child: IconButton(
@@ -121,7 +122,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyApp.bgColor,
+      backgroundColor: UserPreferences.bgColor,
       body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Container(

@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import '../Objects/UserPreferences.dart';
 import '../main.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -78,7 +79,7 @@ class _StartPageState extends State<StartPage> {
                   "Clé: " + _KeySTR,
                   style: const TextStyle(
                     fontSize: 30,
-                    color: MyApp.btnColor,
+                    color: UserPreferences.btnColor,
                     fontWeight: FontWeight.w400,
                   ),
                 )
@@ -102,19 +103,19 @@ class _StartPageState extends State<StartPage> {
                 decoration: InputDecoration(
                     alignLabelWithHint: true,
                     isDense: false,
-                    fillColor: MyApp.bgColor,
+                    fillColor: UserPreferences.bgColor,
                     filled: true,
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: MyApp.btnColor,
+                        color: UserPreferences.btnColor,
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: MyApp.btnColor,
+                        color: UserPreferences.btnColor,
                         width: 2.0,
                       ),
                     ),
@@ -130,7 +131,7 @@ class _StartPageState extends State<StartPage> {
                     "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: MyApp.btnColor,
+                      color: UserPreferences.btnColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
@@ -147,7 +148,7 @@ class _StartPageState extends State<StartPage> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            color: MyApp.bgBtn,
+            color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
           child: IconButton(
@@ -178,7 +179,7 @@ class _StartPageState extends State<StartPage> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 30,
-                color: MyApp.btnColor,
+                color: UserPreferences.btnColor,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -186,7 +187,7 @@ class _StartPageState extends State<StartPage> {
         ),
         Container(
           decoration: const BoxDecoration(
-            color: MyApp.bgBtn,
+            color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
           child: IconButton(
@@ -217,7 +218,7 @@ class _StartPageState extends State<StartPage> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            color: MyApp.bgBtn,
+            color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
           child: IconButton(
@@ -248,7 +249,7 @@ class _StartPageState extends State<StartPage> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 30,
-                color: MyApp.btnColor,
+                color: UserPreferences.btnColor,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -256,7 +257,7 @@ class _StartPageState extends State<StartPage> {
         ),
         Container(
           decoration: const BoxDecoration(
-            color: MyApp.bgBtn,
+            color: UserPreferences.bgBtn,
             shape: BoxShape.circle,
           ),
           child: IconButton(
@@ -284,7 +285,7 @@ class _StartPageState extends State<StartPage> {
   Widget returnBtn() {
     return Container(
       decoration: const BoxDecoration(
-        color: MyApp.bgBtn,
+        color: UserPreferences.bgBtn,
         shape: BoxShape.circle,
       ),
       child: IconButton(
@@ -301,7 +302,7 @@ class _StartPageState extends State<StartPage> {
 
   Widget midWidget(String source) {
     return Container(
-        color: MyApp.bgColor,
+        color: UserPreferences.bgColor,
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height / 1.5,
         width: MediaQuery.of(context).size.width,
@@ -320,18 +321,18 @@ class _StartPageState extends State<StartPage> {
         height: 60,
         width: MediaQuery.of(context).size.width / 2,
         text: widget._source,
-        selectedTextColor: MyApp.btnColor,
+        selectedTextColor: UserPreferences.btnColor,
         transitionType: TransitionType.LEFT_TO_RIGHT,
         isSelected: _isSlelected,
-        backgroundColor: MyApp.btnColor,
-        selectedBackgroundColor: MyApp.bgColor,
+        backgroundColor: UserPreferences.btnColor,
+        selectedBackgroundColor: UserPreferences.bgColor,
         borderRadius: 15,
         borderWidth: 2,
-        borderColor: MyApp.btnColor,
+        borderColor: UserPreferences.btnColor,
         textStyle: const TextStyle(
             fontSize: 30,
             letterSpacing: 1,
-            color: MyApp.bgColor,
+            color: UserPreferences.bgColor,
             fontWeight: FontWeight.w400
         ),
         onPress: () async {
@@ -368,7 +369,7 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: MyApp.bgColor,
+      backgroundColor: UserPreferences.bgColor,
       body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
