@@ -44,6 +44,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
     return InkWell(
       onTap: () {
         setState(() {
+          UserPreferences.setTheme(color);
           _whatsSelected[position] = true;
           for (int i = 0; i < _whatsSelected.length; i++) {
             if (i != position) {
