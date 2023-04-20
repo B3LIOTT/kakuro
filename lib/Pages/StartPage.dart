@@ -367,7 +367,9 @@ class _StartPageState extends State<StartPage> {
 
           switch (_sourceText) {
             case "LANCER":
-              Navigator.of(context).push(_gamePageRoute());
+              String KEY = _KeySTR.split("-")[0];
+              int PORT = int.parse(_KeySTR.split("-")[1]);
+              Navigator.of(context).push(_gamePageRoute(KEY, PORT, widget._source));
               break;
             case "CREER":
               final json = await createParty();
@@ -377,12 +379,13 @@ class _StartPageState extends State<StartPage> {
               });
               break;
             case "REJOINDRE":
-              _KeySTR = textFieldController.text.split("-")[0];
-              joinParty(
-                  _KeySTR, int.parse(textFieldController.text.split("-")[1]));
+              String KEY = textFieldController.text.split("-")[0];
+              int PORT = int.parse(textFieldController.text.split("-")[1]);
+              Navigator.of(context).push(_gamePageRoute(KEY, PORT, widget._source));
+
               break;
             case "SOLO":
-              Navigator.of(context).push(_gamePageRoute());
+              Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
               break;
           }
           setState(() {
@@ -421,10 +424,10 @@ class _StartPageState extends State<StartPage> {
     });
   }
 
-  Route _gamePageRoute() {
+  Route _gamePageRoute(String key, int port, String source) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          GamePage(_diffList[_diffInd], _sizeList[_sizeInd]),
+          GamePage(_diffList[_diffInd], _sizeList[_sizeInd], key, port, source),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
@@ -463,83 +466,7 @@ class _StartPageState extends State<StartPage> {
       print("Erreur lors de la connexion au serveur : $e");
     }
 
-    // Connexion au serveur privé
-    connexionHandlerFromCreate(jsonData);
-
     return jsonData;
   }
 
-  void connexionHandlerFromCreate(jsonData) {
-    // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
-
-    print("Serveur privé => $jsonData");
-
-    // Connexion au serveur privé
-    try {
-      Socket.connect(_IP_SERVER, jsonData["port"]).then((Socket sock) {
-        socket = sock;
-        final input = const Utf8Decoder().bind(sock);
-
-        // Envoi de la clé au serveur privé
-        final key = jsonEncode(jsonData["key"]);
-        socket.write(key);
-
-        input.listen(dataHandler,
-            onError: errorHandler, onDone: doneHandler, cancelOnError: false);
-      });
-    } catch (e) {
-      print("Erreur lors de la connexion au serveur privé : $e");
-    }
-  }
-
-  void dataHandler(String data) {
-    // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
-
-    // Conversion de la liste d'entiers en matrice de jeu
-    final dynamicMatrix = jsonDecode(data);
-    List<List<int>> matrix = List<List<int>>.generate(
-        dynamicMatrix.length,
-        (i) => List<int>.generate(
-            dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
-
-    updateGame(matrix);
-    print("Matrice du jeu : $_gameMatrix");
-  }
-
-  void updateGame(List<List<int>> matrix) {
-    // Actualisation de la matrice du jeu
-    _gameMatrix = matrix;
-  }
-
-  void errorHandler(error, StackTrace trace) {
-    print(error);
-  }
-
-  void doneHandler() {
-    socket.destroy();
-  }
-
-  /*-------------------------------------Rejoindre de partie multi-------------------------------------*/
-  late final int _PORT;
-  late final String _KEY;
-
-  void joinParty(String KEY, int PORT) {
-    _PORT = PORT;
-    _KEY = KEY;
-    try {
-      Socket.connect(_IP_SERVER, _PORT).then((Socket sock) {
-        socket = sock;
-        final input = Utf8Decoder().bind(sock);
-
-        // Envoi de la clé au serveur privé
-        final key = jsonEncode(_KEY);
-        socket.write(key);
-
-        input.listen(dataHandler,
-            onError: errorHandler, onDone: doneHandler, cancelOnError: false);
-      });
-    } catch (e) {
-      print("Erreur lors de la connexion au serveur : $e");
-    }
-  }
 }
