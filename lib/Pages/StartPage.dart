@@ -23,12 +23,16 @@ class _StartPageState extends State<StartPage> {
   late Alignment _menuAlignment;
   final TextEditingController textFieldController = TextEditingController();
   String _KeySTR = "";
+  late int _diffInd;
+  late List<String> _diffList;
 
   @override
   void initState() {
     super.initState();
     _isSlelected = false;
     _menuAlignment = Alignment.centerRight;
+    _diffInd = 0;
+    _diffList = ["8x8", "10x10", "12x12", "16x16"];
   }
 
   List<Widget> childrenList(String source) {
@@ -68,16 +72,22 @@ class _StartPageState extends State<StartPage> {
                 });
               },
             ),
-          )
+          ),
+          diffSelector(),
         ];
         break;
       case "CREER":
         children = [
-          (_KeySTR != "")? Text("Clé: " + _KeySTR, style: const TextStyle(
-            fontSize: 30,
-            color: MyApp.btnColor,
-            fontWeight: FontWeight.w400,
-          ),): Text("Attente de la clé du serveur privé"),
+          (_KeySTR != "")
+              ? Text(
+                  "Clé: " + _KeySTR,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    color: MyApp.btnColor,
+                    fontWeight: FontWeight.w400,
+                  ),
+                )
+              : Text("Attente de la clé du serveur privé"),
         ];
         break;
 
@@ -113,17 +123,64 @@ class _StartPageState extends State<StartPage> {
                         width: 2.0,
                       ),
                     ),
-                    hintText: 'XXXXX-YYYY',
+                    hintText: 'XXXX-YYYY',
                     hintStyle: TextStyle(
                       color: Colors.grey.withOpacity(0.8),
                       fontSize: 30,
                     ))),
           ),
-
         ];
         break;
     }
     return children;
+  }
+
+  Widget diffSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            color: MyApp.bgBtn,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                _diffInd = (_diffInd - 1) % 4;
+              });
+            },
+          ),
+        ),
+        Text(_diffList[_diffInd],
+            style: const TextStyle(
+              fontSize: 30,
+              color: MyApp.btnColor,
+              fontWeight: FontWeight.w400,
+            )),
+        Container(
+          decoration: const BoxDecoration(
+            color: MyApp.bgBtn,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_forward,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                _diffInd = (_diffInd + 1) % 4;
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Widget returnBtn() {
@@ -212,7 +269,7 @@ class _StartPageState extends State<StartPage> {
     return Container(
         color: MyApp.bgColor,
         alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height / 3,
+        height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -247,7 +304,7 @@ class _StartPageState extends State<StartPage> {
           });
           await Future.delayed(const Duration(milliseconds: 500));
 
-          switch(widget._source){
+          switch (widget._source) {
             case "CREER":
               final json = await createParty();
               setState(() {
@@ -256,9 +313,10 @@ class _StartPageState extends State<StartPage> {
               break;
             case "REJOINDRE":
               _KeySTR = textFieldController.text.split("-")[0];
-              joinParty(_KeySTR, int.parse(textFieldController.text.split("-")[1]));
+              joinParty(
+                  _KeySTR, int.parse(textFieldController.text.split("-")[1]));
               break;
-            case "Play":
+            case "SOLO":
               break;
           }
           setState(() {
@@ -279,7 +337,8 @@ class _StartPageState extends State<StartPage> {
           width: MediaQuery.of(context).size.width,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Container(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10),
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 10),
                 height: MediaQuery.of(context).size.height / 5,
                 alignment: Alignment.topRight,
                 child: Row(
@@ -287,30 +346,30 @@ class _StartPageState extends State<StartPage> {
                   children: [
                     returnBtn(),
                     AnimatedContainer(
-                      width: MediaQuery.of(context).size.width /1.5,
+                      width: MediaQuery.of(context).size.width / 1.5,
                       curve: Curves.easeInOut,
                       duration: const Duration(milliseconds: 200),
                       alignment: _menuAlignment,
                       child: TopMenu(),
                     )
                   ],
-                )
-                ),
+                )),
             midWidget(widget._source),
             playButton(),
-            (widget._source == "REJOINDRE")? const Expanded(
-                child: Padding(
-                    padding: EdgeInsets.all(40),
-                    child: AutoSizeText(
-                      "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXXX-YYYY \navec X une lettre majuscule et Y un chiffre",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: MyApp.btnColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                )) : const Expanded(child: SizedBox()),
+            (widget._source == "REJOINDRE")
+                ? const Expanded(
+                    child: Padding(
+                        padding: EdgeInsets.all(40),
+                        child: AutoSizeText(
+                          "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXXX-YYYY \navec X une lettre majuscule et Y un chiffre",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: MyApp.btnColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )))
+                : const Expanded(child: SizedBox()),
           ])),
     );
   }
@@ -335,7 +394,6 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-
   /*-------------------------------------Creation de partie multi-------------------------------------*/
   late Socket socket;
   final String _IP_SERVER = "192.168.106.36";
@@ -356,7 +414,6 @@ class _StartPageState extends State<StartPage> {
       socket.destroy();
     } catch (e) {
       print("Erreur lors de la connexion au serveur : $e");
-      exit(1);
     }
 
     // Connexion au serveur privé
@@ -385,7 +442,6 @@ class _StartPageState extends State<StartPage> {
       });
     } catch (e) {
       print("Erreur lors de la connexion au serveur privé : $e");
-      exit(1);
     }
   }
 
@@ -396,7 +452,7 @@ class _StartPageState extends State<StartPage> {
     final dynamicMatrix = jsonDecode(data);
     List<List<int>> matrix = List<List<int>>.generate(
         dynamicMatrix.length,
-            (i) => List<int>.generate(
+        (i) => List<int>.generate(
             dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
 
     updateGame(matrix);
@@ -414,7 +470,6 @@ class _StartPageState extends State<StartPage> {
 
   void doneHandler() {
     socket.destroy();
-    exit(0);
   }
 
   /*-------------------------------------Rejoindre de partie multi-------------------------------------*/
@@ -438,7 +493,6 @@ class _StartPageState extends State<StartPage> {
       });
     } catch (e) {
       print("Erreur lors de la connexion au serveur : $e");
-      exit(1);
     }
   }
 }
