@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   late Alignment _menuAlignment;
   int _count = 0;
   StreamController<bool> _clickController = StreamController();
+  StreamController<bool> _clickController1 = StreamController();
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
     _isSlelected = [false, false, false];
     _menuAlignment = Alignment.centerRight;
     _clickController.add(false);
+    _clickController1.add(false);
   }
 
   void openPage(String page) async {
@@ -91,68 +93,80 @@ class _HomePageState extends State<HomePage> {
           color: MyApp.bgBtn,
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        child: ButtonBar(
-          alignment: MainAxisAlignment.spaceAround,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: MyApp.btnColor,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.leaderboard,
-                  color : Colors.white,
+        child: StreamBuilder(
+          stream: _clickController1.stream,
+          builder: (context, snapshot) {
+            return ButtonBar(
+              alignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: MyApp.btnColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.leaderboard,
+                      color : Colors.white,
+                    ),
+                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
+                      _clickController1.add(true);
+                      await Future.delayed(const Duration(milliseconds: 400));
+                      _clickController1.add(false);
+                    } : null,
+                  ),
                 ),
-                onPressed: () {
-                },
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                color: MyApp.btnColor,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: const ImageIcon(
-                  AssetImage('lib/assets/images/info.png'),
-                  color : Colors.white,
+                Container(
+                  decoration: const BoxDecoration(
+                    color: MyApp.btnColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const ImageIcon(
+                      AssetImage('lib/assets/images/info.png'),
+                      color : Colors.white,
+                    ),
+                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
+                      _clickController1.add(true);
+                      setState(() {
+                        _menuAlignment = Alignment.center;
+                      });
+                      await Future.delayed(const Duration(milliseconds: 200));
+                      _clickController1.add(false);
+                      setState(() {
+                        _menuAlignment = Alignment.centerRight;
+                      });
+                    } : null,
+                  ),
                 ),
-                onPressed: () async {
-                  setState(() {
-                    _menuAlignment = Alignment.center;
-                  });
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  setState(() {
-                    _menuAlignment = Alignment.centerRight;
-                  });
-                },
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                color: MyApp.btnColor,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: const ImageIcon(
-                  AssetImage('lib/assets/images/settings.png'),
-                  color : Colors.white,
+                Container(
+                  decoration: const BoxDecoration(
+                    color: MyApp.btnColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const ImageIcon(
+                      AssetImage('lib/assets/images/settings.png'),
+                      color : Colors.white,
+                    ),
+                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
+                      _clickController1.add(true);
+                      setState(() {
+                        _menuAlignment = Alignment.center;
+                      });
+                      await Future.delayed(const Duration(milliseconds: 200));
+                      openContainer();
+                      await Future.delayed(const Duration(milliseconds: 200));
+                      _clickController1.add(false);
+                      setState(() {
+                        _menuAlignment = Alignment.centerRight;
+                      });
+                    } : null,
+                  ),
                 ),
-                onPressed: () async {
-                  setState(() {
-                    _menuAlignment = Alignment.center;
-                  });
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  openContainer();
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  setState(() {
-                    _menuAlignment = Alignment.centerRight;
-                  });
-                },
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
@@ -191,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.topRight,
                 child: AnimatedContainer(
                   curve: Curves.easeInOut,
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 200),
                   alignment: _menuAlignment,
                   child: TopMenu(),
                 )),
