@@ -6,7 +6,6 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import '../main.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'PaletteSettings.dart';
 import 'TopMenu.dart';
 
 class StartPage extends StatefulWidget {
@@ -21,7 +20,6 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   late bool _isSlelected;
   final transitionType = ContainerTransitionType.fadeThrough;
-  late Alignment _menuAlignment;
   final TextEditingController textFieldController = TextEditingController();
   String _KeySTR = "";
   late int _diffInd;
@@ -36,7 +34,6 @@ class _StartPageState extends State<StartPage> {
   void initState() {
     super.initState();
     _isSlelected = false;
-    _menuAlignment = Alignment.centerRight;
     _diffInd = 0;
     _sizeInd = 0;
     _sizeList = ["8x8", "10x10", "12x12", "16x16"];

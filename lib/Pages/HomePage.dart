@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
 import 'package:kakuro/Pages/StartPage.dart';
 import 'package:kakuro/main.dart';
-import 'Menu.dart';
-import 'PaletteSettings.dart';
 import 'TopMenu.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,7 +17,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late List<bool> _isSlelected;
   final transitionType = ContainerTransitionType.fadeThrough;
-  late Alignment _menuAlignment;
   int _count = 0;
   StreamController<bool> _clickController = StreamController();
   StreamController<bool> _clickController1 = StreamController();
@@ -29,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _isSlelected = [false, false, false];
-    _menuAlignment = Alignment.centerRight;
     _clickController.add(false);
     _clickController1.add(false);
   }
