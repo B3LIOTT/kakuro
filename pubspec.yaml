@@ -80,6 +80,7 @@ flutter:
    - lib/assets/images/easterEgg.png
    - lib/assets/images/info.png
    - lib/assets/images/settings.png
+   - lib/assets/images/kakuro8x8.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

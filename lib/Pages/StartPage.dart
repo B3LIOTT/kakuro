@@ -6,6 +6,7 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import '../main.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'GamePage.dart';
 import 'TopMenu.dart';
 
 class StartPage extends StatefulWidget {
@@ -41,10 +42,10 @@ class _StartPageState extends State<StartPage> {
     _currentOpacityDiff = 1.0;
     _currentOpacitySize = 1.0;
     _kakuroListBySize = [
-      "assets/images/kakuro8x8.png",
-      "assets/images/kakuro10x10.png",
-      "assets/images/kakuro12x12.png",
-      "assets/images/kakuro16x16.png"
+      "lib/assets/images/kakuro8x8.png",
+      "lib/assets/images/kakuro8x8.png",
+      "lib/assets/images/kakuro8x8.png",
+      "lib/assets/images/kakuro8x8.png"
     ];
   }
 
@@ -123,6 +124,17 @@ class _StartPageState extends State<StartPage> {
                       fontSize: 30,
                     ))),
           ),
+          const Padding(
+                  padding: EdgeInsets.all(40),
+                  child: AutoSizeText(
+                    "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: MyApp.btnColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ))
         ];
         break;
     }
@@ -320,7 +332,8 @@ class _StartPageState extends State<StartPage> {
             fontSize: 30,
             letterSpacing: 1,
             color: MyApp.bgColor,
-            fontWeight: FontWeight.w400),
+            fontWeight: FontWeight.w400
+        ),
         onPress: () async {
           setState(() {
             _isSlelected = !_isSlelected;
@@ -340,6 +353,7 @@ class _StartPageState extends State<StartPage> {
                   _KeySTR, int.parse(textFieldController.text.split("-")[1]));
               break;
             case "SOLO":
+              Navigator.of(context).push(_gamePageRoute());
               break;
           }
           setState(() {
@@ -371,35 +385,21 @@ class _StartPageState extends State<StartPage> {
             ),
             midWidget(widget._source),
             playButton(),
-            (widget._source == "REJOINDRE")
-                ? const Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.all(40),
-                        child: AutoSizeText(
-                          "Demandez le code de la partie à celui qui l'a créé, il est de la forme : \nXXXX-YYYY \navec X une lettre et Y un chiffre",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: MyApp.btnColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )))
-                : const Expanded(child: SizedBox()),
           ])),
     );
   }
 
-  Route _startPageRoute(String source) {
+  Route _gamePageRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          StartPage(source),
+          GamePage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.ease;
 
         var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
