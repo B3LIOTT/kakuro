@@ -33,6 +33,7 @@ class _StartPageState extends State<StartPage> {
   late List<String> _sizeList;
   late double _currentOpacityDiff;
   late double _currentOpacitySize;
+  late List<String> _kakuroListBySize;
 
   @override
   void initState() {
@@ -45,6 +46,12 @@ class _StartPageState extends State<StartPage> {
     _diffList = ["Facile", "Moyen", "Expert"];
     _currentOpacityDiff = 1.0;
     _currentOpacitySize = 1.0;
+    _kakuroListBySize = [
+      "assets/images/kakuro8x8.png",
+      "assets/images/kakuro10x10.png",
+      "assets/images/kakuro12x12.png",
+      "assets/images/kakuro16x16.png"
+    ];
   }
 
   List<Widget> childrenList(String source) {
@@ -53,9 +60,20 @@ class _StartPageState extends State<StartPage> {
     switch (source) {
       case "SOLO":
         children = [
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 1.5,
+            height: MediaQuery.of(context).size.height / 3,
+            child: AnimatedOpacity(
+              opacity: _currentOpacitySize,
+              duration: const Duration(milliseconds: 200),
+              child: Image.asset(
+                _kakuroListBySize[_sizeInd],
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
           diffSelector(),
           sizeSelector(),
-
         ];
         break;
       case "CREER":
@@ -186,6 +204,7 @@ class _StartPageState extends State<StartPage> {
       ],
     );
   }
+
   Widget sizeSelector() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -342,7 +361,7 @@ class _StartPageState extends State<StartPage> {
     return Container(
         color: MyApp.bgColor,
         alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 1.5,
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
