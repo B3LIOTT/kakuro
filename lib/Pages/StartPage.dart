@@ -42,7 +42,7 @@ class _StartPageState extends State<StartPage> {
     _diffInd = 0;
     _sizeInd = 0;
     _sizeList = ["8x8", "10x10", "12x12", "16x16"];
-    _diffList = ["Debutant", "Intermédiaire", "Expert"];
+    _diffList = ["Facile", "Moyen", "Expert"];
     _currentOpacityDiff = 1.0;
     _currentOpacitySize = 1.0;
   }
@@ -53,6 +53,8 @@ class _StartPageState extends State<StartPage> {
     switch (source) {
       case "SOLO":
         children = [
+          diffSelector(),
+          sizeSelector(),
           SizedBox(
             height: 60,
             width: MediaQuery.of(context).size.width / 2,
@@ -85,7 +87,6 @@ class _StartPageState extends State<StartPage> {
               },
             ),
           ),
-          diffSelector(),
         ];
         break;
       case "CREER":
@@ -236,8 +237,8 @@ class _StartPageState extends State<StartPage> {
               });
               Future.delayed(const Duration(milliseconds: 200), () {
                 setState(() {
-                  _diffInd = (_diffInd - 1) % _diffList.length;
-                  _currentOpacityDiff = 1.0;
+                  _sizeInd = (_sizeInd - 1) % _sizeList.length;
+                  _currentOpacitySize = 1.0;
                 });
               });
             },
@@ -246,10 +247,10 @@ class _StartPageState extends State<StartPage> {
         SizedBox(
           width: MediaQuery.of(context).size.width / 3,
           child: AnimatedOpacity(
-            opacity: _currentOpacityDiff,
+            opacity: _currentOpacitySize,
             duration: const Duration(milliseconds: 200),
             child: AutoSizeText(
-              _diffList[_diffInd],
+              _sizeList[_sizeInd],
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 30,
@@ -271,12 +272,12 @@ class _StartPageState extends State<StartPage> {
             ),
             onPressed: () {
               setState(() {
-                _currentOpacityDiff = 0.0;
+                _currentOpacitySize = 0.0;
               });
               Future.delayed(const Duration(milliseconds: 200), () {
                 setState(() {
-                  _diffInd = (_diffInd + 1) % _diffList.length;
-                  _currentOpacityDiff = 1.0;
+                  _sizeInd = (_sizeInd + 1) % _sizeList.length;
+                  _currentOpacitySize = 1.0;
                 });
               });
             },
