@@ -7,6 +7,7 @@ import 'package:animations/animations.dart';
 import 'package:kakuro/Pages/StartPage.dart';
 import 'package:kakuro/main.dart';
 import 'Menu.dart';
+import 'PaletteSettings.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -85,7 +86,7 @@ class _HomePageState extends State<HomePage> {
       ),
       transitionType: transitionType,
       transitionDuration: const Duration(milliseconds: 600),
-      openBuilder: (BuildContext context, _) => const Menu(),
+      openBuilder: (BuildContext context, _) => const PaletteSettings(),
       closedBuilder: (context, VoidCallback openContainer) => Container(
         height: MediaQuery.of(context).size.width / 6,
         width: MediaQuery.of(context).size.width / 2,

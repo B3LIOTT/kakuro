@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,8 @@ import '../main.dart';
 import 'Menu.dart';
 import 'dart:io';
 import 'dart:convert';
+
+import 'PaletteSettings.dart';
 
 class StartPage extends StatefulWidget {
   late String _source;
@@ -24,7 +28,11 @@ class _StartPageState extends State<StartPage> {
   final TextEditingController textFieldController = TextEditingController();
   String _KeySTR = "";
   late int _diffInd;
+  late int _sizeInd;
   late List<String> _diffList;
+  late List<String> _sizeList;
+  late double _currentOpacityDiff;
+  late double _currentOpacitySize;
 
   @override
   void initState() {
@@ -32,7 +40,11 @@ class _StartPageState extends State<StartPage> {
     _isSlelected = false;
     _menuAlignment = Alignment.centerRight;
     _diffInd = 0;
-    _diffList = ["8x8", "10x10", "12x12", "16x16"];
+    _sizeInd = 0;
+    _sizeList = ["8x8", "10x10", "12x12", "16x16"];
+    _diffList = ["Debutant", "Intermédiaire", "Expert"];
+    _currentOpacityDiff = 1.0;
+    _currentOpacitySize = 1.0;
   }
 
   List<Widget> childrenList(String source) {
@@ -151,26 +163,32 @@ class _StartPageState extends State<StartPage> {
             ),
             onPressed: () {
               setState(() {
-                _diffInd = (_diffInd - 1) % 4;
+                _currentOpacityDiff = 0.0;
+              });
+              Future.delayed(const Duration(milliseconds: 200), () {
+                setState(() {
+                  _diffInd = (_diffInd - 1) % _diffList.length;
+                  _currentOpacityDiff = 1.0;
+                });
               });
             },
           ),
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
+          width: MediaQuery.of(context).size.width / 3,
           child: AnimatedOpacity(
-    opacity: 1,
-    duration: const Duration(milliseconds: 200),
-    child: Text(
-      _diffList[_diffInd],
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 30,
-        color: MyApp.btnColor,
-        fontWeight: FontWeight.w400,
-      ),
-    ),
-    ),
+            opacity: _currentOpacityDiff,
+            duration: const Duration(milliseconds: 200),
+            child: AutoSizeText(
+              _diffList[_diffInd],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 30,
+                color: MyApp.btnColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
         ),
         Container(
           decoration: const BoxDecoration(
@@ -184,7 +202,82 @@ class _StartPageState extends State<StartPage> {
             ),
             onPressed: () {
               setState(() {
-                _diffInd = (_diffInd + 1) % 4;
+                _currentOpacityDiff = 0.0;
+              });
+              Future.delayed(const Duration(milliseconds: 200), () {
+                setState(() {
+                  _diffInd = (_diffInd + 1) % _diffList.length;
+                  _currentOpacityDiff = 1.0;
+                });
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+  Widget sizeSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            color: MyApp.bgBtn,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                _currentOpacitySize = 0.0;
+              });
+              Future.delayed(const Duration(milliseconds: 200), () {
+                setState(() {
+                  _diffInd = (_diffInd - 1) % _diffList.length;
+                  _currentOpacityDiff = 1.0;
+                });
+              });
+            },
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 3,
+          child: AnimatedOpacity(
+            opacity: _currentOpacityDiff,
+            duration: const Duration(milliseconds: 200),
+            child: AutoSizeText(
+              _diffList[_diffInd],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 30,
+                color: MyApp.btnColor,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ),
+        Container(
+          decoration: const BoxDecoration(
+            color: MyApp.bgBtn,
+            shape: BoxShape.circle,
+          ),
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_forward,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                _currentOpacityDiff = 0.0;
+              });
+              Future.delayed(const Duration(milliseconds: 200), () {
+                setState(() {
+                  _diffInd = (_diffInd + 1) % _diffList.length;
+                  _currentOpacityDiff = 1.0;
+                });
               });
             },
           ),
@@ -220,7 +313,7 @@ class _StartPageState extends State<StartPage> {
       ),
       transitionType: transitionType,
       transitionDuration: const Duration(milliseconds: 500),
-      openBuilder: (BuildContext context, _) => const Menu(),
+      openBuilder: (BuildContext context, _) => const PaletteSettings(),
       closedBuilder: (context, VoidCallback openContainer) => Container(
         height: MediaQuery.of(context).size.width / 6,
         width: MediaQuery.of(context).size.width / 2,
