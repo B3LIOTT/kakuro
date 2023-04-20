@@ -2,6 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:provider/provider.dart';
+import '../Objects/AppProvider.dart';
 import '../Objects/UserPreferences.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -387,27 +389,30 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: UserPreferences.bgColor,
-      body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 15,
-                  right: 20,
-                  left: 20),
-              child: Stack(
-                alignment: Alignment.centerLeft,
-                children: [returnBtn(), const TopMenu()],
+    return Consumer<AppProvider>(builder: (context, appProvider, child) {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: UserPreferences.bgColor,
+        body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 15,
+                    right: 20,
+                    left: 20),
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [returnBtn(), const TopMenu()],
+                ),
               ),
-            ),
-            midWidget(widget._source),
-            playButton(),
-          ])),
-    );
+              midWidget(widget._source),
+              playButton(),
+            ])),
+      );
+    });
   }
 
   Route _gamePageRoute() {
