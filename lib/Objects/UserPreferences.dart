@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
   static SharedPreferences? _prefs;
-  static Color btnColor = const Color(0xFF61524D);
-  static Color bgBtn = const Color(0xFFF7D0B4);
-  static Color bgColor = const Color(0xFFFFE6E1);
+  static late Color btnColor;
+  static late Color bgBtn;
+  static late Color bgColor;
   static String logoPath = 'lib/assets/images/logo_brown.png';
 
   Future initPrefs() async {
@@ -15,9 +15,7 @@ class UserPreferences {
   }
 
   static void setTheme(String color){
-    _prefs!.setString('theme', color);
     switch (color){
-
       case 'default' :
         btnColor = const Color(0xFF61524D);
         bgBtn = const Color(0xFFF7D0B4);
@@ -37,6 +35,7 @@ class UserPreferences {
         logoPath = 'lib/assets/images/logo_orange.png';
         break;
     }
+    _prefs!.setString('theme', color);
   }
 
   static String getTheme(){
