@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kakuro/Objects/AppProvider.dart';
+import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
 
 class PaletteSettings extends StatefulWidget {
@@ -52,6 +54,8 @@ class _PaletteSettingsState extends State<PaletteSettings> {
             }
           }
         });
+        var settings = context.read<AppProvider>();
+        settings.updateTheme();
       },
       child: Container(
         height: 60,
