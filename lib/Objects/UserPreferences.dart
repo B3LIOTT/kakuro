@@ -11,6 +11,7 @@ class UserPreferences {
 
   Future initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
+    setTheme(getTheme());
   }
 
   static void setTheme(String color){
@@ -30,10 +31,10 @@ class UserPreferences {
         logoPath = 'lib/assets/images/logo_red.png';
         break;
       case 'orange' :
-        btnColor = const Color(0xFFC6753B);
+        btnColor = const Color(0xFFDB7329);
         bgBtn = const Color(0xFFF7D0B4);
-        bgColor = const Color(0xFFFFE6E1);
-        logoPath = 'lib/assets/images/logo_red.png';
+        bgColor = const Color(0xFFFFE7CA);
+        logoPath = 'lib/assets/images/logo_orange.png';
         break;
     }
   }
