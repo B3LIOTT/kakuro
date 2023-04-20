@@ -32,6 +32,25 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  Widget kakuro() {
+    return Container(
+      alignment: Alignment.center,
+      height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: UserPreferences.bgColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: UserPreferences.bgBtn,
+          borderRadius: BorderRadius.circular(20),
+        ),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
@@ -53,6 +72,8 @@ class _GamePageState extends State<GamePage> {
                   children: [returnBtn(), const TopMenu()],
                 ),
               ),
+                  kakuro(),
+
             ])),
       );
     });
