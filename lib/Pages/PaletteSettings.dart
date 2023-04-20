@@ -35,7 +35,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
       case "orange":
         return const Color(0xFFDB7329);
       case "yellow":
-        return const Color(0xFFE3BE3B);
+        return const Color(0xFFFFD028);
       case "green":
         return const Color(0xFF5ECC69);
       case "blue":

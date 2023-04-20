@@ -79,6 +79,7 @@ flutter:
    - lib/assets/images/logo_brown.png
    - lib/assets/images/logo_red.png
    - lib/assets/images/logo_orange.png
+   - lib/assets/images/logo_yellow.png
    - lib/assets/images/easterEgg.png
    - lib/assets/images/info.png
    - lib/assets/images/settings.png
