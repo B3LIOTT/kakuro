@@ -22,6 +22,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  late bool _isKakuroLoading;
 
   @override
   void initState() {
@@ -31,6 +32,15 @@ class _GamePageState extends State<GamePage> {
     } else if (widget._source == "REJOINDRE") {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
+    _isKakuroLoading = true;
+    genKakuro();
+  }
+
+  void genKakuro() async {
+    await Future.delayed(const Duration(seconds: 1)); // TODO: remove this, ca sert juste a voir le loading
+    setState(() {
+      _isKakuroLoading = false;
+    });
   }
 
   Widget returnBtn() {
@@ -52,17 +62,19 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget kakuro() {
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width,
         child: Container(
           margin: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Image.asset("lib/assets/images/kakuro8x8.png"),
-              Text("${widget._diff} - ${widget._size}"),
-            ],
-          )
+          child:
+              _isKakuroLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: UserPreferences.btnColor,
+                      ))
+                  : Image.asset("lib/assets/images/kakuro8x8.png"), // TODO: à remplacer avec le kakuro généré (qui sera surrement une gridview)
+
         ));
   }
 
@@ -133,7 +145,13 @@ class _GamePageState extends State<GamePage> {
                 margin: const EdgeInsets.only(top: 20),
                 alignment: Alignment.center,
                 height: MediaQuery.of(context).size.height / 2,
-                child: kakuro(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    kakuro(),
+                    Text("${widget._diff} - ${widget._size}"),
+                  ],
+                ),
               ),
               Expanded(
                 child: Container(
