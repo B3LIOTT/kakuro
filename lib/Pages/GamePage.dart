@@ -65,7 +65,7 @@ class _GamePageState extends State<GamePage> {
     for(int i = 0; i < _whatsSelected.length; i++) {
       if(_whatsSelected[i]) {
         setState(() {
-          _gameMatrix[i~/_size][i%_size].value = value;
+          _gameMatrix[i~/_size][i%_size].value = (value < 10)? value : 0;
           _whatsSelected[i] = false;
         });
       }
@@ -123,29 +123,49 @@ class _GamePageState extends State<GamePage> {
     } else if (c.horizontalSum == 0 &&
         c.verticalSum == 0 &&
         (c.value >= 0 && c.value < 10)) {
-      w = Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: UserPreferences.bgBtn),
-          ),
-          Center(
-            child: Text(c.value.toString()),
-          )
-        ],
-      );
+
+      w = InkWell(
+          customBorder: const CircleBorder(),
+          onTap: () {
+            setState(() {
+              _whatsSelected[index] = !_whatsSelected[index];
+            });
+          },
+          child: Stack(
+            children: [
+              Center(child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: UserPreferences.bgBtn),
+                  ),
+                  Center(
+                    child: Text(c.value.toString()),
+                  )
+                ],
+              )),
+              _whatsSelected[index]
+                  ? Opacity(
+                  opacity: 0.5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: UserPreferences.btnColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ))
+                  : Container(),
+            ],
+          ));
     }
 
     return w;
   }
 
   Widget kakuro() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width,
-        child: Container(
-            margin: const EdgeInsets.all(20),
+    return Container(
+      height: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(top: 20, bottom: 20, right: 20, left: 20),
             child: _isKakuroLoading
                 ? Center(
                     child: CircularProgressIndicator(
@@ -160,30 +180,9 @@ class _GamePageState extends State<GamePage> {
                           crossAxisCount: _size),
                       itemBuilder: (BuildContext context, int index) {
                         return Center(
-                            child: InkWell(
-                                customBorder: const CircleBorder(),
-                                onTap: () {
-                                  setState(() {
-                                    _whatsSelected[index] = true;
-                                  });
-                                },
-                                child: Stack(
-                                  children: [
-                                    Center(child: carreKakuroGen(index)),
-                                    _whatsSelected[index]
-                                        ? Opacity(
-                                        opacity: 0.5,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: UserPreferences.btnColor,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ))
-                                        : Container(),
-                                  ],
-                                )));
+                            child: carreKakuroGen(index));
                       },
-                    ))));
+                    )));
   }
 
   Widget numPad() {
@@ -234,11 +233,7 @@ class _GamePageState extends State<GamePage> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
-        body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).padding.top + 15,
@@ -252,7 +247,6 @@ class _GamePageState extends State<GamePage> {
               Container(
                 margin: const EdgeInsets.only(top: 20),
                 alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height / 2,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -270,7 +264,7 @@ class _GamePageState extends State<GamePage> {
                   child: numPad(),
                 ),
               ),
-            ])),
+            ]),
       );
     });
   }
