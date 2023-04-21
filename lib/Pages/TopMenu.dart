@@ -33,7 +33,7 @@ class _TopMenuState extends State<TopMenu> {
         _title = 'RULES';
         break;
       case "StartPage":
-        _content = 'The difficulty of the game is based on the number of cells to fill in the grid. The more cells to fill, the more difficult the game will be. So a small KAKURO can be more difficult than a big one with lots of black cells';
+        _content = 'The difficulty of the game is based on the number of cells to fill in the grid. The more cells to fill, the more difficult the game will be. So a small KAKURO can be more difficult than a big one with lots of black cells.';
         _title = 'INFOS';
         break;
       case "HomePage":
@@ -50,11 +50,11 @@ class _TopMenuState extends State<TopMenu> {
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
         title: Text(_title, style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-        content: Text(_content, style: TextStyle(color: UserPreferences.btnColor)),
+        content: Text(_content, style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text('Ok', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
           ),
         ],
       ),);
