@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'IcyApp',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(fontFamily: 'Lato'),
+          theme: ThemeData(fontFamily: 'Lato', useMaterial3: true),
           home: const HomePage(),
         )
     );

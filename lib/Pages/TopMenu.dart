@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/AppProvider.dart';
 import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
-import '../main.dart';
 import 'PaletteSettings.dart';
 
 class TopMenu extends StatefulWidget {
@@ -16,7 +15,7 @@ class TopMenu extends StatefulWidget {
 }
 
 class _TopMenuState extends State<TopMenu> {
-  StreamController<bool> _clickController = StreamController();
+  final StreamController<bool> _clickController = StreamController();
   final transitionType = ContainerTransitionType.fadeThrough;
   late Alignment _menuAlignment;
 
@@ -25,6 +24,22 @@ class _TopMenuState extends State<TopMenu> {
     super.initState();
     _clickController.add(false);
     _menuAlignment = Alignment.centerRight;
+  }
+
+  void showCredits() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: UserPreferences.bgColor,
+        title: Text('CREDITS', style: TextStyle(color: UserPreferences.btnColor)),
+        content: Text('A flutter app made by 3 students from the engineering school INSA Haut De France', style: TextStyle(color: UserPreferences.btnColor)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Ok'),
+            child: Text('Ok', style: TextStyle(color: UserPreferences.btnColor)),
+          ),
+        ],
+      ),);
   }
 
   Widget topMenu() {
@@ -89,10 +104,11 @@ class _TopMenuState extends State<TopMenu> {
                               });
                               await Future.delayed(
                                   const Duration(milliseconds: 200));
-                              _clickController.add(false);
+                              showCredits();
                               setState(() {
                                 _menuAlignment = Alignment.centerRight;
                               });
+                              _clickController.add(false);
                             }
                           : null,
                     ),
