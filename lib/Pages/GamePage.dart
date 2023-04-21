@@ -23,10 +23,12 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late bool _isKakuroLoading;
+  late int _size;
 
   @override
   void initState() {
     super.initState();
+    _size = int.parse(widget._size[0]);
     if (widget._source == "CREER") {
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
     } else if (widget._source == "REJOINDRE") {
@@ -73,7 +75,23 @@ class _GamePageState extends State<GamePage> {
                       child: CircularProgressIndicator(
                         color: UserPreferences.btnColor,
                       ))
-                  : Image.asset("lib/assets/images/kakuro8x8.png"), // TODO: à remplacer avec le kakuro généré (qui sera surrement une gridview)
+                  : GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _size * _size,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: _size),
+                itemBuilder: (BuildContext context, int index) {
+                  return Center(
+                    child: Text(
+                      "0",
+                      style: TextStyle(
+                        color: UserPreferences.btnColor,
+                        fontSize: 30,
+                      ),
+                    ),
+                  );
+                },
+              )
 
         ));
   }
