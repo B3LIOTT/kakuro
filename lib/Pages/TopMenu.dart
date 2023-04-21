@@ -8,7 +8,8 @@ import '../Objects/UserPreferences.dart';
 import 'PaletteSettings.dart';
 
 class TopMenu extends StatefulWidget {
-  const TopMenu({super.key});
+  late final String _source;
+  TopMenu(this._source, {super.key});
 
   @override
   _TopMenuState createState() => _TopMenuState();
@@ -18,12 +19,29 @@ class _TopMenuState extends State<TopMenu> {
   final StreamController<bool> _clickController = StreamController();
   final transitionType = ContainerTransitionType.fadeThrough;
   late Alignment _menuAlignment;
+  late String _title;
+  late String _content;
 
   @override
   void initState() {
     super.initState();
     _clickController.add(false);
     _menuAlignment = Alignment.centerRight;
+    switch(widget._source) {
+      case "GamePage":
+        _content = 'To win, you have to fill the cells... bla bla bla';
+        _title = 'RULES';
+        break;
+      case "StartPage":
+        _content = 'The difficulty of the game is based on the number of cells to fill in the grid. The more cells to fill, the more difficult the game will be. So a small KAKURO can be more difficult than a big one with lots of black cells';
+        _title = 'INFOS';
+        break;
+      case "HomePage":
+        _content = 'A flutter app made by 3 students from the engineering school INSA Haut De France';
+        _title = 'CREDITS';
+        break;
+    }
+
   }
 
   void showCredits() {
@@ -31,12 +49,12 @@ class _TopMenuState extends State<TopMenu> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text('CREDITS', style: TextStyle(color: UserPreferences.btnColor)),
-        content: Text('A flutter app made by 3 students from the engineering school INSA Haut De France', style: TextStyle(color: UserPreferences.btnColor)),
+        title: Text(_title, style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text(_content, style: TextStyle(color: UserPreferences.btnColor)),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Ok'),
-            child: Text('Ok', style: TextStyle(color: UserPreferences.btnColor)),
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text('Ok', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
           ),
         ],
       ),);

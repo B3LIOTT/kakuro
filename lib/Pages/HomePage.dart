@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                     top: MediaQuery.of(context).padding.top + 15,
                     right: 20,
                     left: 20),
-                child: const TopMenu(),
+                child: TopMenu("HomePage"),
               ),
               Container(
                 color: UserPreferences.bgColor,

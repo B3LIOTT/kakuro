@@ -138,7 +138,7 @@ class _GamePageState extends State<GamePage> {
                     left: 20),
                 child: Stack(
                   alignment: Alignment.centerLeft,
-                  children: [returnBtn(), const TopMenu()],
+                  children: [returnBtn(), TopMenu("GamePage")],
                 ),
               ),
               Container(
