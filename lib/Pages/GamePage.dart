@@ -24,6 +24,7 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   late bool _isKakuroLoading;
   late int _size;
+  late List<bool> _whatsSelected;
 
   @override
   void initState() {
@@ -35,11 +36,13 @@ class _GamePageState extends State<GamePage> {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
     _isKakuroLoading = true;
+    _whatsSelected = List.filled(_size * _size, false);
     genKakuro();
   }
 
   void genKakuro() async {
-    await Future.delayed(const Duration(seconds: 1)); // TODO: remove this, ca sert juste a voir le loading
+    await Future.delayed(const Duration(
+        seconds: 1)); // TODO: remove this, ca sert juste a voir le loading
     setState(() {
       _isKakuroLoading = false;
     });
@@ -68,73 +71,86 @@ class _GamePageState extends State<GamePage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
         child: Container(
-          margin: const EdgeInsets.all(20),
-          child:
-              _isKakuroLoading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: UserPreferences.btnColor,
-                      ))
-                  : GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _size * _size,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: _size),
-                itemBuilder: (BuildContext context, int index) {
-                  return Center(
-                    child: Text(
-                      "0",
-                      style: TextStyle(
-                        color: UserPreferences.btnColor,
-                        fontSize: 30,
-                      ),
-                    ),
-                  );
-                },
-              )
-
-        ));
+            margin: const EdgeInsets.all(20),
+            child: _isKakuroLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: UserPreferences.btnColor,
+                  ))
+                : GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _size * _size,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: _size),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Center(
+                          child: InkWell(
+                            customBorder: const CircleBorder(),
+                              onTap: () {
+                                setState(() {
+                                  _whatsSelected[index] = true;
+                                });
+                              },
+                              child: Stack(
+                                children: [
+                                  _whatsSelected[index]
+                                      ? Container(
+                                    decoration: BoxDecoration(
+                                      color: UserPreferences.bgBtn,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  )
+                                      : Container(),
+                                  Center(child: Text(
+                                    "0",
+                                    style: TextStyle(
+                                      color: UserPreferences.btnColor,
+                                      fontSize: 30,
+                                    ),
+                                  )),
+                                ],
+                              )));
+                    },
+                  )));
   }
 
   Widget numPad() {
     return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: UserPreferences.bgBtn,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: GridView.count(
-            crossAxisCount: 5,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(10),
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            children: List.generate(10, (index) =>
-              Container(
-                decoration: BoxDecoration(
-                  color: UserPreferences.bgBtn,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: UserPreferences.btnColor,
-                    width: 2,
-                  ),
-                ),
-                child: IconButton(
-                  icon: Text(
-                    (index != 9)? (index+1).toString() : "X",
-                    style: TextStyle(
-                      color: UserPreferences.btnColor,
-                      fontSize: 30,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: UserPreferences.bgBtn,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: GridView.count(
+          crossAxisCount: 5,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(10),
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          children: List.generate(
+              10,
+              (index) => Container(
+                    decoration: BoxDecoration(
+                      color: UserPreferences.bgBtn,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: UserPreferences.btnColor,
+                        width: 2,
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-
-                  },
-                ),
-            )
-          ),
+                    child: IconButton(
+                      icon: Text(
+                        (index != 9) ? (index + 1).toString() : "X",
+                        style: TextStyle(
+                          color: UserPreferences.btnColor,
+                          fontSize: 30,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                  )),
         ));
   }
 
@@ -173,7 +189,9 @@ class _GamePageState extends State<GamePage> {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(top: 20, bottom: MediaQuery.of(context).padding.bottom + 20),
+                  margin: EdgeInsets.only(
+                      top: 20,
+                      bottom: MediaQuery.of(context).padding.bottom + 20),
                   alignment: Alignment.bottomCenter,
                   child: numPad(),
                 ),
