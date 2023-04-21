@@ -1,4 +1,4 @@
-# kakuro
+# Kakuro
 
 Kakuro game made by 3 students from INSA Haut De France.
 
