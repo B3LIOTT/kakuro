@@ -378,228 +378,58 @@ class Kakuro {
     }
   }
 
-  /// Fonction permettant de vérifier si la valeur du carré est déjà présente dans la ligne et/ou la colonne où se trouve le carré
-  /// @param i : coordonnée i du carré
-  /// @param j : coordonnée j du carré
-  /// @return bool : false si la valeur est présente dans la ligne et/ou la colonne, true sinon
-  bool verifValue(i, j) {
-    /*On sauvegarde les valeurs initiales de i,j et de la valeur du carré*/
-    int initI = i;
-    int initJ = j;
-    int valueIn = board[i][j].value;
-    /*Tant que la valeur n'est pas -1, on vérifie si la valeur est présente à droite du carré*/
-    while (board[i][j].value != -1) {
-      j++;
-      if (board[i][j].value == valueIn) {
-        return false;
-      }
-    }
-    /*On remet j à sa valeur initiale*/
-    j = initJ;
-    /*Tant que la valeur n'est pas -1, on vérifie si la valeur est présente à gauche du carré*/
-    while (board[i][j].value != -1) {
-      j--;
-      if (board[i][j].value == valueIn) {
-        return false;
-      }
-    }
-    /*On remet i à sa valeur initiale*/
-    j = initJ;
-    /*Tant que la valeur n'est pas -1, on vérifie si la valeur est présente au dessus du carré*/
-    while (board[i][j].value != -1) {
-      i--;
-      if (board[i][j].value == valueIn) {
-        return false;
-      }
-    }
-    /*On remet j à sa valeur initiale*/
-    i = initI;
-    /*Tant que la valeur n'est pas -1, on vérifie si la valeur est présente en dessous du carré*/
-    while (board[i][j].value != -1) {
-      i++;
-      if (board[i][j].value == valueIn) {
-        return false;
-      }
-    }
-    /*Si la valeur n'est pas présente dans la ligne ni dans la colonne, on retourne true*/
-    return true;
-  }
-
-  /// Fonction permettant de vérifier si la somme des valeurs des carrés correspond à la somme horizontale
-  /// On appelle cette fonction uniquement sur les blocs noirs qui ont une somme horizontale
-  /// @param i : coordonnée i du carré
-  /// @param j : coordonnée j du carré
-  /// @return bool : false si la somme des valeurs des carrés est différente de la somme horizontale, true sinon
-  bool verifHorizontalSum(int i, j) {
-    /*On crée un entier qui va contenir la somme des valeurs des carrés*/
+  /// Fonction qui retourne la somme d'un bloc
+  /// @param row : coordonnée i du bloc
+  /// @param col : coordonnée j du bloc
+  /// @param orientation : 0 pour vertical, 1 pour horizontal
+  int blockSum(int row, int col, int orientation) {
+    List<int> squaresBlock = blockSizeCoo(row, col, orientation);
     int sum = 0;
-    /*On sauvegarde la valeur initiale de j*/
-    int initJ = j;
-    /*On se décalle à droite du carré*/
-    j++;
-    /*Tant que la valeur n'est pas -1, on ajoute la valeur du carré à la somme*/
-    while (board[i][j].value != -1) {
-      sum += board[i][j].value;
-      j++;
+    if (orientation == 0) {
+      for (int i = squaresBlock[0] + 1; i < squaresBlock[0] + squaresBlock[2]; i++) {
+        sum += board[i][col].value;
+      }
+    } else {
+      for (int j = squaresBlock[1] + 1; j < squaresBlock[1] + squaresBlock[2]; j++) {
+        sum += board[row][j].value;
+      }
     }
-    /*Si la somme est différente de la somme horizontale, on retourne false*/
-    if (sum != board[i][initJ].horizontalSum) {
-      return false;
-    }
-    /*Sinon on retourne true*/
-    return true;
+    return sum;
   }
 
-  /// Fonction permettant de vérifier si la somme des valeurs des carrés correspond à la somme verticale.
-  /// On appelle cette fonction uniquement sur les blocs noirs qui ont une somme verticale
-  /// @param i : coordonnée i du carré
-  /// @param j : coordonnée j du carré
-  /// @return bool : false si la somme des valeurs des carrés est différente de la somme verticale, true sinon
-  ///
-  bool verifVerticalSum(int i, j) {
-    /*On crée un entier qui va contenir la somme des valeurs des carrés*/
-    int sum = 0;
-    /*On sauvegarde la valeur initiale de j*/
-    int initI = i;
-    /*On se décalle en dessous du carré*/
-    i++;
-    /*Tant que la valeur n'est pas -1, on ajoute la valeur du carré à la somme*/
-    while (board[i][j].value != -1) {
-      sum += board[i][j].value;
-      i++;
-    }
-    /*Si la somme est différente de la somme verticale, on retourne false*/
-    if (sum != board[initI][j].verticalSum) {
-      return false;
-    }
-    /*Sinon on retourne true*/
-    return true;
-  }
-
-  /// Fonction de vérification du jeu qui sera appelé à la demande de l'utilisateur pour vérifier si ses valeurs sont correctes
-  /// @return 1 si la grille est correcte
-  /// @return 2 si le cas 2 n'est pas respecté
-  /// @return 3 si le cas 3 n'est pas respecté
-  /// @return 2 ou 3 si l'une des condition du cas 4 n'est pas respectée
-  /// @return 5 si le cas 5 n'est pas respecté
-  int verificateur() {
-    /*On initialise les entiers qui permettent de parcourir le tableau*/
-    int i = 0;
-    int j = 0;
-    /*Tant qu'on a pas parcouru tout le tableau : */
-    while ((i < size) && (j < size)) {
-      /*Cas 1 : On vérifie si toutes les valeurs du carré sont -1. Cela permet ici de savoir
-      si on est sur une case entiérement noire (c'est à dire sans somme indiquée)*/
-      if ((board[i][j].verticalSum == -1) &&
-          (board[i][j].horizontalSum == -1) &&
-          (board[i][j].value == -1)) {
-        /*Si on arrive à la fin de la ligne, on passe à la ligne suivante*/
-        if (j == size) {
-          j = 0;
-          i++;
-        }
-        /*Sinon, on avance d'un carré vers la droite*/
-        else {
-          j++;
-        }
-      }
-      /*Cas 2 : On vérifie si la verticalSum est différente de -1 et si la horizontalSum et la valeur du carré est -1. Cela permet ici de savoir
-      si on est sur une case noire avec une somme verticale indiquée uniquement*/
-      else if ((board[i][j].verticalSum != -1) &&
-          (board[i][j].horizontalSum == -1) &&
-          (board[i][j].value == -1)) {
-        /*On lance la fonction de vérification de la somme verticale*/
-        /*Si on est à la fin de la ligne, on passe à la ligne suivante*/
-        if (verifVerticalSum(i, j)) {
-          /*Si la somme verticale est correcte, on passe à la case suivante*/
-          if (j == size) {
-            j = 0;
-            i++;
-          }
-          /*Sinon, on avance d'un carré vers la droite*/
-          else {
-            j++;
-          }
-        } else {
-          /*Si la somme verticale est incorrecte, on retourne un message indiquant que le jeu n'est pas résolu à cause de la somme verticale en (i, j)*/
-          return 2;
-        }
-      }
-      /*Cas 3 : On vérifie si la horizontalSum est différente de -1 et si la verticalSum et la valeur du carré est -1. Cela permet ici de savoir
-      si on est sur une case noire avec une somme horizontale indiquée uniquement*/
-      else if ((board[i][j].verticalSum == -1) &&
-          (board[i][j].horizontalSum != -1) &&
-          (board[i][j].value == -1)) {
-        /*On lance la fonction de vérification de la somme horizontale*/
-        /*Si la somme horizontale est correcte, on passe à la case suivante*/
-        if (verifHorizontalSum(i, j)) {
-          /*Si on arrive à la fin de la ligne, on passe à la ligne suivante*/
-          if (j == size) {
-            j = 0;
-            i++;
-          }
-          /*Sinon, on avance d'un carré vers la droite*/
-          else {
-            j++;
-          }
-        } else {
-          /*Si la somme horizontale est incorrecte, on retourne un message indiquant que le jeu n'est pas résolu à cause de la somme horizontale en (i, j)*/
-          return 3;
-        }
-      }
-      /*Cas 4 : On vérifie si la verticalSum et la horizontalSum sont différente de -1 et si la valeur du carré est -1. Cela permet ici de savoir
-      si on est sur une case noire avec une somme verticale et une somme horizontale indiquée*/
-      else if ((board[i][j].verticalSum != -1) &&
-          (board[i][j].horizontalSum != -1) &&
-          (board[i][j].value == -1)) {
-        /*On lance la fonction de vérification de la somme verticale*/
-        if (verifVerticalSum(i, j)) {
-          /*Si la somme verticale est correcte, on lance la fonction de vérification de la somme horizontale*/
-          if (verifHorizontalSum(i, j)) {
-            /*Si la somme horizontale est correcte, on passe à la case suivante*/
-            /*Si on arrive à la fin de la ligne, on passe à la ligne suivante*/
-            if (j == size) {
-              j = 0;
-              i++;
+  /// Fonction qui vérifie si le plateau est solution
+  /// @return la liste vide si le plateau est solution, sinon la liste des coordonnées des blocs qui ne sont pas solution
+  List<List<int>> checkSolution() {
+    List<List<int>> list = [];
+    for (int row = 0; row < size; row++) {
+      for (int col = 0; col < size; col++) {
+        if (board[row][col].value == -1 && (board[row][col].horizontalSum != -1 || board[row][col].verticalSum != -1)) {
+          if (board[row][col].horizontalSum != -1) {
+            if (board[row][col].horizontalSum != blockSum(row, col, 1)) {
+              List<int> list2 = [row, col];
+              list.add(list2);
             }
-            /*Sinon, on avance d'un carré vers la droite*/
-            else {
-              j++;
+          }
+          if (board[row][col].verticalSum != -1) {
+            if (board[row][col].verticalSum != blockSum(row, col, 0)) {
+              List<int> list2 = [row, col];
+              list.add(list2);
             }
-          } else {
-            /*Si la somme horizontale est incorrecte, on retourne un message indiquant que le jeu n'est pas résolu à cause de la somme horizontale en (i, j)*/
-            return 3;
           }
-        } else {
-          /*Si la somme verticale est incorrecte, on retourne un message indiquant que le jeu n'est pas résolu à cause de la somme verticale en (i, j)*/
-          return 2;
-        }
-      }
-      /*Cas 5 : On vérifie si la valeur du carré est différente de -1. Cela permet ici de savoir
-      si on est sur une case blanche*/
-      else if (board[i][j].value != -1) {
-        /*On lance la fonction de vérification qui permet de savoir si la valeur du carré est inscrite une fois et une seule dans la ligne et la colonne*/
-        if (verifValue(i, j)) {
-          /*Si la valeur du carré est inscrite une fois et une seule dans la ligne et la colonne :*/
-          /*Si on arrive à la fin de la ligne, on passe à la ligne suivante*/
-          if (j == size) {
-            j = 0;
-            i++;
-          }
-          /*Sinon, on avance d'un carré vers la droite*/
-          else {
-            j++;
-          }
-        } else {
-          /*Si la valeur du carré n'est pas inscrite une fois et une seule dans la ligne et la colonne, on retourne un message indiquant que le jeu n'est pas résolu à cause de la valeur en (i, j)*/
-          return 5;
         }
       }
     }
-    /*On retourne un message indiquant que le jeu est résolu*/
-    return 1;
+    return list;
   }
 
+  /// Fonction qui détermine si le plateau est solution
+  /// @return true si le plateau est solution, false sinon
+  bool isSolution() {
+    return checkSolution().isEmpty;
+  }
+
+
+  /// Fonction qui permet d'afficher dans la console le plateau de jeu
   void printBoard() {
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
@@ -647,7 +477,7 @@ class Kakuro {
 }
 
 void main() {
-  var board = Kakuro(12, 0.5);
-  board.printBoard();
-  stdout.write(board.verificateur());
+  var kakuro = Kakuro(12, 0.5);
+  kakuro.printBoard();
+  stdout.write(kakuro.isSolution());
 }
