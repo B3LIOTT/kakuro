@@ -9,16 +9,14 @@ import '../main.dart';
 import 'PaletteSettings.dart';
 
 class TopMenu extends StatefulWidget {
-const TopMenu({super.key});
+  const TopMenu({super.key});
 
   @override
   _TopMenuState createState() => _TopMenuState();
-
 }
 
 class _TopMenuState extends State<TopMenu> {
   StreamController<bool> _clickController = StreamController();
-  StreamController<bool> _clickController1 = StreamController();
   final transitionType = ContainerTransitionType.fadeThrough;
   late Alignment _menuAlignment;
 
@@ -26,115 +24,125 @@ class _TopMenuState extends State<TopMenu> {
   void initState() {
     super.initState();
     _clickController.add(false);
-    _clickController1.add(false);
     _menuAlignment = Alignment.centerRight;
   }
 
   Widget topMenu() {
-    return OpenContainer(
-      closedElevation: 0,
-      closedColor: UserPreferences.bgColor,
-      closedShape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
-      transitionType: transitionType,
-      transitionDuration: const Duration(milliseconds: 600),
-      openBuilder: (BuildContext context, _) => const PaletteSettings(),
-      closedBuilder: (context, VoidCallback openContainer) => Container(
-        height: MediaQuery.of(context).size.width / 6,
-        width: MediaQuery.of(context).size.width / 2,
-        decoration: BoxDecoration(
-          color: UserPreferences.bgBtn,
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        child: StreamBuilder(
-          stream: _clickController1.stream,
-          builder: (context, snapshot) {
-            return ButtonBar(
-              alignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: UserPreferences.btnColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.leaderboard,
-                      color : Colors.white,
+    return StreamBuilder<bool>(
+        stream: _clickController.stream,
+        builder: (context, snapshot) {
+          return OpenContainer(
+            tappable: false,
+            closedElevation: 0,
+            closedColor: UserPreferences.bgColor,
+            closedShape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            transitionType: transitionType,
+            transitionDuration: const Duration(milliseconds: 600),
+            openBuilder: (BuildContext context, _) => const PaletteSettings(),
+            closedBuilder: (context, VoidCallback openContainer) => Container(
+              height: MediaQuery.of(context).size.width / 6,
+              width: MediaQuery.of(context).size.width / 2,
+              decoration: BoxDecoration(
+                color: UserPreferences.bgBtn,
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+              child: ButtonBar(
+                alignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: UserPreferences.btnColor,
+                      shape: BoxShape.circle,
                     ),
-                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
-                      _clickController1.add(true);
-                      await Future.delayed(const Duration(milliseconds: 400));
-                      _clickController1.add(false);
-                    } : null,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: UserPreferences.btnColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const ImageIcon(
-                      AssetImage('lib/assets/images/info.png'),
-                      color : Colors.white,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.leaderboard,
+                        color: Colors.white,
+                      ),
+                      onPressed: snapshot.hasData && snapshot.data == false
+                          ? () async {
+                              _clickController.add(true);
+                              await Future.delayed(
+                                  const Duration(milliseconds: 400));
+                              _clickController.add(false);
+                            }
+                          : null,
                     ),
-                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
-                      _clickController1.add(true);
-                      setState(() {
-                        _menuAlignment = Alignment.center;
-                      });
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      _clickController1.add(false);
-                      setState(() {
-                        _menuAlignment = Alignment.centerRight;
-                      });
-                    } : null,
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: UserPreferences.btnColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const ImageIcon(
-                      AssetImage('lib/assets/images/settings.png'),
-                      color : Colors.white,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: UserPreferences.btnColor,
+                      shape: BoxShape.circle,
                     ),
-                    onPressed: snapshot.hasData && snapshot.data == false ? () async {
-                      _clickController1.add(true);
-                      setState(() {
-                        _menuAlignment = Alignment.center;
-                      });
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      openContainer();
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      _clickController1.add(false);
-                      setState(() {
-                        _menuAlignment = Alignment.centerRight;
-                      });
-                    } : null,
+                    child: IconButton(
+                      icon: const ImageIcon(
+                        AssetImage('lib/assets/images/info.png'),
+                        color: Colors.white,
+                      ),
+                      onPressed: snapshot.hasData && snapshot.data == false
+                          ? () async {
+                              _clickController.add(true);
+                              setState(() {
+                                _menuAlignment = Alignment.center;
+                              });
+                              await Future.delayed(
+                                  const Duration(milliseconds: 200));
+                              _clickController.add(false);
+                              setState(() {
+                                _menuAlignment = Alignment.centerRight;
+                              });
+                            }
+                          : null,
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
+                  Container(
+                    decoration: BoxDecoration(
+                      color: UserPreferences.btnColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const ImageIcon(
+                        AssetImage('lib/assets/images/settings.png'),
+                        color: Colors.white,
+                      ),
+                      onPressed: snapshot.hasData && snapshot.data == false
+                          ? () async {
+                              _clickController.add(true);
+                              setState(() {
+                                _menuAlignment = Alignment.center;
+                              });
+                              await Future.delayed(
+                                  const Duration(milliseconds: 200));
+                              openContainer();
+                              await Future.delayed(
+                                  const Duration(milliseconds: 200));
+                              setState(() {
+                                _menuAlignment = Alignment.centerRight;
+                              });
+                              _clickController.add(false);
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return AnimatedContainer(
-      width: MediaQuery.of(context).size.width,
-          curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: 200),
-          alignment: _menuAlignment,
-          child: topMenu(),
-      );});
+        width: MediaQuery.of(context).size.width,
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 200),
+        alignment: _menuAlignment,
+        child: topMenu(),
+      );
+    });
   }
 }

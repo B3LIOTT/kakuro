@@ -20,14 +20,12 @@ class _HomePageState extends State<HomePage> {
   final transitionType = ContainerTransitionType.fadeThrough;
   int _count = 0;
   StreamController<bool> _clickController = StreamController();
-  StreamController<bool> _clickController1 = StreamController();
 
   @override
   void initState() {
     super.initState();
     _isSlelected = [false, false, false];
     _clickController.add(false);
-    _clickController1.add(false);
   }
 
   void openPage(String page) async {
