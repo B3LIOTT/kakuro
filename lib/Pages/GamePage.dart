@@ -318,7 +318,7 @@ class _GamePageState extends State<GamePage> {
     print("Matrice du jeu : $_gameMatrix");
   }
 
-  void updateGame(List<List<int>> matrix) {
+  void updateGame(List<List<int>> matrix) { // TODO : changer cette fonction qui est plus du tout à jour
     // Actualisation de la matrice du jeu
     // _gameMatrix = matrix;
   }
