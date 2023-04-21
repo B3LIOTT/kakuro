@@ -402,7 +402,7 @@ class _StartPageState extends State<StartPage> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
-        body: SizedBox(
+          body: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child:

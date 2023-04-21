@@ -29,7 +29,7 @@ class _TopMenuState extends State<TopMenu> {
     _menuAlignment = Alignment.centerRight;
     switch(widget._source) {
       case "GamePage":
-        _content = 'To win, you have to fill the cells... bla bla bla';
+        _content = 'Each puzzle consists of a blank grid with sum-clues in various places. The object is to fill all empty squares using numbers 1 to 9 so the sum of each horizontal block equals the clue on its left, and the sum of each vertical block equals the clue on its top. In addition, no number may be used in the same block more than once.';
         _title = 'RULES';
         break;
       case "StartPage":
