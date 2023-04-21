@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:kakuro/Objects/Kakuro.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
+import '../Objects/Carre.dart';
 import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 
@@ -24,7 +25,9 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   late bool _isKakuroLoading;
   late int _size;
+  late double _density;
   late List<bool> _whatsSelected;
+  List<List<Carre>> _gameMatrix = [];
 
   @override
   void initState() {
@@ -35,6 +38,17 @@ class _GamePageState extends State<GamePage> {
     } else if (widget._source == "REJOINDRE") {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
+    switch(widget._diff) {
+      case "Facile":
+        _density = 0.8;
+        break;
+      case "Moyen":
+        _density = 0.5;
+        break;
+      case "Expert":
+        _density = 0.3;
+        break;
+    }
     _isKakuroLoading = true;
     _whatsSelected = List.filled(_size * _size, false);
     genKakuro();
@@ -43,7 +57,9 @@ class _GamePageState extends State<GamePage> {
   void genKakuro() async {
     await Future.delayed(const Duration(
         seconds: 1)); // TODO: remove this, ca sert juste a voir le loading
+    Kakuro kwakuro = Kakuro(_size, _density);
     setState(() {
+      _gameMatrix = kwakuro.board;
       _isKakuroLoading = false;
     });
   }
@@ -64,6 +80,45 @@ class _GamePageState extends State<GamePage> {
         },
       ),
     );
+  }
+
+  Widget carreKakuroGen(int index) {
+    int i = index~/_size;
+    int j = index%_size;
+    Carre c = _gameMatrix[i][j];
+    late Widget w;
+
+    if(c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
+      w = Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: UserPreferences.btnColor
+        ),
+      );
+    } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) {
+      w = Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.red
+        ),
+      );
+    } else if (c.horizontalSum == -1 && c.verticalSum > -1 && c.value == -1) {
+      w = Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.red
+        ),
+      );
+    } else if (c.horizontalSum == 0 && c.verticalSum == 0 && (c.value > 0 && c.value < 10)) {
+      w = Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: UserPreferences.bgBtn
+        ),
+      );
+    }
+
+    return w;
   }
 
   Widget kakuro() {
@@ -94,20 +149,16 @@ class _GamePageState extends State<GamePage> {
                               child: Stack(
                                 children: [
                                   _whatsSelected[index]
-                                      ? Container(
+                                      ? Opacity(
+                                    opacity: 0.5,
+                                    child: Container(
                                     decoration: BoxDecoration(
                                       color: UserPreferences.bgBtn,
                                       shape: BoxShape.circle,
                                     ),
-                                  )
+                                  ))
                                       : Container(),
-                                  Center(child: Text(
-                                    "0",
-                                    style: TextStyle(
-                                      color: UserPreferences.btnColor,
-                                      fontSize: 30,
-                                    ),
-                                  )),
+                                  Center(child: carreKakuroGen(index)),
                                 ],
                               )));
                     },
@@ -205,7 +256,6 @@ class _GamePageState extends State<GamePage> {
 
   late Socket socket;
   final String _IP_SERVER = "192.168.1.21";
-  List<List<int>> _gameMatrix = [];
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
     // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
@@ -230,6 +280,7 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
+  // TODO : recevoir une List<List<Carre>>
   void dataHandler(String data) {
     // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
 
@@ -246,7 +297,7 @@ class _GamePageState extends State<GamePage> {
 
   void updateGame(List<List<int>> matrix) {
     // Actualisation de la matrice du jeu
-    _gameMatrix = matrix;
+   // _gameMatrix = matrix;
   }
 
   void errorHandler(error, StackTrace trace) {
