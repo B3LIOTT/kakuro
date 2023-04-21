@@ -428,6 +428,17 @@ class Kakuro {
     return checkSolution().isEmpty;
   }
 
+  /// Fonction qui vide les valeurs des carrés blancs
+  void removeValues() {
+    for (int row = 0; row < size; row++) {
+      for (int col = 0; col < size; col++) {
+        if (board[row][col].value != -1) {
+          board[row][col].value = 0;
+        }
+      }
+    }
+  }
+
 
   /// Fonction qui permet d'afficher dans la console le plateau de jeu
   void printBoard() {
@@ -478,6 +489,10 @@ class Kakuro {
 
 void main() {
   var kakuro = Kakuro(12, 0.5);
+  kakuro.printBoard();
+  stdout.write(kakuro.isSolution());
+  kakuro.removeValues();
+  stdout.write("\n");
   kakuro.printBoard();
   stdout.write(kakuro.isSolution());
 }
