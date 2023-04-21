@@ -40,11 +40,6 @@ class _GamePageState extends State<GamePage> {
         _size = int.parse(widget._size.substring(0, 2));
         break;
     }
-    if (widget._source == "CREER") {
-      connexionHandlerFromCreate(widget._KEY, widget._PORT);
-    } else if (widget._source == "REJOINDRE") {
-      connexionHandlerFromJoin(widget._KEY, widget._PORT);
-    }
     switch (widget._diff) {
       case "Facile":
         _density = 0.8;
@@ -59,13 +54,19 @@ class _GamePageState extends State<GamePage> {
     _isKakuroLoading = true;
     _whatsSelected = List.filled(_size * _size, false);
     genKakuro();
+
+    if (widget._source == "CREER") {
+      connexionHandlerFromCreate(widget._KEY, widget._PORT);
+    } else if (widget._source == "REJOINDRE") {
+      connexionHandlerFromJoin(widget._KEY, widget._PORT);
+    }
   }
 
   void updateValue(int value) {
-    for(int i = 0; i < _whatsSelected.length; i++) {
-      if(_whatsSelected[i]) {
+    for (int i = 0; i < _whatsSelected.length; i++) {
+      if (_whatsSelected[i]) {
         setState(() {
-          _gameMatrix[i~/_size][i%_size].value = (value < 10)? value : 0;
+          _gameMatrix[i ~/ _size][i % _size].value = (value < 10) ? value : 0;
           _whatsSelected[i] = false;
         });
       }
@@ -123,7 +124,6 @@ class _GamePageState extends State<GamePage> {
     } else if (c.horizontalSum == 0 &&
         c.verticalSum == 0 &&
         (c.value >= 0 && c.value < 10)) {
-
       w = InkWell(
           customBorder: const CircleBorder(),
           onTap: () {
@@ -133,7 +133,8 @@ class _GamePageState extends State<GamePage> {
           },
           child: Stack(
             children: [
-              Center(child: Stack(
+              Center(
+                  child: Stack(
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -147,13 +148,13 @@ class _GamePageState extends State<GamePage> {
               )),
               _whatsSelected[index]
                   ? Opacity(
-                  opacity: 0.5,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: UserPreferences.btnColor,
-                      shape: BoxShape.circle,
-                    ),
-                  ))
+                      opacity: 0.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: UserPreferences.btnColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ))
                   : Container(),
             ],
           ));
@@ -164,25 +165,24 @@ class _GamePageState extends State<GamePage> {
 
   Widget kakuro() {
     return Container(
-      height: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(top: 20, bottom: 20, right: 20, left: 20),
-            child: _isKakuroLoading
-                ? Center(
-                    child: CircularProgressIndicator(
-                    color: UserPreferences.btnColor,
-                  ))
-                : InteractiveViewer(
-                    panEnabled: true,
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _size * _size,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: _size),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Center(
-                            child: carreKakuroGen(index));
-                      },
-                    )));
+        height: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(top: 20, bottom: 20, right: 20, left: 20),
+        child: _isKakuroLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                color: UserPreferences.btnColor,
+              ))
+            : InteractiveViewer(
+                panEnabled: true,
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _size * _size,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: _size),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Center(child: carreKakuroGen(index));
+                  },
+                )));
   }
 
   Widget numPad() {
@@ -220,7 +220,7 @@ class _GamePageState extends State<GamePage> {
                         ),
                       ),
                       onPressed: () {
-                        updateValue(index+1);
+                        updateValue(index + 1);
                       },
                     ),
                   )),
@@ -234,37 +234,36 @@ class _GamePageState extends State<GamePage> {
         resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
         body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 15,
-                    right: 20,
-                    left: 20),
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [returnBtn(), TopMenu("GamePage")],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    kakuro(),
-                    Text("${widget._diff} - ${widget._size}"),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      top: 20,
-                      bottom: MediaQuery.of(context).padding.bottom + 20),
-                  alignment: Alignment.bottomCenter,
-                  child: numPad(),
-                ),
-              ),
-            ]),
+          Padding(
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + 15,
+                right: 20,
+                left: 20),
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [returnBtn(), TopMenu("GamePage")],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                kakuro(),
+                Text("${widget._diff} - ${widget._size}"),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: 20, bottom: MediaQuery.of(context).padding.bottom + 20),
+              alignment: Alignment.bottomCenter,
+              child: numPad(),
+            ),
+          ),
+        ]),
       );
     });
   }
@@ -289,6 +288,10 @@ class _GamePageState extends State<GamePage> {
         final key = jsonEncode(KEY);
         socket.write(key);
 
+        // Envoi de la matrice de jeu au serveur privé pour qu'il la stocke et la diffuse aux autres joueurs qui arrivent
+        final matrix = jsonEncode(_gameMatrix);
+        socket.write(matrix);
+
         input.listen(dataHandler,
             onError: errorHandler, onDone: doneHandler, cancelOnError: false);
       });
@@ -297,24 +300,23 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  // TODO : recevoir une List<List<Carre>>
   void dataHandler(String data) {
     // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
 
     // Conversion de la liste d'entiers en matrice de jeu
     final dynamicMatrix = jsonDecode(data);
-    List<List<int>> matrix = List<List<int>>.generate(
-        dynamicMatrix.length,
-        (i) => List<int>.generate(
+    List<List<Carre>> matrixData = List<List<Carre>>.generate(
+        data.length,
+            (i) => List<Carre>.generate(
             dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
 
-    updateGame(matrix);
+    updateGame(matrixData);
     print("Matrice du jeu : $_gameMatrix");
   }
 
-  void updateGame(List<List<int>> matrix) { // TODO : changer cette fonction qui est plus du tout à jour
+  void updateGame(List<List<Carre>> matrix) {
     // Actualisation de la matrice du jeu
-    // _gameMatrix = matrix;
+    _gameMatrix = matrix;
   }
 
   void errorHandler(error, StackTrace trace) {

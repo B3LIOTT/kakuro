@@ -446,7 +446,7 @@ class _StartPageState extends State<StartPage> {
 
   /*-------------------------------------Creation de partie multi-------------------------------------*/
   late Socket socket;
-  final String _IP_SERVER = "192.168.1.21";
+  final String _IP_SERVER = "192.168.43.42";
   final int _MAIN_SERVER_PORT = 8080;
   List<List<int>> _gameMatrix = [];
 
