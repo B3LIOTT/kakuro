@@ -37,7 +37,7 @@ class _TopMenuState extends State<TopMenu> {
         _title = 'INFOS';
         break;
       case "HomePage":
-        _content = 'A flutter app made by 3 students from the engineering school INSA Haut De France';
+        _content = 'A flutter app made by 4 students from the engineering school INSA Haut De France';
         _title = 'CREDITS';
         break;
     }
