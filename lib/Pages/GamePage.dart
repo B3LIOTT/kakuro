@@ -32,13 +32,20 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    _size = int.parse(widget._size[0]);
+    switch (widget._size.length) {
+      case 3:
+        _size = int.parse(widget._size[0]);
+        break;
+      case 5:
+        _size = int.parse(widget._size.substring(0, 2));
+        break;
+    }
     if (widget._source == "CREER") {
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
     } else if (widget._source == "REJOINDRE") {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
-    switch(widget._diff) {
+    switch (widget._diff) {
       case "Facile":
         _density = 0.8;
         break;
@@ -54,9 +61,18 @@ class _GamePageState extends State<GamePage> {
     genKakuro();
   }
 
+  void updateValue(int value) {
+    for(int i = 0; i < _whatsSelected.length; i++) {
+      if(_whatsSelected[i]) {
+        setState(() {
+          _gameMatrix[i~/_size][i%_size].value = value;
+          _whatsSelected[i] = false;
+        });
+      }
+    }
+  }
+
   void genKakuro() async {
-    await Future.delayed(const Duration(
-        seconds: 1)); // TODO: remove this, ca sert juste a voir le loading
     Kakuro kwakuro = Kakuro(_size, _density);
     setState(() {
       _gameMatrix = kwakuro.board;
@@ -83,38 +99,41 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget carreKakuroGen(int index) {
-    int i = index~/_size;
-    int j = index%_size;
+    int i = index ~/ _size;
+    int j = index % _size;
     Carre c = _gameMatrix[i][j];
     late Widget w;
 
-    if(c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
+    if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
       w = Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: UserPreferences.btnColor
-        ),
+            borderRadius: BorderRadius.circular(10),
+            color: UserPreferences.btnColor),
       );
     } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) {
       w = Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.red
-        ),
+            borderRadius: BorderRadius.circular(20), color: Colors.red),
       );
     } else if (c.horizontalSum == -1 && c.verticalSum > -1 && c.value == -1) {
       w = Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.red
-        ),
+            borderRadius: BorderRadius.circular(20), color: Colors.red),
       );
-    } else if (c.horizontalSum == 0 && c.verticalSum == 0 && (c.value > 0 && c.value < 10)) {
-      w = Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: UserPreferences.bgBtn
-        ),
+    } else if (c.horizontalSum == 0 &&
+        c.verticalSum == 0 &&
+        (c.value >= 0 && c.value < 10)) {
+      w = Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: UserPreferences.bgBtn),
+          ),
+          Center(
+            child: Text(c.value.toString()),
+          )
+        ],
       );
     }
 
@@ -132,37 +151,39 @@ class _GamePageState extends State<GamePage> {
                     child: CircularProgressIndicator(
                     color: UserPreferences.btnColor,
                   ))
-                : GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _size * _size,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: _size),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Center(
-                          child: InkWell(
-                            customBorder: const CircleBorder(),
-                              onTap: () {
-                                setState(() {
-                                  _whatsSelected[index] = true;
-                                });
-                              },
-                              child: Stack(
-                                children: [
-                                  _whatsSelected[index]
-                                      ? Opacity(
-                                    opacity: 0.5,
-                                    child: Container(
-                                    decoration: BoxDecoration(
-                                      color: UserPreferences.bgBtn,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ))
-                                      : Container(),
-                                  Center(child: carreKakuroGen(index)),
-                                ],
-                              )));
-                    },
-                  )));
+                : InteractiveViewer(
+                    panEnabled: true,
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _size * _size,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: _size),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Center(
+                            child: InkWell(
+                                customBorder: const CircleBorder(),
+                                onTap: () {
+                                  setState(() {
+                                    _whatsSelected[index] = true;
+                                  });
+                                },
+                                child: Stack(
+                                  children: [
+                                    Center(child: carreKakuroGen(index)),
+                                    _whatsSelected[index]
+                                        ? Opacity(
+                                        opacity: 0.5,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: UserPreferences.btnColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ))
+                                        : Container(),
+                                  ],
+                                )));
+                      },
+                    ))));
   }
 
   Widget numPad() {
@@ -199,7 +220,9 @@ class _GamePageState extends State<GamePage> {
                           fontSize: 30,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        updateValue(index+1);
+                      },
                     ),
                   )),
         ));
@@ -297,7 +320,7 @@ class _GamePageState extends State<GamePage> {
 
   void updateGame(List<List<int>> matrix) {
     // Actualisation de la matrice du jeu
-   // _gameMatrix = matrix;
+    // _gameMatrix = matrix;
   }
 
   void errorHandler(error, StackTrace trace) {
