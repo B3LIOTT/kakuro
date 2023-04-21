@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'Carre.dart';
@@ -12,7 +13,10 @@ class Kakuro {
   List<List<Carre>> get getBoard {
     return board;
   }
-
+  /// Constructeur de la classe Kakuro
+  /// size: taille du kakuro
+  /// density: densité du kakuro
+  /// board: tableau de carrés
   Kakuro(this.size, this.density) {
     board = List.generate(
         size, (i) => List.filled(size, Carre(0, 0, 0), growable: false),
@@ -27,22 +31,22 @@ class Kakuro {
           board[i][j] = Carre(-1, -1, -1);
         } else {
           // other squares are white squares
-          if (board[i][j] != -1) {
+          if (board[i][j].value != -1) {
             board[i][j] = Carre(0, 0, 0);
           }
         }
       }
     }
-    generateBlackSquares();
-    fillWhiteSpaces();
+    generateBlackSquares(); // on génère les carrés noirs
+    fillWhiteSpaces(); // On s'assure qu'il n'existe pas de trop grandes séries de cases blanches
+    fillBoard(); // On remplit les cases blanches avec des chiffres
+    fillSums(); // On génère les sommes
   }
 
-  /**
-   * Fonction qui génère les carrés noirs (en fonction d'une densité donnée)
-   * No line or line of white cells can have a length greater than the range of the puzzle (1-9)
-   * Black cells should have a 180 degree rotational symmetry
-   * 1-cell sums should be avoided (at least 2 cells per sum)
-   */
+  /// Fonction qui génère les carrés noirs (en fonction d'une densité donnée)
+  /// Aucune série de carrés blancs ne doit faire plus de 9 cases
+  /// Il y a une symétrie central des carrés noirs (180°)
+  /// Les sommes de 1 chiffre sont interdites
   void generateBlackSquares() {
     int x = Random().nextInt(100);
     if (x < density * 100) {
@@ -140,9 +144,7 @@ class Kakuro {
     }
   }
 
-  /** Fonction permettant d'insérer un carré noir pour compléter une séquence trop longue de cases blanches
-   *
-   */
+  /// Fonction permettant d'inserer un carre noir pour completer une sequence trop longue de cases blanches
   void fillWhiteSpaces() {
     // Dans un premier temps, on construit la liste de toutes séquences de cases blanches horizontales
     List<List<int>> whiteSpaces = [];
@@ -202,10 +204,9 @@ class Kakuro {
     }
   }
 
-  /** Fonction permettant de vérifier si le plateau est contraint ou non
-   * 1 : plateau contraint
-   * -1 : plateau non contraint
-   */
+  /// Fonction permettant de verifier si le plateau est contraint ou non
+  /// 1 : plateau contraint
+  /// -1 : plateau non contraint
   bool isBoardConstrained() {
     for (int i = 1; i < size - 1; i++) {
       for (int j = 1; j < size - 1; j++) {
@@ -217,12 +218,10 @@ class Kakuro {
     return false;
   }
 
-  /**
-   * Fonction permettant de vérifier si le carré est contraint ou non
-   * Un carré est contraint s'il est entouré de carrés noirs sur les côtés (soit gauche et droite, soit haut et bas)
-   * 0 : carré contraint
-   * -1 : carré non contraint
-   */
+  /// Fonction permettant de vérifier si le carré est contraint ou non
+  /// Un carré est contraint s'il est entouré de carrés noirs sur les côtés (soit gauche et droite, soit haut et bas)
+  /// 0 : carré contraint
+  /// -1 : carré non contraint
   int isConstrained(int i, int j) {
     if (board[i][j].value == 0) {
       if (board[i][j - 1].value == -1 && board[i][j + 1].value == -1) {
@@ -235,13 +234,11 @@ class Kakuro {
     return -1;
   }
 
-  /**
-   * Fonction qui retourne la taille d'un bloc depuis une coordonnée précisée et qui renvoie les coordonnées du début du bloc
-   * @param i : coordonnée i du bloc depuis lequel on part
-   * @param j : coordonnée j du bloc depuis lequel on part
-   * @param orientation : orientation du bloc (1: horizontal, 0: vertical)
-   * @return {id : int, jd : int, taille : int} : id et jd sont les coordonnées du début du bloc, taille est la taille du bloc
-   */
+  /// Fonction qui retourne la taille d'un bloc depuis une coordonnée précisée et qui renvoie les coordonnées du début du bloc
+  /// @param i : coordonnée i du bloc depuis lequel on part
+  /// @param j : coordonnée j du bloc depuis lequel on part
+  /// @param orientation : orientation du bloc (1: horizontal, 0: vertical)
+  /// @return {id : int, jd : int, taille : int} : id et jd sont les coordonnées du début du bloc, taille est la taille du bloc
   List<int> blockSizeCoo(int i, j, orientation) {
     /*Définition des variables*/
     int id = -1;
@@ -291,12 +288,100 @@ class Kakuro {
     }
   }
 
-  /**
-   * Fonction permettant de vérifier si la valeur du carré est déjà présente dans la ligne et/ou la colonne où se trouve le carré
-   * @param i : coordonnée i du carré
-   * @param j : coordonnée j du carré
-   * @return bool : false si la valeur est présente dans la ligne et/ou la colonne, true sinon
-   * */
+  /// Fonction qui rempli les cases blanches du plateau avec des chiffres aléatoires
+  bool fillBoard() {
+    for (int row = 0; row < size; row++) {
+      for (int col = 0; col < size; col++) {
+        if (board[row][col].value == 0) {
+          List<int> possibleValues = getPossibleValues(row, col);
+          if (possibleValues.isEmpty) {
+            return false;
+          }
+
+          int randomIndex = Random().nextInt(possibleValues.length);
+          board[row][col].value = possibleValues[randomIndex];
+
+          if (fillBoard()) {
+            return true;
+          } else {
+            board[row][col].value = 0;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  /// Fonction permettant de retourner la liste des valeurs possibles pour un carré
+  /// @param row : coordonnée i du carré
+  /// @param col : coordonnée j du carré
+  List<int> getPossibleValues(int row, int col) {
+    List<int> possibleValues = List.generate(9, (i) => i + 1);
+    List<int> squaresBlockVertical = blockSizeCoo(row, col, 0);
+    List<int> squaresBlockHorizontal = blockSizeCoo(row, col, 1);
+    // On parcours les carrés du bloc vertical et on enlève les valeurs déjà présentes
+    for (int i = squaresBlockVertical[0]; i < squaresBlockVertical[0] + squaresBlockVertical[2]; i++) {
+      if (board[i][col].value != 0) {
+        possibleValues.remove(board[i][col].value);
+      }
+    }
+    // On parcours les carrés du bloc horizontal et on enlève les valeurs déjà présentes
+    for (int j = squaresBlockHorizontal[1]; j < squaresBlockHorizontal[1] + squaresBlockHorizontal[2]; j++) {
+      if (board[row][j].value != 0) {
+        possibleValues.remove(board[row][j].value);
+      }
+    }
+    return possibleValues;
+  }
+
+  /// Fonction qui permet de compléter les Verticals et les Horizontals Sums en déduisant depuis les carrés blancs complétés
+  void fillSums() {
+    for (int row = 0; row < size; row++) {
+      for (int col = 0; col < size; col++) {
+        if (board[row][col].value == -1) {
+          int horizontalSum = 0;
+          int verticalSum = 0;
+
+          // Calculate horizontal sum
+          int currentCol = col + 1;
+          while (currentCol < size && board[row][currentCol].value != -1) {
+            horizontalSum += board[row][currentCol].value;
+            currentCol++;
+          }
+
+          // Calculate vertical sum
+          int currentRow = row + 1;
+          while (currentRow < size && board[currentRow][col].value != -1) {
+            verticalSum += board[currentRow][col].value;
+            currentRow++;
+          }
+
+          // Assign sums to the Carre object
+          if (horizontalSum == 0 && verticalSum == 0) {
+            board[row][col].horizontalSum = -1;
+            board[row][col].verticalSum = -1;
+          }
+          else if (horizontalSum == 0) {
+            board[row][col].horizontalSum = -1;
+            board[row][col].verticalSum = verticalSum;
+          }
+          else if (verticalSum == 0) {
+            board[row][col].horizontalSum = horizontalSum;
+            board[row][col].verticalSum = -1;
+          }
+          else {
+            board[row][col].horizontalSum = horizontalSum;
+            board[row][col].verticalSum = verticalSum;
+          }
+        }
+      }
+    }
+  }
+
+  /// Fonction permettant de vérifier si la valeur du carré est déjà présente dans la ligne et/ou la colonne où se trouve le carré
+  /// @param i : coordonnée i du carré
+  /// @param j : coordonnée j du carré
+  /// @return bool : false si la valeur est présente dans la ligne et/ou la colonne, true sinon
   bool verifValue(i, j) {
     /*On sauvegarde les valeurs initiales de i,j et de la valeur du carré*/
     int initI = i;
@@ -340,86 +425,11 @@ class Kakuro {
     return true;
   }
 
-  /**
-   * Fonction récursive qui permet de remplir une colonne avec des valeurs aléatoires comprises entre 1 et 9
-   * @param i : coordonnée i du bloc depuis lequel on part
-   * @param j : coordonnée j du bloc depuis lequel on part
-   */
-
-  void rempliColRecur(int i, j) {
-    /*Définition des variables*/
-    int value = 0;
-    /*On vérifie si on a atteint la fin du bloc*/
-    if (board[i][j].value == -1) {
-      /*Si on a atteint la fin du bloc, on vide la liste valueUsed*/
-      valueUsed.clear();
-      /*On retourne à la fonction appelante*/
-      return;
-    }
-    /*Si on a pas atteint la fin du bloc*/
-    else {
-      /*On choisit une valeur aléatoire dans la liste possibleValues qui n'est pas dans la liste valueUsed*/
-      do {
-        value = possibleValues[Random().nextInt(possibleValues.length)];
-      } while (valueUsed.contains(value));
-      /*On modifie la valeur de la case*/
-      board[i][j].value = value;
-      /*On vérifie avec la fonction verifValue si la valeur choisie est valide*/
-      if (verifValue(i, j)) {
-        /*On ajoute la valeur à la liste valueUsed*/
-        valueUsed.add(value);
-        /*On appelle la fonction rempliColRecur avec la case suivante*/
-        rempliColRecur(i++, j);
-      } else {
-        /*Si la valeur n'est pas valide, on remet la valeur de la case à -1*/
-        board[i][j].value = -1;
-        /*On ajoute la valeur à la liste valueUsed*/
-        valueUsed.add(value);
-        /*On appelle la fonction rempliColRecur avec la même case*/
-        rempliColRecur(i, j);
-      }
-    }
-  }
-
-  /**
-   * Fonction qui détermine où on appelle la fonction rempliColRecur
-   */
-  void whereFillCol() {
-    /*Définition des variables*/
-    int i = 0;
-    int j = 1;
-    /*On parcourt le tableau*/
-    for (i; i < size - 2; i++) {
-      for (j; j < size - 2; j++) {
-        /*Cas 1 : Une case noire se situe en (i,j) et une case noire se situe en (i+1,j)*/
-        if ((board[i][j].value == -1) && (board[i++][j].value == -1)) {
-          /*On passe à la case suivante*/
-          j++;
-        }
-        /*Cas 2 : Une case noire se situe en (i,j) et une case blanche se situe en (i+1,j)*/
-        else if ((board[i][j].value == -1) && (board[i++][j].value == 0)) {
-          /*On appelle la fonction rempliColonne pour remplir la colonne de valeurs aléatoires*/
-          i++;
-          rempliColRecur(i, j);
-          i--;
-          /*On passe à la case suivante*/
-          j++;
-        }
-        /*Cas 3 : On parcourt une case blanche*/
-        else if (board[i][j].value == 0) {
-          /*On passe à la case suivante*/
-          j++;
-        }
-      }
-    }
-  }
-
-  /**Fonction permettant de vérifier si la somme des valeurs des carrés correspond à la somme horizontale
-   * On appelle cette fonction uniquement sur les blocs noirs qui ont une somme horizontale
-   * @param i : coordonnée i du carré
-   * @param j : coordonnée j du carré
-   * @return bool : false si la somme des valeurs des carrés est différente de la somme horizontale, true sinon
-   */
+  /// Fonction permettant de vérifier si la somme des valeurs des carrés correspond à la somme horizontale
+  /// On appelle cette fonction uniquement sur les blocs noirs qui ont une somme horizontale
+  /// @param i : coordonnée i du carré
+  /// @param j : coordonnée j du carré
+  /// @return bool : false si la somme des valeurs des carrés est différente de la somme horizontale, true sinon
   bool verifHorizontalSum(int i, j) {
     /*On crée un entier qui va contenir la somme des valeurs des carrés*/
     int sum = 0;
@@ -440,12 +450,12 @@ class Kakuro {
     return true;
   }
 
-  /**Fonction permettant de vérifier si la somme des valeurs des carrés correspond à la somme verticale.
-   * On appelle cette fonction uniquement sur les blocs noirs qui ont une somme verticale
-   * @param i : coordonnée i du carré
-   * @param j : coordonnée j du carré
-   * @return bool : false si la somme des valeurs des carrés est différente de la somme verticale, true sinon
-   * */
+  /// Fonction permettant de vérifier si la somme des valeurs des carrés correspond à la somme verticale.
+  /// On appelle cette fonction uniquement sur les blocs noirs qui ont une somme verticale
+  /// @param i : coordonnée i du carré
+  /// @param j : coordonnée j du carré
+  /// @return bool : false si la somme des valeurs des carrés est différente de la somme verticale, true sinon
+  ///
   bool verifVerticalSum(int i, j) {
     /*On crée un entier qui va contenir la somme des valeurs des carrés*/
     int sum = 0;
@@ -466,14 +476,12 @@ class Kakuro {
     return true;
   }
 
-  /**
-   * Fonction de vérification du jeu qui sera appelé à la demande de l'utilisateur pour vérifier si ses valeurs sont correctes
-   * @return 1 si la grille est correcte
-   * @return 2 si le cas 2 n'est pas respecté
-   * @return 3 si le cas 3 n'est pas respecté
-   * @return 2 ou 3 si l'une des condition du cas 4 n'est pas respectée
-   * @return 5 si le cas 5 n'est pas respecté
-   */
+  /// Fonction de vérification du jeu qui sera appelé à la demande de l'utilisateur pour vérifier si ses valeurs sont correctes
+  /// @return 1 si la grille est correcte
+  /// @return 2 si le cas 2 n'est pas respecté
+  /// @return 3 si le cas 3 n'est pas respecté
+  /// @return 2 ou 3 si l'une des condition du cas 4 n'est pas respectée
+  /// @return 5 si le cas 5 n'est pas respecté
   int verificateur() {
     /*On initialise les entiers qui permettent de parcourir le tableau*/
     int i = 0;
@@ -598,22 +606,48 @@ class Kakuro {
         if (board[i][j].value == -1) {
           if (board[i][j].verticalSum == -1 &&
               board[i][j].horizontalSum == -1) {
-            print("X ");
+            stdout.write("XXXXX ");
           } else if (board[i][j].verticalSum == -1) {
-            print(board[i][j].horizontalSum.toString() + " ");
+            // On ajoute un espace si la somme horizontale est inférieure à 10
+            if (board[i][j].horizontalSum < 10) {
+              stdout.write("  \\${board[i][j].horizontalSum}  ");
+            } else {
+              stdout.write("  \\${board[i][j].horizontalSum} ");
+            }
           } else if (board[i][j].horizontalSum == -1) {
-            print(board[i][j].verticalSum.toString() + " ");
+            // On ajoute un espace si la somme verticale est inférieure à 10
+            if (board[i][j].verticalSum < 10) {
+              stdout.write(" ${board[i][j].verticalSum}\\   ");
+            } else {
+              stdout.write("${board[i][j].verticalSum}\\   ");
+            }
           } else {
-            print(board[i][j].verticalSum.toString() +
-                "\\" +
-                board[i][j].horizontalSum.toString() +
-                " ");
+            // On ajoute la bonne quantité d'espace pour que les sommes soient alignées
+            if (board[i][j].horizontalSum < 10) {
+              if (board[i][j].verticalSum < 10) {
+                stdout.write(" ${board[i][j].verticalSum}\\${board[i][j].horizontalSum}  ");
+              } else {
+                stdout.write("${board[i][j].verticalSum}\\${board[i][j].horizontalSum}  ");
+              }
+            } else {
+              if (board[i][j].verticalSum < 10) {
+                stdout.write(" ${board[i][j].verticalSum}\\${board[i][j].horizontalSum} ");
+              } else {
+                stdout.write("${board[i][j].verticalSum}\\${board[i][j].horizontalSum} ");
+              }
+            }
           }
         } else {
-          print(board[i][j].value.toString() + " ");
+          stdout.write("  ${board[i][j].value}   ");
         }
       }
-      print("");
+      stdout.write("\n");
     }
   }
+}
+
+void main() {
+  var board = Kakuro(12, 0.5);
+  board.printBoard();
+  stdout.write(board.verificateur());
 }
