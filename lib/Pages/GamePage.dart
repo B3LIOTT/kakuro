@@ -185,15 +185,11 @@ class _GamePageState extends State<GamePage> {
             ],
           ));
     }
-    else {
-      w = InkWell(
-          customBorder: const CircleBorder(),
-          onTap: () {
-            setState(() {
-              _whatsSelected[index] = !_whatsSelected[index];
-            });
-          },
-          child: Stack(
+    else if (c.horizontalSum > 0 &&
+        c.verticalSum > 0 &&
+        (c.value == -1)) {
+      print("$c");
+      w = Stack(
             children: [
               Center(
                   child: Stack(
@@ -208,8 +204,19 @@ class _GamePageState extends State<GamePage> {
                         ),
                         ),
                   ),
-                  Center(
-                    child: Text(""),
+                  Padding(
+                      padding: const EdgeInsets.all(0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Text(c.verticalSum.toString()),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(c.horizontalSum.toString()),
+                    ),
                   )
                 ],
               )),
@@ -224,7 +231,7 @@ class _GamePageState extends State<GamePage> {
                       ))
                   : Container(),
             ],
-          ));
+          );
     }
 
     return w;
