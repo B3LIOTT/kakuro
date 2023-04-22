@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:kakuro/Objects/CustomBorder.dart';
 import 'package:kakuro/Objects/Kakuro.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
@@ -105,25 +106,86 @@ class _GamePageState extends State<GamePage> {
     Carre c = _gameMatrix[i][j];
     late Widget w;
 
-    if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
+    if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) { //si c'est un carré noir
       w = Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: UserPreferences.btnColor),
       );
-    } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) {
+    } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) { //si c'est un carré noir avec une somme horizontale
       w = Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Colors.red),
+          border : CustomBorder(
+            color: UserPreferences.btnColor,
+            width: 2.2 - _size.toDouble() * 0.0875,
+            voidSize: 12 - _size.toDouble() * 0.5,
+            hasDiagonal: true,
+            hasLeft : ((j==0) || (_gameMatrix[i][j-1].horizontalSum == -1 && _gameMatrix[i][j-1].verticalSum == -1 && _gameMatrix[i][j-1].value == -1)) ? false : true,
+            hasBottom : ((i==_size-1) || (_gameMatrix[i+1][j].horizontalSum == -1 && _gameMatrix[i+1][j].verticalSum == -1 && _gameMatrix[i+1][j].value == -1)) ? false : true,
+          ),
+        ),
       );
-    } else if (c.horizontalSum == -1 && c.verticalSum > -1 && c.value == -1) {
+    } else if (c.horizontalSum == -1 && c.verticalSum > -1 && c.value == -1) { //si c'est un carré noir avec une somme verticale
       w = Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Colors.red),
+          decoration: BoxDecoration(
+            border : CustomBorder(
+              color: UserPreferences.btnColor,
+              width: 2.2 - _size.toDouble() * 0.0875,
+              voidSize: 12 - _size.toDouble() * 0.5,
+              hasDiagonal: true,
+              hasRight : ((j==_size-1) || (_gameMatrix[i][j+1].horizontalSum == -1 && _gameMatrix[i][j+1].verticalSum == -1 && _gameMatrix[i][j+1].value == -1)) ? false : true,
+              hasTop : ((i==0) || (_gameMatrix[i-1][j].horizontalSum == -1 && _gameMatrix[i-1][j].verticalSum == -1 && _gameMatrix[i-1][j].value == -1)) ? false : true,
+            ),
+          ),
       );
     } else if (c.horizontalSum == 0 &&
         c.verticalSum == 0 &&
-        (c.value >= 0 && c.value < 10)) {
+        (c.value >= 0 && c.value < 10)) {  //si c'est un carré blanc avec une valeur
+      w = InkWell(
+          customBorder: const CircleBorder(),
+          onTap: () {
+            setState(() {
+              _whatsSelected[index] = !_whatsSelected[index];
+            });
+          },
+          child: Stack(
+            children: [
+              _whatsSelected[index]
+                  ? Opacity(
+                  opacity: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: UserPreferences.bgBtn,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: UserPreferences.bgColor,
+                        width: 5 - _size.toDouble() * 0.25,
+                      ),
+                    ),
+                  ))
+                  : Container(),
+              Center(
+                  child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border : CustomBorder(
+                          color: UserPreferences.btnColor,
+                          width: 2.2 - _size.toDouble() * 0.0875,
+                          voidSize: 12 - _size.toDouble() * 0.5,
+                          hasLeft : ((j==0) || (_gameMatrix[i][j-1].horizontalSum == -1 && _gameMatrix[i][j-1].verticalSum == -1 && _gameMatrix[i][j-1].value == -1)) ? false : true,
+                          hasBottom : ((i==_size-1) || (_gameMatrix[i+1][j].horizontalSum == -1 && _gameMatrix[i+1][j].verticalSum == -1 && _gameMatrix[i+1][j].value == -1)) ? false : true,
+                          hasRight : ((j==_size-1) || (_gameMatrix[i][j+1].horizontalSum == -1 && _gameMatrix[i][j+1].verticalSum == -1 && _gameMatrix[i][j+1].value == -1)) ? false : true,
+                          hasTop : ((i==0) || (_gameMatrix[i-1][j].horizontalSum == -1 && _gameMatrix[i-1][j].verticalSum == -1 && _gameMatrix[i-1][j].value == -1)) ? false : true,
+                        ),
+                        ),
+                  ),
+                  Center(
+                    child: Text(c.value.toString()),
+                  )
+                ],
+              )),
+            ],
+          ));
+    }
+    else {
       w = InkWell(
           customBorder: const CircleBorder(),
           onTap: () {
@@ -138,11 +200,16 @@ class _GamePageState extends State<GamePage> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: UserPreferences.bgBtn),
+                        border : CustomBorder(
+                          color: UserPreferences.btnColor,
+                            width: 2.2 - _size.toDouble() * 0.0875,
+                            voidSize: 12 - _size.toDouble() * 0.5,
+                          hasDiagonal: true
+                        ),
+                        ),
                   ),
                   Center(
-                    child: Text(c.value.toString()),
+                    child: Text(""),
                   )
                 ],
               )),
