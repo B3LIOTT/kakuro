@@ -42,6 +42,7 @@ class Kakuro {
     fillWhiteSpaces(); // On s'assure qu'il n'existe pas de trop grandes séries de cases blanches
     fillBoard(); // On remplit les cases blanches avec des chiffres
     fillSums(); // On génère les sommes
+    removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
   }
 
   /// Fonction qui génère les carrés noirs (en fonction d'une densité donnée)
@@ -200,8 +201,8 @@ class Kakuro {
     // tant qu'il existe des cases blanches contraintes, on les remplit
     while (isBoardConstrained()) {
       for (int i = 1; i < size - 1; i++) {
-        for (int j = start; j < size - 1; j++) {
-          if (isConstrained(i, j) != -1) {
+        for (int j = 1; j < size - 1; j++) {
+          if (isConstrained(i,j) != -1) {
             board[i][j] = Carre(-1, -1, -1);
             board[size - 2 - i + 1][size - 2 - j + 1] = Carre(-1, -1, -1);
           }
@@ -230,9 +231,11 @@ class Kakuro {
   /// -1 : carré non contraint
   int isConstrained(int i, int j) {
     if (board[i][j].value == 0) {
+      // un carré est contraint soit s'il est entre deux carrés noirs horizontalement
       if (board[i][j - 1].value == -1 && board[i][j + 1].value == -1) {
         return 0;
       }
+      // soit s'il est entre deux carrés noirs verticalement
       if (board[i - 1][j].value == -1 && board[i + 1][j].value == -1) {
         return 0;
       }
@@ -473,7 +476,8 @@ class Kakuro {
       if (row == squaresBlockVertical[0] + squaresBlockVertical[2] - 1) {
         // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est égale à la somme du bloc
         if (value + blockSum(row, col, 0) !=
-            board[squaresBlockVertical[0]][squaresBlockVertical[1]].verticalSum) {
+            board[squaresBlockVertical[0]][squaresBlockVertical[1]]
+                .verticalSum) {
           valuesToRemove.add(value);
         }
       }
@@ -490,7 +494,8 @@ class Kakuro {
       if (row != squaresBlockVertical[0] + squaresBlockVertical[2] - 1) {
         // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est inférieure à la somme du bloc
         if (value + blockSum(row, col, 0) >=
-            board[squaresBlockVertical[0]][squaresBlockVertical[1]].verticalSum) {
+            board[squaresBlockVertical[0]][squaresBlockVertical[1]]
+                .verticalSum) {
           valuesToRemove.add(value);
         }
       }
@@ -576,7 +581,22 @@ class Kakuro {
   }
 }
 
+/// Fonction qui teste le temps moyen de génération d'une grille
+/// @param n : nombre de grilles à générer
+/// @param size : taille de la grille
+/// @param density : densité de la grille
+void testTime(int n, int size, double density) {
+  Stopwatch stopwatch = Stopwatch()..start();
+  for (int i = 0; i < n; i++) {
+    Kakuro(size, density);
+  }
+  print(
+      'Temps moyen de génération de $n grilles de taille $size : ${stopwatch.elapsedMilliseconds / n} ms');
+}
+
+/// Fonction main de tests
 void main() {
+  /*
   var kakuro = Kakuro(12, 0.5);
   kakuro.printBoard();
   stdout.write(kakuro.isSolution());
@@ -587,5 +607,10 @@ void main() {
   kakuro.solveKakuro();
   stdout.write("\n");
   kakuro.printBoard();
-  stdout.write(kakuro.isSolution());
+  stdout.write(kakuro.isSolution());*/
+  testTime(100, 8, 0.5);
+  testTime(100, 10, 0.5);
+  testTime(100, 12, 0.5);
+  testTime(100, 14, 0.5);
+  testTime(100, 16, 0.5);
 }
