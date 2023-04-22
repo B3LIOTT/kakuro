@@ -109,7 +109,7 @@ class _GamePageState extends State<GamePage> {
     if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
       //si c'est un carré noir
       w = Container();
-    } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) {
+    } else if (c.horizontalSum > 0 && c.verticalSum == -1 && c.value == -1) {
       //si c'est un carré noir avec une somme horizontale
       w = Container(
         decoration: BoxDecoration(
@@ -130,6 +130,18 @@ class _GamePageState extends State<GamePage> {
                         _gameMatrix[i + 1][j].value == -1))
                 ? false
                 : true,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Text(
+              c.horizontalSum.toString(),
+              style: TextStyle(
+                fontSize: 104 / _size,
+              ),
+            ),
           ),
         ),
       );
@@ -154,6 +166,18 @@ class _GamePageState extends State<GamePage> {
                         _gameMatrix[i - 1][j].value == -1))
                 ? false
                 : true,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Text(
+              c.verticalSum.toString(),
+              style: TextStyle(
+                fontSize: 104 / _size,
+              ),
+            ),
           ),
         ),
       );
@@ -227,8 +251,7 @@ class _GamePageState extends State<GamePage> {
               )),
             ],
           ));
-    } else if ((c.horizontalSum > 0 || c.verticalSum > 0) && (c.value == -1)) {
-      print("$c");
+    } else {
       w = Center(
         child: Stack(
           children: [
@@ -241,22 +264,30 @@ class _GamePageState extends State<GamePage> {
                     hasDiagonal: true),
               ),
             ),
-            (c.verticalSum > 0)? Padding(
-              padding: const EdgeInsets.all(0),
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  c.verticalSum.toString(),
+                  style: TextStyle(
+                    fontSize: 104 / _size,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(3),
               child: Align(
                 alignment: Alignment.topRight,
-                child: Text(c.verticalSum.toString()),
+                child: Text(
+                  c.horizontalSum.toString(),
+                  style: TextStyle(
+                    fontSize: 104 / _size,
+                  ),
+                ),
               ),
-            ) : Container(),
-            (c.horizontalSum > 0)
-                ? Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(c.horizontalSum.toString()),
-                    ),
-                  )
-                : Container(),
+            )
           ],
         ),
       );
