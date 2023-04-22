@@ -189,7 +189,14 @@ class _GamePageState extends State<GamePage> {
           customBorder: const CircleBorder(),
           onTap: () {
             setState(() {
-              _whatsSelected[index] = !_whatsSelected[index];
+              for (int i = 0; i < _whatsSelected.length; i++) {
+                if (i != index) {
+                  _whatsSelected[i] = false;
+                }
+                else {
+                  _whatsSelected[i] = !_whatsSelected[i];
+                }
+              }
             });
           },
           child: Stack(
