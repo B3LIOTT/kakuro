@@ -13,6 +13,7 @@ class Kakuro {
   List<List<Carre>> get getBoard {
     return board;
   }
+
   /// Constructeur de la classe Kakuro
   /// size: taille du kakuro
   /// density: densité du kakuro
@@ -164,8 +165,11 @@ class Kakuro {
     for (int i = 0; i < whiteSpaces.length; i++) {
       // Si la séquence est trop longue, on insère un carré noir au milieu des deux cases blanches
       if (whiteSpaces[i][2] > 9) {
-        board[whiteSpaces[i][0]][whiteSpaces[i][1] + whiteSpaces[i][2] ~/ 2] = Carre(-1, -1, -1);
-        board[size - 2 - whiteSpaces[i][0] + 1][size - 2 - (whiteSpaces[i][1] + whiteSpaces[i][2] ~/ 2) + 1] = Carre(-1, -1, -1);
+        board[whiteSpaces[i][0]][whiteSpaces[i][1] + whiteSpaces[i][2] ~/ 2] =
+            Carre(-1, -1, -1);
+        board[size - 2 - whiteSpaces[i][0] + 1]
+                [size - 2 - (whiteSpaces[i][1] + whiteSpaces[i][2] ~/ 2) + 1] =
+            Carre(-1, -1, -1);
       }
     }
 
@@ -187,15 +191,17 @@ class Kakuro {
     for (int i = 0; i < whiteSpaces.length; i++) {
       // Si la séquence est trop longue, on insère un carré noir au milieu des deux cases blanches
       if (whiteSpaces[i][2] > 9) {
-        board[whiteSpaces[i][0] + whiteSpaces[i][2] ~/ 2][whiteSpaces[i][1]] = Carre(-1, -1, -1);
-        board[size - 2 - (whiteSpaces[i][0] + whiteSpaces[i][2] ~/ 2) + 1][size - 2 - whiteSpaces[i][1] + 1] = Carre(-1, -1, -1);
+        board[whiteSpaces[i][0] + whiteSpaces[i][2] ~/ 2][whiteSpaces[i][1]] =
+            Carre(-1, -1, -1);
+        board[size - 2 - (whiteSpaces[i][0] + whiteSpaces[i][2] ~/ 2) + 1]
+            [size - 2 - whiteSpaces[i][1] + 1] = Carre(-1, -1, -1);
       }
     }
     // tant qu'il existe des cases blanches contraintes, on les remplit
     while (isBoardConstrained()) {
       for (int i = 1; i < size - 1; i++) {
         for (int j = start; j < size - 1; j++) {
-          if (isConstrained(i, j) != -1){
+          if (isConstrained(i, j) != -1) {
             board[i][j] = Carre(-1, -1, -1);
             board[size - 2 - i + 1][size - 2 - j + 1] = Carre(-1, -1, -1);
           }
@@ -254,7 +260,7 @@ class Kakuro {
       id = i;
       jd = j;
       /*On cherche la dernière case du bloc et on compte le nombre de cases*/
-      while (board[i+1][j].value != -1) {
+      while (board[i + 1][j].value != -1) {
         taille++;
         i++;
       }
@@ -275,7 +281,7 @@ class Kakuro {
       id = i;
       jd = j;
       /*On cherche la dernière case du bloc et on compte le nombre de cases*/
-      while (board[i][j+1].value != -1) {
+      while (board[i][j + 1].value != -1) {
         taille++;
         j++;
       }
@@ -320,13 +326,17 @@ class Kakuro {
     List<int> squaresBlockVertical = blockSizeCoo(row, col, 0);
     List<int> squaresBlockHorizontal = blockSizeCoo(row, col, 1);
     // On parcours les carrés du bloc vertical et on enlève les valeurs déjà présentes
-    for (int i = squaresBlockVertical[0]; i < squaresBlockVertical[0] + squaresBlockVertical[2]; i++) {
+    for (int i = squaresBlockVertical[0];
+        i < squaresBlockVertical[0] + squaresBlockVertical[2];
+        i++) {
       if (board[i][col].value != 0) {
         possibleValues.remove(board[i][col].value);
       }
     }
     // On parcours les carrés du bloc horizontal et on enlève les valeurs déjà présentes
-    for (int j = squaresBlockHorizontal[1]; j < squaresBlockHorizontal[1] + squaresBlockHorizontal[2]; j++) {
+    for (int j = squaresBlockHorizontal[1];
+        j < squaresBlockHorizontal[1] + squaresBlockHorizontal[2];
+        j++) {
       if (board[row][j].value != 0) {
         possibleValues.remove(board[row][j].value);
       }
@@ -360,16 +370,13 @@ class Kakuro {
           if (horizontalSum == 0 && verticalSum == 0) {
             board[row][col].horizontalSum = -1;
             board[row][col].verticalSum = -1;
-          }
-          else if (horizontalSum == 0) {
+          } else if (horizontalSum == 0) {
             board[row][col].horizontalSum = -1;
             board[row][col].verticalSum = verticalSum;
-          }
-          else if (verticalSum == 0) {
+          } else if (verticalSum == 0) {
             board[row][col].horizontalSum = horizontalSum;
             board[row][col].verticalSum = -1;
-          }
-          else {
+          } else {
             board[row][col].horizontalSum = horizontalSum;
             board[row][col].verticalSum = verticalSum;
           }
@@ -386,11 +393,15 @@ class Kakuro {
     List<int> squaresBlock = blockSizeCoo(row, col, orientation);
     int sum = 0;
     if (orientation == 0) {
-      for (int i = squaresBlock[0] + 1; i < squaresBlock[0] + squaresBlock[2]; i++) {
+      for (int i = squaresBlock[0] + 1;
+          i < squaresBlock[0] + squaresBlock[2];
+          i++) {
         sum += board[i][col].value;
       }
     } else {
-      for (int j = squaresBlock[1] + 1; j < squaresBlock[1] + squaresBlock[2]; j++) {
+      for (int j = squaresBlock[1] + 1;
+          j < squaresBlock[1] + squaresBlock[2];
+          j++) {
         sum += board[row][j].value;
       }
     }
@@ -403,7 +414,9 @@ class Kakuro {
     List<List<int>> list = [];
     for (int row = 0; row < size; row++) {
       for (int col = 0; col < size; col++) {
-        if (board[row][col].value == -1 && (board[row][col].horizontalSum != -1 || board[row][col].verticalSum != -1)) {
+        if (board[row][col].value == -1 &&
+            (board[row][col].horizontalSum != -1 ||
+                board[row][col].verticalSum != -1)) {
           if (board[row][col].horizontalSum != -1) {
             if (board[row][col].horizontalSum != blockSum(row, col, 1)) {
               List<int> list2 = [row, col];
@@ -439,6 +452,78 @@ class Kakuro {
     }
   }
 
+  List<int> getPossibleValuesv2(int row, int col) {
+    List<int> possibleValues = getPossibleValues(row, col);
+    List<int> squaresBlockHorizontal = blockSizeCoo(row, col, 1);
+    List<int> squaresBlockVertical = blockSizeCoo(row, col, 0);
+    List<int> valuesToRemove = [];
+    // Pour chaque valeur possible, on vérifie si la somme des valeurs du bloc + la valeur que l'on souhaite tester
+    // est inférieure stricte (si elle n'est pas la dernière case) ou égale (si elle est la dernière case  à la somme du bloc
+    for (int value in possibleValues) {
+      // si c'est la dernière case du bloc horizontal
+      if (col == squaresBlockHorizontal[1] + squaresBlockHorizontal[2] - 1) {
+        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est égale à la somme du bloc
+        if (value + blockSum(row, col, 1) !=
+            board[squaresBlockHorizontal[0]][squaresBlockHorizontal[1]]
+                .horizontalSum) {
+          valuesToRemove.add(value);
+        }
+      }
+      // si c'est la dernière case du bloc vertical
+      if (row == squaresBlockVertical[0] + squaresBlockVertical[2] - 1) {
+        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est égale à la somme du bloc
+        if (value + blockSum(row, col, 0) !=
+            board[squaresBlockVertical[0]][squaresBlockVertical[1]].verticalSum) {
+          valuesToRemove.add(value);
+        }
+      }
+      // si ce n'est pas la dernière case du bloc horizontal
+      if (col != squaresBlockHorizontal[1] + squaresBlockHorizontal[2] - 1) {
+        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est inférieure à la somme du bloc
+        if (value + blockSum(row, col, 1) >=
+            board[squaresBlockHorizontal[0]][squaresBlockHorizontal[1]]
+                .horizontalSum) {
+          valuesToRemove.add(value);
+        }
+      }
+      // si ce n'est pas la dernière case du bloc vertical
+      if (row != squaresBlockVertical[0] + squaresBlockVertical[2] - 1) {
+        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est inférieure à la somme du bloc
+        if (value + blockSum(row, col, 0) >=
+            board[squaresBlockVertical[0]][squaresBlockVertical[1]].verticalSum) {
+          valuesToRemove.add(value);
+        }
+      }
+    }
+    for (int value in valuesToRemove) {
+      possibleValues.remove(value);
+    }
+    //print("possibleValues : $possibleValues");
+    return possibleValues;
+  }
+
+  /// Fonction qui permet de résoudre un plateau
+  /// @return true si le plateau est solution, false sinon
+  bool solveKakuro() {
+    for (int row = 0; row < size - 1; row++) {
+      for (int col = 0; col < size - 1; col++) {
+        if (board[row][col].value == 0) {
+          List<int> possibleValues = getPossibleValuesv2(row, col);
+          for (int value in possibleValues) {
+            board[row][col].value = value;
+            if (solveKakuro()) {
+              return true;
+              // sinon on remet la valeur à 0, on passe à la valeur suivante
+            } else {
+              board[row][col].value = 0;
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
   /// Fonction qui permet d'afficher dans la console le plateau de jeu
   void printBoard() {
@@ -466,15 +551,19 @@ class Kakuro {
             // On ajoute la bonne quantité d'espace pour que les sommes soient alignées
             if (board[i][j].horizontalSum < 10) {
               if (board[i][j].verticalSum < 10) {
-                stdout.write(" ${board[i][j].verticalSum}\\${board[i][j].horizontalSum}  ");
+                stdout.write(
+                    " ${board[i][j].verticalSum}\\${board[i][j].horizontalSum}  ");
               } else {
-                stdout.write("${board[i][j].verticalSum}\\${board[i][j].horizontalSum}  ");
+                stdout.write(
+                    "${board[i][j].verticalSum}\\${board[i][j].horizontalSum}  ");
               }
             } else {
               if (board[i][j].verticalSum < 10) {
-                stdout.write(" ${board[i][j].verticalSum}\\${board[i][j].horizontalSum} ");
+                stdout.write(
+                    " ${board[i][j].verticalSum}\\${board[i][j].horizontalSum} ");
               } else {
-                stdout.write("${board[i][j].verticalSum}\\${board[i][j].horizontalSum} ");
+                stdout.write(
+                    "${board[i][j].verticalSum}\\${board[i][j].horizontalSum} ");
               }
             }
           }
@@ -492,6 +581,10 @@ void main() {
   kakuro.printBoard();
   stdout.write(kakuro.isSolution());
   kakuro.removeValues();
+  stdout.write("\n");
+  kakuro.printBoard();
+  stdout.write(kakuro.isSolution());
+  kakuro.solveKakuro();
   stdout.write("\n");
   kakuro.printBoard();
   stdout.write(kakuro.isSolution());
