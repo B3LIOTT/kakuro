@@ -187,8 +187,7 @@ class _GamePageState extends State<GamePage> {
 
   Widget numPad() {
     return Container(
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.only(right: 20, left: 20),
         decoration: BoxDecoration(
           color: UserPreferences.bgBtn,
           borderRadius: BorderRadius.circular(20),
@@ -203,6 +202,7 @@ class _GamePageState extends State<GamePage> {
           children: List.generate(
               10,
               (index) => Container(
+                alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: UserPreferences.bgBtn,
                       shape: BoxShape.circle,
@@ -216,7 +216,7 @@ class _GamePageState extends State<GamePage> {
                         (index != 9) ? (index + 1).toString() : "X",
                         style: TextStyle(
                           color: UserPreferences.btnColor,
-                          fontSize: 30,
+                          fontSize: MediaQuery.of(context).size.width / 15,
                         ),
                       ),
                       onPressed: () {
