@@ -106,38 +106,61 @@ class _GamePageState extends State<GamePage> {
     Carre c = _gameMatrix[i][j];
     late Widget w;
 
-    if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) { //si c'est un carré noir
-      w = Container(
-      );
-    } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) { //si c'est un carré noir avec une somme horizontale
+    if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
+      //si c'est un carré noir
+      w = Container();
+    } else if (c.horizontalSum > -1 && c.verticalSum == -1 && c.value == -1) {
+      //si c'est un carré noir avec une somme horizontale
       w = Container(
         decoration: BoxDecoration(
-          border : CustomBorder(
+          border: CustomBorder(
             color: UserPreferences.btnColor,
             width: 2.2 - _size.toDouble() * 0.0875,
             voidSize: 12 - _size.toDouble() * 0.5,
             hasDiagonal: true,
-            hasLeft : ((j==0) || (_gameMatrix[i][j-1].horizontalSum == -1 && _gameMatrix[i][j-1].verticalSum == -1 && _gameMatrix[i][j-1].value == -1)) ? false : true,
-            hasBottom : ((i==_size-1) || (_gameMatrix[i+1][j].horizontalSum == -1 && _gameMatrix[i+1][j].verticalSum == -1 && _gameMatrix[i+1][j].value == -1)) ? false : true,
+            hasLeft: ((j == 0) ||
+                    (_gameMatrix[i][j - 1].horizontalSum == -1 &&
+                        _gameMatrix[i][j - 1].verticalSum == -1 &&
+                        _gameMatrix[i][j - 1].value == -1))
+                ? false
+                : true,
+            hasBottom: ((i == _size - 1) ||
+                    (_gameMatrix[i + 1][j].horizontalSum == -1 &&
+                        _gameMatrix[i + 1][j].verticalSum == -1 &&
+                        _gameMatrix[i + 1][j].value == -1))
+                ? false
+                : true,
           ),
         ),
       );
-    } else if (c.horizontalSum == -1 && c.verticalSum > -1 && c.value == -1) { //si c'est un carré noir avec une somme verticale
+    } else if (c.horizontalSum == -1 && c.verticalSum > -1 && c.value == -1) {
+      //si c'est un carré noir avec une somme verticale
       w = Container(
-          decoration: BoxDecoration(
-            border : CustomBorder(
-              color: UserPreferences.btnColor,
-              width: 2.2 - _size.toDouble() * 0.0875,
-              voidSize: 12 - _size.toDouble() * 0.5,
-              hasDiagonal: true,
-              hasRight : ((j==_size-1) || (_gameMatrix[i][j+1].horizontalSum == -1 && _gameMatrix[i][j+1].verticalSum == -1 && _gameMatrix[i][j+1].value == -1)) ? false : true,
-              hasTop : ((i==0) || (_gameMatrix[i-1][j].horizontalSum == -1 && _gameMatrix[i-1][j].verticalSum == -1 && _gameMatrix[i-1][j].value == -1)) ? false : true,
-            ),
+        decoration: BoxDecoration(
+          border: CustomBorder(
+            color: UserPreferences.btnColor,
+            width: 2.2 - _size.toDouble() * 0.0875,
+            voidSize: 12 - _size.toDouble() * 0.5,
+            hasDiagonal: true,
+            hasRight: ((j == _size - 1) ||
+                    (_gameMatrix[i][j + 1].horizontalSum == -1 &&
+                        _gameMatrix[i][j + 1].verticalSum == -1 &&
+                        _gameMatrix[i][j + 1].value == -1))
+                ? false
+                : true,
+            hasTop: ((i == 0) ||
+                    (_gameMatrix[i - 1][j].horizontalSum == -1 &&
+                        _gameMatrix[i - 1][j].verticalSum == -1 &&
+                        _gameMatrix[i - 1][j].value == -1))
+                ? false
+                : true,
           ),
+        ),
       );
     } else if (c.horizontalSum == 0 &&
         c.verticalSum == 0 &&
-        (c.value >= 0 && c.value < 10)) {  //si c'est un carré blanc avec une valeur
+        (c.value >= 0 && c.value < 10)) {
+      //si c'est un carré blanc avec une valeur
       w = InkWell(
           customBorder: const CircleBorder(),
           onTap: () {
@@ -149,33 +172,53 @@ class _GamePageState extends State<GamePage> {
             children: [
               _whatsSelected[index]
                   ? Opacity(
-                  opacity: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: UserPreferences.bgBtn,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: UserPreferences.bgColor,
-                        width: 5 - _size.toDouble() * 0.25,
-                      ),
-                    ),
-                  ))
+                      opacity: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: UserPreferences.bgBtn,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: UserPreferences.bgColor,
+                            width: 5 - _size.toDouble() * 0.25,
+                          ),
+                        ),
+                      ))
                   : Container(),
               Center(
                   child: Stack(
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        border : CustomBorder(
-                          color: UserPreferences.btnColor,
-                          width: 2.2 - _size.toDouble() * 0.0875,
-                          voidSize: 12 - _size.toDouble() * 0.5,
-                          hasLeft : ((j==0) || (_gameMatrix[i][j-1].horizontalSum == -1 && _gameMatrix[i][j-1].verticalSum == -1 && _gameMatrix[i][j-1].value == -1)) ? false : true,
-                          hasBottom : ((i==_size-1) || (_gameMatrix[i+1][j].horizontalSum == -1 && _gameMatrix[i+1][j].verticalSum == -1 && _gameMatrix[i+1][j].value == -1)) ? false : true,
-                          hasRight : ((j==_size-1) || (_gameMatrix[i][j+1].horizontalSum == -1 && _gameMatrix[i][j+1].verticalSum == -1 && _gameMatrix[i][j+1].value == -1)) ? false : true,
-                          hasTop : ((i==0) || (_gameMatrix[i-1][j].horizontalSum == -1 && _gameMatrix[i-1][j].verticalSum == -1 && _gameMatrix[i-1][j].value == -1)) ? false : true,
-                        ),
-                        ),
+                      border: CustomBorder(
+                        color: UserPreferences.btnColor,
+                        width: 2.2 - _size.toDouble() * 0.0875,
+                        voidSize: 12 - _size.toDouble() * 0.5,
+                        hasLeft: ((j == 0) ||
+                                (_gameMatrix[i][j - 1].horizontalSum == -1 &&
+                                    _gameMatrix[i][j - 1].verticalSum == -1 &&
+                                    _gameMatrix[i][j - 1].value == -1))
+                            ? false
+                            : true,
+                        hasBottom: ((i == _size - 1) ||
+                                (_gameMatrix[i + 1][j].horizontalSum == -1 &&
+                                    _gameMatrix[i + 1][j].verticalSum == -1 &&
+                                    _gameMatrix[i + 1][j].value == -1))
+                            ? false
+                            : true,
+                        hasRight: ((j == _size - 1) ||
+                                (_gameMatrix[i][j + 1].horizontalSum == -1 &&
+                                    _gameMatrix[i][j + 1].verticalSum == -1 &&
+                                    _gameMatrix[i][j + 1].value == -1))
+                            ? false
+                            : true,
+                        hasTop: ((i == 0) ||
+                                (_gameMatrix[i - 1][j].horizontalSum == -1 &&
+                                    _gameMatrix[i - 1][j].verticalSum == -1 &&
+                                    _gameMatrix[i - 1][j].value == -1))
+                            ? false
+                            : true,
+                      ),
+                    ),
                   ),
                   Center(
                     child: Text(c.value.toString()),
@@ -184,54 +227,39 @@ class _GamePageState extends State<GamePage> {
               )),
             ],
           ));
-    }
-    else if (c.horizontalSum > 0 &&
-        c.verticalSum > 0 &&
-        (c.value == -1)) {
+    } else if ((c.horizontalSum > 0 || c.verticalSum > 0) && (c.value == -1)) {
       print("$c");
-      w = Stack(
-            children: [
-              Center(
-                  child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        border : CustomBorder(
-                          color: UserPreferences.btnColor,
-                            width: 2.2 - _size.toDouble() * 0.0875,
-                            voidSize: 12 - _size.toDouble() * 0.5,
-                          hasDiagonal: true
-                        ),
-                        ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Text(c.verticalSum.toString()),
-                    ),
-                  ),
-                  Padding(
+      w = Center(
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: CustomBorder(
+                    color: UserPreferences.btnColor,
+                    width: 2.2 - _size.toDouble() * 0.0875,
+                    voidSize: 12 - _size.toDouble() * 0.5,
+                    hasDiagonal: true),
+              ),
+            ),
+            (c.verticalSum > 0)? Padding(
+              padding: const EdgeInsets.all(0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Text(c.verticalSum.toString()),
+              ),
+            ) : Container(),
+            (c.horizontalSum > 0)
+                ? Padding(
                     padding: const EdgeInsets.all(2),
                     child: Align(
                       alignment: Alignment.bottomLeft,
                       child: Text(c.horizontalSum.toString()),
                     ),
                   )
-                ],
-              )),
-              _whatsSelected[index]
-                  ? Opacity(
-                      opacity: 0.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: UserPreferences.btnColor,
-                          shape: BoxShape.circle,
-                        ),
-                      ))
-                  : Container(),
-            ],
-          );
+                : Container(),
+          ],
+        ),
+      );
     }
 
     return w;
@@ -276,7 +304,7 @@ class _GamePageState extends State<GamePage> {
           children: List.generate(
               10,
               (index) => Container(
-                alignment: Alignment.center,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: UserPreferences.bgBtn,
                       shape: BoxShape.circle,
@@ -381,7 +409,7 @@ class _GamePageState extends State<GamePage> {
     final dynamicMatrix = jsonDecode(data);
     List<List<Carre>> matrixData = List<List<Carre>>.generate(
         data.length,
-            (i) => List<Carre>.generate(
+        (i) => List<Carre>.generate(
             dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
 
     updateGame(matrixData);
