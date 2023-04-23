@@ -28,11 +28,14 @@ class _GamePageState extends State<GamePage> {
   late int _size;
   late double _density;
   late List<bool> _whatsSelected;
-  List<List<Carre>> _gameMatrix = [];
+  late Kakuro _kwakuro;
+  late List<double> _opacities;
+  late Color _verifyColor;
 
   @override
   void initState() {
     super.initState();
+    _verifyColor = Colors.green;
     switch (widget._size.length) {
       case 3:
         _size = int.parse(widget._size[0]);
@@ -41,6 +44,7 @@ class _GamePageState extends State<GamePage> {
         _size = int.parse(widget._size.substring(0, 2));
         break;
     }
+    _opacities = List.generate(_size*_size, (index) => 0.0);
     switch (widget._diff) {
       case "Facile":
         _density = 0.8;
@@ -61,7 +65,7 @@ class _GamePageState extends State<GamePage> {
     for (int i = 0; i < _whatsSelected.length; i++) {
       if (_whatsSelected[i]) {
         setState(() {
-          _gameMatrix[i ~/ _size][i % _size].value = (value < 10) ? value : 0;
+          _kwakuro.board[i ~/ _size][i % _size].value = (value < 10) ? value : 0;
           _whatsSelected[i] = false;
         });
       }
@@ -69,9 +73,9 @@ class _GamePageState extends State<GamePage> {
   }
 
   void genKakuro() {
-    Kakuro kwakuro = Kakuro(_size, _density);
+    _kwakuro = Kakuro(_size, _density);
     setState(() {
-      _gameMatrix = kwakuro.board;
+      _kwakuro.board = _kwakuro.board;
       _isKakuroLoading = false;
     });
 
@@ -80,7 +84,6 @@ class _GamePageState extends State<GamePage> {
     } else if (widget._source == "REJOINDRE") {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
-
   }
 
   Widget returnBtn() {
@@ -104,7 +107,7 @@ class _GamePageState extends State<GamePage> {
   Widget carreKakuroGen(int index) {
     int i = index ~/ _size;
     int j = index % _size;
-    Carre c = _gameMatrix[i][j];
+    Carre c = _kwakuro.board[i][j];
     late Widget w;
 
     if (c.horizontalSum == -1 && c.verticalSum == -1 && c.value == -1) {
@@ -120,15 +123,15 @@ class _GamePageState extends State<GamePage> {
             voidSize: 12 - _size.toDouble() * 0.5,
             hasDiagonal: true,
             hasLeft: ((j == 0) ||
-                    (_gameMatrix[i][j - 1].horizontalSum == -1 &&
-                        _gameMatrix[i][j - 1].verticalSum == -1 &&
-                        _gameMatrix[i][j - 1].value == -1))
+                    (_kwakuro.board[i][j - 1].horizontalSum == -1 &&
+                        _kwakuro.board[i][j - 1].verticalSum == -1 &&
+                        _kwakuro.board[i][j - 1].value == -1))
                 ? false
                 : true,
             hasBottom: ((i == _size - 1) ||
-                    (_gameMatrix[i + 1][j].horizontalSum == -1 &&
-                        _gameMatrix[i + 1][j].verticalSum == -1 &&
-                        _gameMatrix[i + 1][j].value == -1))
+                    (_kwakuro.board[i + 1][j].horizontalSum == -1 &&
+                        _kwakuro.board[i + 1][j].verticalSum == -1 &&
+                        _kwakuro.board[i + 1][j].value == -1))
                 ? false
                 : true,
           ),
@@ -156,15 +159,15 @@ class _GamePageState extends State<GamePage> {
             voidSize: 12 - _size.toDouble() * 0.5,
             hasDiagonal: true,
             hasRight: ((j == _size - 1) ||
-                    (_gameMatrix[i][j + 1].horizontalSum == -1 &&
-                        _gameMatrix[i][j + 1].verticalSum == -1 &&
-                        _gameMatrix[i][j + 1].value == -1))
+                    (_kwakuro.board[i][j + 1].horizontalSum == -1 &&
+                        _kwakuro.board[i][j + 1].verticalSum == -1 &&
+                        _kwakuro.board[i][j + 1].value == -1))
                 ? false
                 : true,
             hasTop: ((i == 0) ||
-                    (_gameMatrix[i - 1][j].horizontalSum == -1 &&
-                        _gameMatrix[i - 1][j].verticalSum == -1 &&
-                        _gameMatrix[i - 1][j].value == -1))
+                    (_kwakuro.board[i - 1][j].horizontalSum == -1 &&
+                        _kwakuro.board[i - 1][j].verticalSum == -1 &&
+                        _kwakuro.board[i - 1][j].value == -1))
                 ? false
                 : true,
           ),
@@ -193,8 +196,7 @@ class _GamePageState extends State<GamePage> {
               for (int i = 0; i < _whatsSelected.length; i++) {
                 if (i != index) {
                   _whatsSelected[i] = false;
-                }
-                else {
+                } else {
                   _whatsSelected[i] = !_whatsSelected[i];
                 }
               }
@@ -202,6 +204,15 @@ class _GamePageState extends State<GamePage> {
           },
           child: Stack(
             children: [
+              AnimatedOpacity(
+                opacity: _opacities[index],
+                duration: const Duration(milliseconds: 200),
+                child: Container(
+                decoration: BoxDecoration(
+                  color: _verifyColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                )),
               _whatsSelected[index]
                   ? Opacity(
                       opacity: 1,
@@ -226,32 +237,33 @@ class _GamePageState extends State<GamePage> {
                         width: 2.2 - _size.toDouble() * 0.0875,
                         voidSize: 12 - _size.toDouble() * 0.5,
                         hasLeft: ((j == 0) ||
-                                (_gameMatrix[i][j - 1].horizontalSum == -1 &&
-                                    _gameMatrix[i][j - 1].verticalSum == -1 &&
-                                    _gameMatrix[i][j - 1].value == -1))
+                                (_kwakuro.board[i][j - 1].horizontalSum == -1 &&
+                                    _kwakuro.board[i][j - 1].verticalSum == -1 &&
+                                    _kwakuro.board[i][j - 1].value == -1))
                             ? false
                             : true,
                         hasBottom: ((i == _size - 1) ||
-                                (_gameMatrix[i + 1][j].horizontalSum == -1 &&
-                                    _gameMatrix[i + 1][j].verticalSum == -1 &&
-                                    _gameMatrix[i + 1][j].value == -1))
+                                (_kwakuro.board[i + 1][j].horizontalSum == -1 &&
+                                    _kwakuro.board[i + 1][j].verticalSum == -1 &&
+                                    _kwakuro.board[i + 1][j].value == -1))
                             ? false
                             : true,
                         hasRight: ((j == _size - 1) ||
-                                (_gameMatrix[i][j + 1].horizontalSum == -1 &&
-                                    _gameMatrix[i][j + 1].verticalSum == -1 &&
-                                    _gameMatrix[i][j + 1].value == -1))
+                                (_kwakuro.board[i][j + 1].horizontalSum == -1 &&
+                                    _kwakuro.board[i][j + 1].verticalSum == -1 &&
+                                    _kwakuro.board[i][j + 1].value == -1))
                             ? false
                             : true,
                         hasTop: ((i == 0) ||
-                                (_gameMatrix[i - 1][j].horizontalSum == -1 &&
-                                    _gameMatrix[i - 1][j].verticalSum == -1 &&
-                                    _gameMatrix[i - 1][j].value == -1))
+                                (_kwakuro.board[i - 1][j].horizontalSum == -1 &&
+                                    _kwakuro.board[i - 1][j].verticalSum == -1 &&
+                                    _kwakuro.board[i - 1][j].value == -1))
                             ? false
                             : true,
                       ),
                     ),
                   ),
+
                   Center(
                     child: Text(c.value.toString()),
                   )
@@ -368,6 +380,66 @@ class _GamePageState extends State<GamePage> {
         ));
   }
 
+  Widget verifyBtn() {
+    return Container(
+        margin: const EdgeInsets.only(right: 20, left: 20),
+        decoration: BoxDecoration(
+          color: UserPreferences.bgBtn,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: UserPreferences.btnColor,
+            width: 2,
+          ),
+        ),
+        child: IconButton(
+          icon: Icon(
+            Icons.check,
+            color: UserPreferences.btnColor,
+            size: MediaQuery.of(context).size.width / 15,
+          ),
+          onPressed: () {
+            verify();
+          },
+        ));
+  }
+
+  void verify() async {
+    if(_kwakuro.isSolution()) {
+      setState(() {
+       _verifyColor = Colors.green;
+      });
+      for(int index = 0; index < _opacities.length; index++) {
+        setState(() {
+          _opacities[index] = 1.0;
+        });
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      for(int index = 0; index < _opacities.length; index++) {
+        setState(() {
+          _opacities[index] = 0.0;
+        });
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+
+    } else {
+      setState(() {
+        _verifyColor = Colors.red;
+      });
+      for(int index = 0; index < _opacities.length; index++) {
+        setState(() {
+          _opacities[index] = 0.6;
+        });
+        await Future.delayed(Duration(microseconds: 16~/_size*900));
+      }
+      for(int index = 0; index < _opacities.length; index++) {
+        setState(() {
+          _opacities[index] = 0.0;
+        });
+        await Future.delayed(Duration(microseconds: 16~/_size*900));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
@@ -400,8 +472,12 @@ class _GamePageState extends State<GamePage> {
             child: Container(
               margin: EdgeInsets.only(
                   top: 20, bottom: MediaQuery.of(context).padding.bottom + 20),
-              alignment: Alignment.bottomCenter,
-              child: numPad(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    verifyBtn(),
+                numPad()
+                  ]),
             ),
           ),
         ]),
@@ -430,7 +506,7 @@ class _GamePageState extends State<GamePage> {
         socket.write(key);
 
         // Envoi de la matrice de jeu au serveur privé pour qu'il la stocke et la diffuse aux autres joueurs qui arrivent
-        final matrix = jsonEncode(_gameMatrix);
+        final matrix = jsonEncode(_kwakuro.board);
         socket.write(matrix);
 
         input.listen(dataHandler,
@@ -452,12 +528,12 @@ class _GamePageState extends State<GamePage> {
             dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
 
     updateGame(matrixData);
-    print("Matrice du jeu : $_gameMatrix");
+    print("Matrice du jeu : ${_kwakuro.board}");
   }
 
   void updateGame(List<List<Carre>> matrix) {
     // Actualisation de la matrice du jeu
-    _gameMatrix = matrix;
+    _kwakuro.board = matrix;
   }
 
   void errorHandler(error, StackTrace trace) {
