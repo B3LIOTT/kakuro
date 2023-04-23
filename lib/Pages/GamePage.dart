@@ -55,12 +55,6 @@ class _GamePageState extends State<GamePage> {
     _isKakuroLoading = true;
     _whatsSelected = List.filled(_size * _size, false);
     genKakuro();
-
-    if (widget._source == "CREER") {
-      connexionHandlerFromCreate(widget._KEY, widget._PORT);
-    } else if (widget._source == "REJOINDRE") {
-      connexionHandlerFromJoin(widget._KEY, widget._PORT);
-    }
   }
 
   void updateValue(int value) {
@@ -74,12 +68,19 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  void genKakuro() async {
+  void genKakuro() {
     Kakuro kwakuro = Kakuro(_size, _density);
     setState(() {
       _gameMatrix = kwakuro.board;
       _isKakuroLoading = false;
     });
+
+    if (widget._source == "CREER") {
+      connexionHandlerFromCreate(widget._KEY, widget._PORT);
+    } else if (widget._source == "REJOINDRE") {
+      connexionHandlerFromJoin(widget._KEY, widget._PORT);
+    }
+
   }
 
   Widget returnBtn() {
