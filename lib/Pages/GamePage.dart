@@ -556,6 +556,7 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       _kwakuro.board = matrix;
     });
+    print("Matrice du jeu mise à jour");
   }
 
   void errorHandler(error, StackTrace trace) {
@@ -588,7 +589,7 @@ class _GamePageState extends State<GamePage> {
 
   void dataHandlerFromJoin(String data) {
     // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
-    if(_nbRequest == 0) {
+    if (_nbRequest == 0) {
       // Reception de la difficulté et de la taille
       final decodedJson = jsonDecode(data);
       _density = decodedJson["density"];
@@ -598,18 +599,20 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density);
 
       _nbRequest++;
+    } else {
+      // Conversion de la liste d'entiers en matrice de jeu
+      final decodedJson = jsonDecode(data);
+
+      final matrixData = decodedJson.map<List<Carre>>((innerListJson) =>
+          (innerListJson as List<dynamic>)
+              .map((myClassJson) =>
+              Carre.fromJson(myClassJson as Map<String, dynamic>))
+              .toList()
+      ).toList();
+
+      updateGame(matrixData);
+      _isKakuroLoading = false;
+      print("Matrice du jeu : ${_kwakuro.board}");
     }
-    // Conversion de la liste d'entiers en matrice de jeu
-    final decodedJson = jsonDecode(data);
-
-    final matrixData = decodedJson.map<List<Carre>>((innerListJson) =>
-        (innerListJson as List<dynamic>)
-            .map((myClassJson) =>
-            Carre.fromJson(myClassJson as Map<String, dynamic>))
-            .toList()
-    ).toList();
-
-    updateGame(matrixData);
-    print("Matrice du jeu : ${_kwakuro.board}");
   }
 }
