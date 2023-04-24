@@ -310,7 +310,7 @@ class _GamePageState extends State<GamePage> {
 
   Widget kakuro() {
     return Container(
-        height: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width-40,
         margin: const EdgeInsets.only(top: 20, bottom: 20, right: 20, left: 20),
         child: _isKakuroLoading
             ? Center(
@@ -483,7 +483,7 @@ class _GamePageState extends State<GamePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 kakuro(),
-                Text("${widget._diff} - ${widget._size}"),
+                Text("${(widget._diff == 0.2)? "Exxpert" : (widget._diff == 0.5)? "Moyen" : "Facile"} - ${widget._size}x${widget._size}"),
               ],
             ),
           ),
