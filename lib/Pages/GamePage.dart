@@ -44,7 +44,7 @@ class _GamePageState extends State<GamePage> {
         _size = int.parse(widget._size.substring(0, 2));
         break;
     }
-    _opacities = List.generate(_size*_size, (index) => 0.0);
+    _opacities = List.generate(_size * _size, (index) => 0.0);
     switch (widget._diff) {
       case "Facile":
         _density = 0.8;
@@ -65,7 +65,8 @@ class _GamePageState extends State<GamePage> {
     for (int i = 0; i < _whatsSelected.length; i++) {
       if (_whatsSelected[i]) {
         setState(() {
-          _kwakuro.board[i ~/ _size][i % _size].value = (value < 10) ? value : 0;
+          _kwakuro.board[i ~/ _size][i % _size].value =
+              (value < 10) ? value : 0;
           _whatsSelected[i] = false;
         });
       }
@@ -205,15 +206,15 @@ class _GamePageState extends State<GamePage> {
           child: Stack(
             children: [
               AnimatedOpacity(
-                opacity: _opacities[index],
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                child: Container(
-                decoration: BoxDecoration(
-                  color: _verifyColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                )),
+                  opacity: _opacities[index],
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _verifyColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  )),
               _whatsSelected[index]
                   ? Opacity(
                       opacity: 1,
@@ -239,32 +240,35 @@ class _GamePageState extends State<GamePage> {
                         voidSize: 12 - _size.toDouble() * 0.5,
                         hasLeft: ((j == 0) ||
                                 (_kwakuro.board[i][j - 1].horizontalSum == -1 &&
-                                    _kwakuro.board[i][j - 1].verticalSum == -1 &&
+                                    _kwakuro.board[i][j - 1].verticalSum ==
+                                        -1 &&
                                     _kwakuro.board[i][j - 1].value == -1))
                             ? false
                             : true,
                         hasBottom: ((i == _size - 1) ||
                                 (_kwakuro.board[i + 1][j].horizontalSum == -1 &&
-                                    _kwakuro.board[i + 1][j].verticalSum == -1 &&
+                                    _kwakuro.board[i + 1][j].verticalSum ==
+                                        -1 &&
                                     _kwakuro.board[i + 1][j].value == -1))
                             ? false
                             : true,
                         hasRight: ((j == _size - 1) ||
                                 (_kwakuro.board[i][j + 1].horizontalSum == -1 &&
-                                    _kwakuro.board[i][j + 1].verticalSum == -1 &&
+                                    _kwakuro.board[i][j + 1].verticalSum ==
+                                        -1 &&
                                     _kwakuro.board[i][j + 1].value == -1))
                             ? false
                             : true,
                         hasTop: ((i == 0) ||
                                 (_kwakuro.board[i - 1][j].horizontalSum == -1 &&
-                                    _kwakuro.board[i - 1][j].verticalSum == -1 &&
+                                    _kwakuro.board[i - 1][j].verticalSum ==
+                                        -1 &&
                                     _kwakuro.board[i - 1][j].value == -1))
                             ? false
                             : true,
                       ),
                     ),
                   ),
-
                   Center(
                     child: Text(c.value.toString()),
                   )
@@ -405,29 +409,50 @@ class _GamePageState extends State<GamePage> {
   }
 
   void verify() async {
-    if(_kwakuro.isSolution()) {
+    print(_kwakuro.wrongL);
+
+    if (_kwakuro.isSolution()) {
       setState(() {
         _verifyColor = Colors.green;
       });
-      for(int index = 0; index < _opacities.length; index++) {
+      for (int index = 0; index < _opacities.length; index++) {
         _opacities[index] = 0.6;
-      }setState(() {});
+      }
+      setState(() {});
       await Future.delayed(const Duration(milliseconds: 500));
-      for(int index = 0; index < _opacities.length; index++) {
+      for (int index = 0; index < _opacities.length; index++) {
         _opacities[index] = 0.0;
-      }setState(() {});
-
+      }
+      setState(() {});
     } else {
       setState(() {
         _verifyColor = Colors.red;
       });
-      for(int index = 0; index < _opacities.length; index++) {
-        _opacities[index] = 0.6;
-      }setState(() {});
+      for (List<int> li in _kwakuro.wrongL) {
+        if (li[3] == 1) {
+          for (int i = 1; i < li[2]; i++) {
+            _opacities[li[0] * _size + li[1] + i] = 0.6;
+          }
+        } else {
+          for (int i = 1; i < li[2]; i++) {
+            _opacities[(li[0] + i) * _size + li[1]] = 0.6;
+          }
+        }
+      }
+      setState(() {});
       await Future.delayed(const Duration(milliseconds: 500));
-      for(int index = 0; index < _opacities.length; index++) {
-        _opacities[index] = 0.0;
-      }setState(() {});
+      for (List<int> li in _kwakuro.wrongL) {
+        if (li[3] == 1) {
+          for (int i = 0; i < li[2]; i++) {
+            _opacities[li[0] * _size + li[1] + i] = 0.0;
+          }
+        } else {
+          for (int i = 0; i < li[2]; i++) {
+            _opacities[(li[0] + i) * _size + li[1]] = 0.0;
+          }
+        }
+      }
+      setState(() {});
     }
   }
 
@@ -464,11 +489,8 @@ class _GamePageState extends State<GamePage> {
               margin: EdgeInsets.only(
                   top: 20, bottom: MediaQuery.of(context).padding.bottom + 20),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    verifyBtn(),
-                numPad()
-                  ]),
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [verifyBtn(), numPad()]),
             ),
           ),
         ]),

@@ -9,6 +9,7 @@ class Kakuro {
   double density;
   List possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   List valueUsed = [];
+  List<List<int>> wrongL = [];
 
   List<List<Carre>> get getBoard {
     return board;
@@ -272,6 +273,7 @@ class Kakuro {
       /* On crée la liste qui comporte les coordonnées du début du bloc et la taille du bloc*/
       List<int> list = [id, jd, taille];
       /*On retourne la liste*/
+      wrongL.add(list+[orientation]);// on ajoute la liste à la liste des blocs mal placés pour l'affichage graphique
       return list;
     }
     /*Si l'orientation est verticale*/
@@ -293,6 +295,7 @@ class Kakuro {
       /* On crée la liste qui comporte les coordonnées du début du bloc et la taille du bloc*/
       List<int> list = [id, jd, taille];
       /*On retourne la liste*/
+      wrongL.add(list+[orientation]);// on ajoute la liste à la liste des blocs mal placés pour l'affichage graphique
       return list;
     }
   }
@@ -414,7 +417,9 @@ class Kakuro {
   /// Fonction qui vérifie si le plateau est solution
   /// @return la liste vide si le plateau est solution, sinon la liste des coordonnées des blocs qui ne sont pas solution
   List<List<int>> checkSolution() {
+    wrongL.isNotEmpty? wrongL.clear() : null;
     List<List<int>> list = [];
+    List<int> l = [];
     for (int row = 0; row < size; row++) {
       for (int col = 0; col < size; col++) {
         if (board[row][col].value == -1 &&
@@ -424,13 +429,13 @@ class Kakuro {
             if (board[row][col].horizontalSum != blockSum(row, col, 1)) {
               List<int> list2 = [row, col];
               list.add(list2);
-            }
+            }else {wrongL.removeAt(wrongL.length-1);}
           }
           if (board[row][col].verticalSum != -1) {
             if (board[row][col].verticalSum != blockSum(row, col, 0)) {
               List<int> list2 = [row, col];
               list.add(list2);
-            }
+            }else {wrongL.removeAt(wrongL.length-1);}
           }
         }
       }
