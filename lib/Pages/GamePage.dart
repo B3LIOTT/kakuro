@@ -10,8 +10,8 @@ import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 
 class GamePage extends StatefulWidget {
-  late String _diff;
-  late String _size;
+  late double _diff;
+  late int _size;
   late final String _source;
   late final int _PORT;
   late final String _KEY;
@@ -36,28 +36,12 @@ class _GamePageState extends State<GamePage> {
   void initState() {
     super.initState();
     _verifyColor = Colors.green;
-    switch (widget._size.length) {
-      case 3:
-        _size = int.parse(widget._size[0]);
-        break;
-      case 5:
-        _size = int.parse(widget._size.substring(0, 2));
-        break;
-    }
+    _size = widget._size;
+    _density = widget._diff;
     _opacities = List.generate(_size * _size, (index) => 0.0);
-    switch (widget._diff) {
-      case "Facile":
-        _density = 0.8;
-        break;
-      case "Moyen":
-        _density = 0.5;
-        break;
-      case "Expert":
-        _density = 0.2;
-        break;
-    }
     _isKakuroLoading = true;
     _whatsSelected = List.filled(_size * _size, false);
+
     if (widget._source == "CREER") {
       genKakuro();
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
@@ -606,23 +590,24 @@ class _GamePageState extends State<GamePage> {
     // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
     if(_nbRequest == 0) {
       // Reception de la difficulté et de la taille
+      print(data);
       final decodedJson = jsonDecode(data);
       _density = decodedJson["density"];
       _size = decodedJson["size"];
 
-    } else {
-      // Conversion de la liste d'entiers en matrice de jeu
-      final decodedJson = jsonDecode(data);
-
-      final matrixData = decodedJson.map<List<Carre>>((innerListJson) =>
-          (innerListJson as List<dynamic>)
-              .map((myClassJson) =>
-              Carre.fromJson(myClassJson as Map<String, dynamic>))
-              .toList()
-      ).toList();
-
-      updateGame(matrixData);
-      print("Matrice du jeu : ${_kwakuro.board}");
+      _nbRequest++;
     }
+    // Conversion de la liste d'entiers en matrice de jeu
+    final decodedJson = jsonDecode(data);
+
+    final matrixData = decodedJson.map<List<Carre>>((innerListJson) =>
+        (innerListJson as List<dynamic>)
+            .map((myClassJson) =>
+            Carre.fromJson(myClassJson as Map<String, dynamic>))
+            .toList()
+    ).toList();
+
+    updateGame(matrixData);
+    print("Matrice du jeu : ${_kwakuro.board}");
   }
 }

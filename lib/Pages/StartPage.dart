@@ -27,6 +27,8 @@ class _StartPageState extends State<StartPage> {
   late int _diffInd;
   late int _sizeInd;
   late List<String> _diffList;
+  late List<int> _sizeListInt;
+  late List<double> _diffListDouble;
   late List<String> _sizeList;
   late double _currentOpacityDiff;
   late double _currentOpacitySize;
@@ -40,6 +42,8 @@ class _StartPageState extends State<StartPage> {
     _diffInd = 0;
     _sizeInd = 0;
     _sizeList = ["8x8", "10x10", "12x12", "16x16"];
+    _sizeListInt = [8, 10, 12, 16];
+    _diffListDouble = [0.8, 0.5, 0.2];
     _diffList = ["Facile", "Moyen", "Expert"];
     _currentOpacityDiff = 1.0;
     _currentOpacitySize = 1.0;
@@ -427,7 +431,7 @@ class _StartPageState extends State<StartPage> {
   Route _gamePageRoute(String key, int port, String source) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          GamePage(_diffList[_diffInd], _sizeList[_sizeInd], key, port, source),
+          GamePage(_diffListDouble[_diffInd], _sizeListInt[_sizeInd], key, port, source),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
@@ -448,13 +452,12 @@ class _StartPageState extends State<StartPage> {
   late Socket socket;
   final String _IP_SERVER = "192.168.43.42";
   final int _MAIN_SERVER_PORT = 8080;
-  List<List<int>> _gameMatrix = [];
 
   dynamic createParty() async {
     late final jsonData;
     final data = {
-      "difficulty": _diffList[_diffInd],
-      "size": _sizeList[_sizeInd],
+      "density": _diffListDouble[_diffInd],
+      "size": _sizeListInt[_sizeInd],
       // Ajouter la matrice du jeu génére par le créateur de la partie (c'est le client qui la génère car cela pourrai surcharger le serveur)
     };
     final jData = jsonEncode(data);
