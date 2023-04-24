@@ -206,7 +206,8 @@ class _GamePageState extends State<GamePage> {
             children: [
               AnimatedOpacity(
                 opacity: _opacities[index],
-                duration: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
                 child: Container(
                 decoration: BoxDecoration(
                   color: _verifyColor,
@@ -406,37 +407,27 @@ class _GamePageState extends State<GamePage> {
   void verify() async {
     if(_kwakuro.isSolution()) {
       setState(() {
-       _verifyColor = Colors.green;
+        _verifyColor = Colors.green;
       });
       for(int index = 0; index < _opacities.length; index++) {
-        setState(() {
-          _opacities[index] = 1.0;
-        });
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
+        _opacities[index] = 0.6;
+      }setState(() {});
+      await Future.delayed(const Duration(milliseconds: 500));
       for(int index = 0; index < _opacities.length; index++) {
-        setState(() {
-          _opacities[index] = 0.0;
-        });
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
+        _opacities[index] = 0.0;
+      }setState(() {});
 
     } else {
       setState(() {
         _verifyColor = Colors.red;
       });
       for(int index = 0; index < _opacities.length; index++) {
-        setState(() {
-          _opacities[index] = 0.6;
-        });
-        await Future.delayed(Duration(microseconds: 16~/_size*900));
-      }
+        _opacities[index] = 0.6;
+      }setState(() {});
+      await Future.delayed(const Duration(milliseconds: 500));
       for(int index = 0; index < _opacities.length; index++) {
-        setState(() {
-          _opacities[index] = 0.0;
-        });
-        await Future.delayed(Duration(microseconds: 16~/_size*900));
-      }
+        _opacities[index] = 0.0;
+      }setState(() {});
     }
   }
 
