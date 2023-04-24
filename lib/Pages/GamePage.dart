@@ -53,12 +53,19 @@ class _GamePageState extends State<GamePage> {
         _density = 0.5;
         break;
       case "Expert":
-        _density = 0.3;
+        _density = 0.2;
         break;
     }
     _isKakuroLoading = true;
     _whatsSelected = List.filled(_size * _size, false);
-    genKakuro();
+    if (widget._source == "CREER") {
+      genKakuro();
+      connexionHandlerFromCreate(widget._KEY, widget._PORT);
+    } else if (widget._source == "REJOINDRE") {
+      connexionHandlerFromJoin(widget._KEY, widget._PORT);
+    }else {
+      genKakuro();
+    }
   }
 
   void updateValue(int value) {
@@ -80,11 +87,7 @@ class _GamePageState extends State<GamePage> {
       _isKakuroLoading = false;
     });
 
-    if (widget._source == "CREER") {
-      connexionHandlerFromCreate(widget._KEY, widget._PORT);
-    } else if (widget._source == "REJOINDRE") {
-      connexionHandlerFromJoin(widget._KEY, widget._PORT);
-    }
+
   }
 
   Widget returnBtn() {
@@ -409,8 +412,6 @@ class _GamePageState extends State<GamePage> {
   }
 
   void verify() async {
-    print(_kwakuro.wrongL);
-
     if (_kwakuro.isSolution()) {
       setState(() {
         _verifyColor = Colors.green;
@@ -424,6 +425,8 @@ class _GamePageState extends State<GamePage> {
         _opacities[index] = 0.0;
       }
       setState(() {});
+      await Future.delayed(const Duration(milliseconds: 200));
+      GG();
     } else {
       setState(() {
         _verifyColor = Colors.red;
@@ -454,6 +457,22 @@ class _GamePageState extends State<GamePage> {
       }
       setState(() {});
     }
+  }
+
+  void GG() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: UserPreferences.bgColor,
+        title: Text("VICTORY", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text("GG! You complete this Kakuro ${widget._diff}-${widget._size}", style: const TextStyle(color: Colors.black54)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+          ),
+        ],
+      ),);
   }
 
   @override
@@ -501,7 +520,7 @@ class _GamePageState extends State<GamePage> {
   /*------------------------ Echange de données avec le serveur ------------------------*/
 
   late Socket socket;
-  final String _IP_SERVER = "192.168.1.21";
+  final String _IP_SERVER = "192.168.43.42";
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
     // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
@@ -546,7 +565,9 @@ class _GamePageState extends State<GamePage> {
 
   void updateGame(List<List<Carre>> matrix) {
     // Actualisation de la matrice du jeu
-    _kwakuro.board = matrix;
+    setState(() {
+      _kwakuro.board = matrix;
+    });
   }
 
   void errorHandler(error, StackTrace trace) {
