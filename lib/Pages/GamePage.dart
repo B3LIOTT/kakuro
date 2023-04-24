@@ -609,17 +609,20 @@ class _GamePageState extends State<GamePage> {
       final decodedJson = jsonDecode(data);
       _density = decodedJson["density"];
       _size = decodedJson["size"];
+
+    } else {
+      // Conversion de la liste d'entiers en matrice de jeu
+      final decodedJson = jsonDecode(data);
+
+      final matrixData = decodedJson.map<List<Carre>>((innerListJson) =>
+          (innerListJson as List<dynamic>)
+              .map((myClassJson) =>
+              Carre.fromJson(myClassJson as Map<String, dynamic>))
+              .toList()
+      ).toList();
+
+      updateGame(matrixData);
+      print("Matrice du jeu : ${_kwakuro.board}");
     }
-    // Conversion de la liste d'entiers en matrice de jeu
-    final decodedJson = jsonDecode(data);
-
-    final matrixData =  decodedJson.map<List<Carre>>((innerListJson) =>
-        (innerListJson as List<dynamic>)
-            .map((myClassJson) => Carre.fromJson(myClassJson as Map<String, dynamic>))
-            .toList()
-    ).toList();
-
-    updateGame(matrixData);
-    print("Matrice du jeu : ${_kwakuro.board}");
   }
 }
