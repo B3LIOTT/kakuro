@@ -7,11 +7,11 @@ class Carre {
   Carre(this.verticalSum, this.horizontalSum, this.value);
 
   Carre.fromJson(Map<String, dynamic> json)
-      : verticalSum = json['verticalSum'],
-        horizontalSum = json['horizontalSum'],
-        value = json['value'];
+      : verticalSum = json['verticalSum'] as int,
+        horizontalSum = json['horizontalSum'] as int,
+        value = json['value'] as int;
 
-  Map<String, dynamic> toJson() => {
+  Map<String, int> toJson() => {
         'verticalSum': verticalSum,
         'horizontalSum': horizontalSum,
         'value': value,
