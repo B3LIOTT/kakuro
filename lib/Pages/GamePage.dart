@@ -10,8 +10,8 @@ import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 
 class GamePage extends StatefulWidget {
-  late final String _diff;
-  late final String _size;
+  late String _diff;
+  late String _size;
   late final String _source;
   late final int _PORT;
   late final String _KEY;
@@ -521,6 +521,7 @@ class _GamePageState extends State<GamePage> {
 
   late Socket socket;
   final String _IP_SERVER = "192.168.43.42";
+  int _nbRequest = 0;
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
     // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
@@ -529,7 +530,7 @@ class _GamePageState extends State<GamePage> {
 
     // Connexion au serveur privé
     try {
-      Socket.connect(_IP_SERVER, PORT).then((Socket sock) {
+      Socket.connect(_IP_SERVER, PORT).then((Socket sock) async {
         socket = sock;
         final input = const Utf8Decoder().bind(sock);
 
@@ -537,11 +538,12 @@ class _GamePageState extends State<GamePage> {
         final key = jsonEncode(KEY);
         socket.write(key);
 
+        await Future.delayed(const Duration(milliseconds: 1000));
         // Envoi de la matrice de jeu au serveur privé pour qu'il la stocke et la diffuse aux autres joueurs qui arrivent
-        final matrix = jsonEncode(_kwakuro.board);
+        final matrix = jsonEncode(_kwakuro.board.map((e) => e.map((e) => e.toJson()).toList()).toList());
         socket.write(matrix);
 
-        input.listen(dataHandler,
+        input.listen(dataHandlerFromCreate,
             onError: errorHandler, onDone: doneHandler, cancelOnError: false);
       });
     } catch (e) {
@@ -549,15 +551,17 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  void dataHandler(String data) {
+  void dataHandlerFromCreate(String data) {
     // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
 
     // Conversion de la liste d'entiers en matrice de jeu
-    final dynamicMatrix = jsonDecode(data);
-    List<List<Carre>> matrixData = List<List<Carre>>.generate(
-        data.length,
-        (i) => List<Carre>.generate(
-            dynamicMatrix[i].length, (j) => dynamicMatrix[i][j]));
+    final decodedJson = jsonDecode(data);
+
+    final matrixData =  decodedJson.map<List<Carre>>((innerListJson) =>
+        (innerListJson as List<dynamic>)
+            .map((myClassJson) => Carre.fromJson(myClassJson as Map<String, dynamic>))
+            .toList()
+    ).toList();
 
     updateGame(matrixData);
     print("Matrice du jeu : ${_kwakuro.board}");
@@ -590,11 +594,32 @@ class _GamePageState extends State<GamePage> {
         final key = jsonEncode(KEY);
         socket.write(key);
 
-        input.listen(dataHandler,
+        input.listen(dataHandlerFromJoin,
             onError: errorHandler, onDone: doneHandler, cancelOnError: false);
       });
     } catch (e) {
       print("Erreur lors de la connexion au serveur : $e");
     }
+  }
+
+  void dataHandlerFromJoin(String data) {
+    // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
+    if(_nbRequest == 0) {
+      // Reception de la difficulté et de la taille
+      final decodedJson = jsonDecode(data);
+      _density = decodedJson["density"];
+      _size = decodedJson["size"];
+    }
+    // Conversion de la liste d'entiers en matrice de jeu
+    final decodedJson = jsonDecode(data);
+
+    final matrixData =  decodedJson.map<List<Carre>>((innerListJson) =>
+        (innerListJson as List<dynamic>)
+            .map((myClassJson) => Carre.fromJson(myClassJson as Map<String, dynamic>))
+            .toList()
+    ).toList();
+
+    updateGame(matrixData);
+    print("Matrice du jeu : ${_kwakuro.board}");
   }
 }
