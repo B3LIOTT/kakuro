@@ -590,10 +590,12 @@ class _GamePageState extends State<GamePage> {
     // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
     if(_nbRequest == 0) {
       // Reception de la difficulté et de la taille
-      print(data);
       final decodedJson = jsonDecode(data);
       _density = decodedJson["density"];
       _size = decodedJson["size"];
+
+      // Initialisation du Kakuro
+      _kwakuro = Kakuro(_size, _density);
 
       _nbRequest++;
     }
