@@ -7,6 +7,7 @@ import 'package:kakuro/Pages/StartPage.dart';
 import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     _clickController.add(false);
   }
 
-  void openPage(String page) async {
+  void openPage(int page) async {
     await Future.delayed(const Duration(milliseconds: 500));
     Navigator.of(context).push(_startPageRoute(page));
     _clickController.add(false);
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     _isSlelected[i] = !_isSlelected[i];
                   });
                   await Future.delayed(const Duration(milliseconds: 500));
-                  Navigator.of(context).push(_startPageRoute(text));
+                  Navigator.of(context).push(_startPageRoute(i));
                   _clickController.add(false);
                   setState(() {
                     _isSlelected[i] = !_isSlelected[i];
@@ -80,9 +81,9 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  bouton("SOLO", 0, snapshot),
-                  bouton("CREER", 1, snapshot),
-                  bouton("REJOINDRE", 2, snapshot),
+                  bouton(AppLocalizations.of(context).solo, 0, snapshot),
+                  bouton(AppLocalizations.of(context).create, 1, snapshot),
+                  bouton(AppLocalizations.of(context).join, 2, snapshot),
                 ],
               );
             }));
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Route _startPageRoute(String source) {
+  Route _startPageRoute(int source) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           StartPage(source),

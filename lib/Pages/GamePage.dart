@@ -8,11 +8,12 @@ import '../Objects/AppProvider.dart';
 import '../Objects/Carre.dart';
 import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GamePage extends StatefulWidget {
   late double _diff;
   late int _size;
-  late final String _source;
+  late final int _source;
   late final int _PORT;
   late final String _KEY;
 
@@ -42,10 +43,10 @@ class _GamePageState extends State<GamePage> {
     _isKakuroLoading = true;
     _whatsSelected = List.filled(_size * _size, false);
 
-    if (widget._source == "CREER") {
+    if (widget._source == 1) {
       genKakuro();
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
-    } else if (widget._source == "REJOINDRE") {
+    } else if (widget._source == 2) {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }else {
       genKakuro();
@@ -483,7 +484,7 @@ class _GamePageState extends State<GamePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 kakuro(),
-                Text("${(widget._diff == 0.2)? "Exxpert" : (widget._diff == 0.5)? "Moyen" : "Facile"} - ${widget._size}x${widget._size}"),
+                Text("${(widget._diff == 0.2)? AppLocalizations.of(context).hard : (widget._diff == 0.5)? AppLocalizations.of(context).medium : AppLocalizations.of(context).easy} - ${widget._size}x${widget._size}"),
               ],
             ),
           ),

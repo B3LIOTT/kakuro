@@ -1,0 +1,58 @@
+{
+  "solo": "SOLO",
+  "@solo": {
+    "description": "SOLO button"
+  },
+  "create": "CREATE",
+    "@create": {
+        "description": "CREATE button"
+    },
+  "join": "JOIN",
+    "@join": {
+        "description": "JOIN button"
+    },
+  "start" : "START",
+  "@start": {
+    "description": "START button"
+  },
+  "credits": "CREDITS",
+    "@credits": {
+        "description": "CREDITS text"
+    },
+  "c_desc" : "A flutter app made by 4 students from the engineering school INSA Hauts-de-France",
+    "@c_desc": {
+        "description": "CREDITS description"
+    },
+  "easy": "Easy",
+    "@easy": {
+        "description": "Easy choice"
+    },
+  "medium": "Medium",
+    "@medium": {
+        "description": "Medium choice"
+    },
+  "hard": "Hard",
+    "@hard": {
+        "description": "Hard choice"
+    },
+  "info": "INFO",
+    "@info": {
+        "description": "INFO text"
+    },
+  "d_desc": "The difficulty of the game is based on the number of cells to fill in the grid. The more cells to fill, the more difficult the game will be.",
+    "@d_desc": {
+        "description": "Difficulty description"
+    },
+  "k_desc" : "Ask the person who created the game for the code, it is in the following format:\nXXXX-YYYY\nX being a number and Y being a letter.",
+    "@k_desc": {
+        "description": "Key description"
+    },
+  "rules": "RULES",
+    "@rules": {
+        "description": "RULES text"
+    },
+  "r_desc": "Each puzzle consists of a blank grid with sum-clues in various places. The object is to fill all empty squares using numbers 1 to 9 so the sum of each horizontal block equals the clue on its left, and the sum of each vertical block equals the clue on its top. In addition, no number may be used in the same block more than once.",
+    "@r_desc": {
+        "description": "Rules description"
+    }
+}

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:animations/animations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/AppProvider.dart';
 import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
 import 'PaletteSettings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TopMenu extends StatefulWidget {
   late final String _source;
@@ -27,20 +27,6 @@ class _TopMenuState extends State<TopMenu> {
     super.initState();
     _clickController.add(false);
     _menuAlignment = Alignment.centerRight;
-    switch(widget._source) {
-      case "GamePage":
-        _content = 'Each puzzle consists of a blank grid with sum-clues in various places. The object is to fill all empty squares using numbers 1 to 9 so the sum of each horizontal block equals the clue on its left, and the sum of each vertical block equals the clue on its top. In addition, no number may be used in the same block more than once.';
-        _title = 'RULES';
-        break;
-      case "StartPage":
-        _content = 'The difficulty of the game is based on the number of cells to fill in the grid. The more cells to fill, the more difficult the game will be. So a small KAKURO can be more difficult than a big one with lots of black cells.';
-        _title = 'INFOS';
-        break;
-      case "HomePage":
-        _content = 'A flutter app made by 4 students from the engineering school INSA Haut De France';
-        _title = 'CREDITS';
-        break;
-    }
 
   }
 
@@ -119,6 +105,20 @@ class _TopMenuState extends State<TopMenu> {
                               _clickController.add(true);
                               setState(() {
                                 _menuAlignment = Alignment.center;
+                                switch(widget._source) {
+                                  case "GamePage":
+                                    _content = AppLocalizations.of(context)!.r_desc;
+                                    _title = AppLocalizations.of(context)!.rules;
+                                    break;
+                                  case "StartPage":
+                                    _content = AppLocalizations.of(context)!.d_desc;
+                                    _title = AppLocalizations.of(context)!.info;
+                                    break;
+                                  case "HomePage":
+                                    _content = AppLocalizations.of(context)!.c_desc;
+                                    _title = AppLocalizations.of(context)!.credits;
+                                    break;
+                                }
                               });
                               await Future.delayed(
                                   const Duration(milliseconds: 200));
