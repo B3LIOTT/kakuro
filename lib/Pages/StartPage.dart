@@ -156,7 +156,7 @@ class _StartPageState extends State<StartPage> {
           Padding(
               padding: const EdgeInsets.all(40),
               child: AutoSizeText(
-                AppLocalizations.of(context)!.k_desc,
+                AppLocalizations.of(context).k_desc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: UserPreferences.btnColor,
@@ -466,7 +466,7 @@ class _StartPageState extends State<StartPage> {
   final int _MAIN_SERVER_PORT = 8080;
 
   dynamic createParty() async {
-    late final jsonData;
+    late final JsonCodec jsonData;
     final data = {
       "density": _diffListDouble[_diffInd],
       "size": _sizeListInt[_sizeInd],

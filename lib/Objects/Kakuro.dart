@@ -419,7 +419,6 @@ class Kakuro {
   List<List<int>> checkSolution() {
     wrongL.isNotEmpty? wrongL.clear() : null;
     List<List<int>> list = [];
-    List<int> l = [];
     for (int row = 0; row < size; row++) {
       for (int col = 0; col < size; col++) {
         if (board[row][col].value == -1 &&

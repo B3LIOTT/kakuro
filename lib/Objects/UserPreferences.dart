@@ -19,7 +19,7 @@ class UserPreferences {
       case 'default' :
         btnColor = const Color(0xFF61524D);
         bgBtn = const Color(0xFFF7D0B4);
-        bgColor = const Color(0xFFFFE6E1);
+        bgColor = const Color(0xFFFFEEE1);
         logoPath = 'lib/assets/images/logo_brown.png';
         break;
       case 'red' :
@@ -35,9 +35,9 @@ class UserPreferences {
         logoPath = 'lib/assets/images/logo_orange.png';
         break;
       case 'yellow' :
-        btnColor = const Color(0xFFFFD028);
-        bgBtn = const Color(0xFFFFF2C3);
-        bgColor = const Color(0xFFFFFCEF);
+        btnColor = const Color(0xFFFFC700);
+        bgBtn = const Color(0xFFFFF1B0);
+        bgColor = const Color(0xFFFFF7DD);
         logoPath = 'lib/assets/images/logo_yellow.png';
         break;
       case 'green' :
