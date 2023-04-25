@@ -107,16 +107,16 @@ class _TopMenuState extends State<TopMenu> {
                                 _menuAlignment = Alignment.center;
                                 switch(widget._source) {
                                   case "GamePage":
-                                    _content = AppLocalizations.of(context).r_desc;
-                                    _title = AppLocalizations.of(context).rules;
+                                    _content = AppLocalizations.of(context)!.r_desc;
+                                    _title = AppLocalizations.of(context)!.rules;
                                     break;
                                   case "StartPage":
-                                    _content = AppLocalizations.of(context).d_desc;
-                                    _title = AppLocalizations.of(context).info;
+                                    _content = AppLocalizations.of(context)!.d_desc;
+                                    _title = AppLocalizations.of(context)!.info;
                                     break;
                                   case "HomePage":
-                                    _content = AppLocalizations.of(context).c_desc;
-                                    _title = AppLocalizations.of(context).credits;
+                                    _content = AppLocalizations.of(context)!.c_desc;
+                                    _title = AppLocalizations.of(context)!.credits;
                                     break;
                                 }
                               });

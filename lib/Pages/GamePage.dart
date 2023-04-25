@@ -484,7 +484,7 @@ class _GamePageState extends State<GamePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 kakuro(),
-                Text("${(widget._diff == 0.2)? AppLocalizations.of(context).hard : (widget._diff == 0.5)? AppLocalizations.of(context).medium : AppLocalizations.of(context).easy} - ${widget._size}x${widget._size}"),
+                Text("${(widget._diff == 0.2)? AppLocalizations.of(context)!.hard : (widget._diff == 0.5)? AppLocalizations.of(context)!.medium : AppLocalizations.of(context)!.easy} - ${widget._size}x${widget._size}"),
               ],
             ),
           ),

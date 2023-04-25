@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'Objects/UserPreferences.dart';
 import 'Pages/HomePage.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
@@ -42,10 +41,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(fontFamily: 'Lato', useMaterial3: true),
           home: const HomePage(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: const [
-            Locale('en'),
-            Locale('fr'),
-          ],
+          supportedLocales: AppLocalizations.supportedLocales,
         )
     );
   }

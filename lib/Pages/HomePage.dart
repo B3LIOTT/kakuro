@@ -81,9 +81,9 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  bouton(AppLocalizations.of(context).solo, 0, snapshot),
-                  bouton(AppLocalizations.of(context).create, 1, snapshot),
-                  bouton(AppLocalizations.of(context).join, 2, snapshot),
+                  bouton(AppLocalizations.of(context)!.solo, 0, snapshot),
+                  bouton(AppLocalizations.of(context)!.create, 1, snapshot),
+                  bouton(AppLocalizations.of(context)!.join, 2, snapshot),
                 ],
               );
             }));

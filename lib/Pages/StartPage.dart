@@ -156,7 +156,7 @@ class _StartPageState extends State<StartPage> {
           Padding(
               padding: const EdgeInsets.all(40),
               child: AutoSizeText(
-                AppLocalizations.of(context).k_desc,
+                AppLocalizations.of(context)!.k_desc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: UserPreferences.btnColor,
@@ -368,28 +368,28 @@ class _StartPageState extends State<StartPage> {
           });
           await Future.delayed(const Duration(milliseconds: 500));
 
-          if (_sourceText == AppLocalizations.of(context).start) {
+          if (_sourceText == AppLocalizations.of(context)!.start) {
             String KEY = _KeySTR.split("-")[0];
             int PORT = int.parse(_KeySTR.split("-")[1]);
             Navigator.of(context).push(
                 _gamePageRoute(KEY, PORT, widget._source));
           }
-          else if (_sourceText == AppLocalizations.of(context).create) {
+          else if (_sourceText == AppLocalizations.of(context)!.create) {
             final json = await createParty();
             setState(() {
               _KeySTR = json["key"] + "-" + json["port"].toString();
               _sourceText = AppLocalizations
                   .of(context)
-                  .start;
+                  !.start;
             });
           }
-          else if (_sourceText == AppLocalizations.of(context).join) {
+          else if (_sourceText == AppLocalizations.of(context)!.join) {
             String KEY = textFieldController.text.split("-")[0];
             int PORT = int.parse(textFieldController.text.split("-")[1]);
             Navigator.of(context).push(
                 _gamePageRoute(KEY, PORT, widget._source));
           }
-          else if (_sourceText == AppLocalizations.of(context).solo) {
+          else if (_sourceText == AppLocalizations.of(context)!.solo) {
               Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
           }
           setState(() {
@@ -402,16 +402,16 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    _diffList = [AppLocalizations.of(context).easy, AppLocalizations.of(context).medium, AppLocalizations.of(context).hard];
+    _diffList = [AppLocalizations.of(context)!.easy, AppLocalizations.of(context)!.medium, AppLocalizations.of(context)!.hard];
     switch (widget._source) {
       case 0:
-        _sourceText = AppLocalizations.of(context).solo;
+        _sourceText = AppLocalizations.of(context)!.solo;
         break;
       case 1:
-        _sourceText = AppLocalizations.of(context).create;
+        _sourceText = AppLocalizations.of(context)!.create;
         break;
       case 2:
-        _sourceText = AppLocalizations.of(context).join;
+        _sourceText = AppLocalizations.of(context)!.join;
         break;
     }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
