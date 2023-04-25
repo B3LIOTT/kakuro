@@ -39,11 +39,11 @@ class _GamePageState extends State<GamePage> {
     _verifyColor = Colors.green;
     _isKakuroLoading = true;
 
-    if(widget._source != 2) { // si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
+    if(widget._source != 2) {
+      _size = widget._size;
+      _density = widget._diff;// si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
-      _size = widget._size;
-      _density = widget._diff;
       genKakuro();
     }
     if (widget._source == 1) {

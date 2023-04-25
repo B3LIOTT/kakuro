@@ -35,15 +35,16 @@ class _StartPageState extends State<StartPage> {
   late double _currentOpacitySize;
   late List<String> _kakuroListBySize;
   late String _sourceText;
+  late bool _rdy;
 
   @override
   void initState() {
     super.initState();
+    _rdy = false;
     _isSlelected = false;
     _diffInd = 0;
     _sizeInd = 0;
     _sizeList = ["8x8", "10x10", "12x12", "16x16"];
-    _diffList = [AppLocalizations.of(context)!.easy, AppLocalizations.of(context)!.medium, AppLocalizations.of(context)!.hard];
     _sizeListInt = [8, 10, 12, 16];
     _diffListDouble = [0.8, 0.5, 0.2];
     _currentOpacityDiff = 1.0;
@@ -54,13 +55,18 @@ class _StartPageState extends State<StartPage> {
       "lib/assets/images/kakuro8x8.png",
       "lib/assets/images/kakuro8x8.png"
     ];
+  }
+
+  void initLocaliz() {
+    _diffList = [AppLocalizations.of(context)!.easy, AppLocalizations.of(context)!.medium, AppLocalizations.of(context)!.hard];
 
     switch (widget._source) {
       case 0:
         _sourceText = AppLocalizations.of(context)!.solo;
         break;
       case 1:
-        _sourceText = AppLocalizations.of(context)!.create;
+        if(!_rdy) {_sourceText = AppLocalizations.of(context)!.create;}
+        else {_sourceText = AppLocalizations.of(context)!.start;}
         break;
       case 2:
         _sourceText = AppLocalizations.of(context)!.join;
@@ -391,9 +397,7 @@ class _StartPageState extends State<StartPage> {
             final json = await createParty();
             setState(() {
               _KeySTR = json["key"] + "-" + json["port"].toString();
-              _sourceText = AppLocalizations
-                  .of(context)
-                  !.start;
+              _rdy = true;
             });
           }
           else if (_sourceText == AppLocalizations.of(context)!.join) {
@@ -415,6 +419,7 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
+    initLocaliz();
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
