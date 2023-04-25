@@ -13,7 +13,7 @@ class CustomBorder extends BoxBorder {
 
   CustomBorder({this.color = Colors.black, this.width = 2, this.voidSize = 0, this.hasDiagonal = false, this.hasTop = true, this.hasBottom = true, this.hasLeft = true, this.hasRight = true});
   @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.all(0);
+  EdgeInsetsGeometry get dimensions => const EdgeInsets.all(0);
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) =>

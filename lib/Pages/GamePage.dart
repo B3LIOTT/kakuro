@@ -37,19 +37,19 @@ class _GamePageState extends State<GamePage> {
   void initState() {
     super.initState();
     _verifyColor = Colors.green;
-    _size = widget._size;
-    _density = widget._diff;
-    _opacities = List.generate(_size * _size, (index) => 0.0);
     _isKakuroLoading = true;
-    _whatsSelected = List.filled(_size * _size, false);
 
-    if (widget._source == 1) {
+    if(widget._source != 2) { // si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
+      _opacities = List.generate(_size * _size, (index) => 0.0);
+      _whatsSelected = List.filled(_size * _size, false);
+      _size = widget._size;
+      _density = widget._diff;
       genKakuro();
+    }
+    if (widget._source == 1) {
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
     } else if (widget._source == 2) {
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
-    }else {
-      genKakuro();
     }
   }
 
@@ -484,7 +484,7 @@ class _GamePageState extends State<GamePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 kakuro(),
-                Text("${(widget._diff == 0.2)? AppLocalizations.of(context)!.hard : (widget._diff == 0.5)? AppLocalizations.of(context)!.medium : AppLocalizations.of(context)!.easy} - ${widget._size}x${widget._size}"),
+                Text("${(widget._diff == 0.2)? AppLocalizations.of(context)?.hard : (widget._diff == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${widget._size}x${widget._size}"),
               ],
             ),
           ),
@@ -597,6 +597,8 @@ class _GamePageState extends State<GamePage> {
       _size = decodedJson["size"];
 
       // Initialisation du Kakuro
+      _opacities = List.generate(_size * _size, (index) => 0.0);
+      _whatsSelected = List.filled(_size * _size, false);
       _kwakuro = Kakuro(_size, _density);
 
       _nbRequest++;

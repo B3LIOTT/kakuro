@@ -43,6 +43,7 @@ class _StartPageState extends State<StartPage> {
     _diffInd = 0;
     _sizeInd = 0;
     _sizeList = ["8x8", "10x10", "12x12", "16x16"];
+    _diffList = [AppLocalizations.of(context)!.easy, AppLocalizations.of(context)!.medium, AppLocalizations.of(context)!.hard];
     _sizeListInt = [8, 10, 12, 16];
     _diffListDouble = [0.8, 0.5, 0.2];
     _currentOpacityDiff = 1.0;
@@ -53,6 +54,18 @@ class _StartPageState extends State<StartPage> {
       "lib/assets/images/kakuro8x8.png",
       "lib/assets/images/kakuro8x8.png"
     ];
+
+    switch (widget._source) {
+      case 0:
+        _sourceText = AppLocalizations.of(context)!.solo;
+        break;
+      case 1:
+        _sourceText = AppLocalizations.of(context)!.create;
+        break;
+      case 2:
+        _sourceText = AppLocalizations.of(context)!.join;
+        break;
+    }
   }
 
   List<Widget> childrenList(int source) {
@@ -402,18 +415,6 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    _diffList = [AppLocalizations.of(context)!.easy, AppLocalizations.of(context)!.medium, AppLocalizations.of(context)!.hard];
-    switch (widget._source) {
-      case 0:
-        _sourceText = AppLocalizations.of(context)!.solo;
-        break;
-      case 1:
-        _sourceText = AppLocalizations.of(context)!.create;
-        break;
-      case 2:
-        _sourceText = AppLocalizations.of(context)!.join;
-        break;
-    }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -462,11 +463,11 @@ class _StartPageState extends State<StartPage> {
 
   /*-------------------------------------Creation de partie multi-------------------------------------*/
   late Socket socket;
-  final String _IP_SERVER = "192.168.43.42";
+  final String _IP_SERVER = "10.0.2.2";
   final int _MAIN_SERVER_PORT = 8080;
 
   dynamic createParty() async {
-    late final JsonCodec jsonData;
+    late final jsonData;
     final data = {
       "density": _diffListDouble[_diffInd],
       "size": _sizeListInt[_sizeInd],
@@ -480,7 +481,7 @@ class _StartPageState extends State<StartPage> {
       final input = const Utf8Decoder().bind(socket);
       socket.write(jData);
       final responseBytes = await input.first;
-      jsonData = json.decode(responseBytes);
+      jsonData = jsonDecode(responseBytes);
 
       // Fermeture de la connexion avec le serveur principal
       socket.destroy();
