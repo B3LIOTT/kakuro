@@ -481,9 +481,9 @@ class _GamePageState extends State<GamePage> {
             margin: const EdgeInsets.only(top: 20),
             alignment: Alignment.center,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 kakuro(),
+                (widget._source == 1)? Text("${widget._KEY}-${widget._PORT}", style: const TextStyle(fontSize: 20),) : Container(),
                 Text("${(widget._diff == 0.2)? AppLocalizations.of(context)?.hard : (widget._diff == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${widget._size}x${widget._size}"),
               ],
             ),
@@ -491,7 +491,7 @@ class _GamePageState extends State<GamePage> {
           Expanded(
             child: Container(
               margin: EdgeInsets.only(
-                  top: 20, bottom: MediaQuery.of(context).padding.bottom + 20),
+                  top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [verifyBtn(), numPad()]),
@@ -510,7 +510,7 @@ class _GamePageState extends State<GamePage> {
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
     // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
-
+    while(_isKakuroLoading) {}
     print("Serveur privé => $KEY-$PORT");
 
     // Connexion au serveur privé

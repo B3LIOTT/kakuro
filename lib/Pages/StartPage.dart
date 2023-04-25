@@ -24,7 +24,7 @@ class _StartPageState extends State<StartPage> {
   late bool _isSlelected;
   final transitionType = ContainerTransitionType.fadeThrough;
   final TextEditingController textFieldController = TextEditingController();
-  String _KeySTR = "";
+  late bool _KeyOK;
   late int _diffInd;
   late int _sizeInd;
   late List<String> _diffList;
@@ -35,12 +35,11 @@ class _StartPageState extends State<StartPage> {
   late double _currentOpacitySize;
   late List<String> _kakuroListBySize;
   late String _sourceText;
-  late bool _rdy;
 
   @override
   void initState() {
     super.initState();
-    _rdy = false;
+    _KeyOK = false;
     _isSlelected = false;
     _diffInd = 0;
     _sizeInd = 0;
@@ -65,8 +64,7 @@ class _StartPageState extends State<StartPage> {
         _sourceText = AppLocalizations.of(context)!.solo;
         break;
       case 1:
-        if(!_rdy) {_sourceText = AppLocalizations.of(context)!.create;}
-        else {_sourceText = AppLocalizations.of(context)!.start;}
+        _sourceText = AppLocalizations.of(context)!.create;
         break;
       case 2:
         _sourceText = AppLocalizations.of(context)!.join;
@@ -112,18 +110,14 @@ class _StartPageState extends State<StartPage> {
           ),
           diffSelector(),
           sizeSelector(),
-          (_KeySTR != "")
-              ? Text(
-                  "Clé: $_KeySTR",
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: UserPreferences.btnColor,
-                    fontWeight: FontWeight.w400,
-                  ),
+          _KeyOK? Icon(
+                  Icons.check,
+                  color: UserPreferences.btnColor,
+                  size: 50,
                 )
               : _isSlelected
                   ? SizedBox(
-                      height: 40,
+                      height: 50,
                       child: Center(
                           child: CircularProgressIndicator(
                         color: UserPreferences.btnColor,
@@ -387,18 +381,16 @@ class _StartPageState extends State<StartPage> {
           });
           await Future.delayed(const Duration(milliseconds: 500));
 
-          if (_sourceText == AppLocalizations.of(context)!.start) {
-            String KEY = _KeySTR.split("-")[0];
-            int PORT = int.parse(_KeySTR.split("-")[1]);
-            Navigator.of(context).push(
-                _gamePageRoute(KEY, PORT, widget._source));
-          }
-          else if (_sourceText == AppLocalizations.of(context)!.create) {
+          if (_sourceText == AppLocalizations.of(context)!.create) {
             final json = await createParty();
             setState(() {
-              _KeySTR = json["key"] + "-" + json["port"].toString();
-              _rdy = true;
+              _KeyOK = true;
             });
+            String KEY = json["key"];
+            int PORT = json["port"] as int;
+            await Future.delayed(const Duration(milliseconds: 200));
+            Navigator.of(context).push(
+                _gamePageRoute(KEY, PORT, widget._source));
           }
           else if (_sourceText == AppLocalizations.of(context)!.join) {
             String KEY = textFieldController.text.split("-")[0];
