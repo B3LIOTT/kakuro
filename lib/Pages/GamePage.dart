@@ -523,10 +523,9 @@ class _GamePageState extends State<GamePage> {
         final key = jsonEncode(KEY);
         socket.write(key);
 
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 200));
         // Envoi de la matrice de jeu au serveur privé pour qu'il la stocke et la diffuse aux autres joueurs qui arrivent
-        final matrix = jsonEncode(_kwakuro.board.map((e) => e.map((e) => e.toJson()).toList()).toList());
-        socket.write(matrix);
+        await sendMatrix(socket, _kwakuro.board);
 
         input.listen(dataHandlerFromCreate,
             onError: errorHandler, onDone: doneHandler, cancelOnError: false);
@@ -618,4 +617,15 @@ class _GamePageState extends State<GamePage> {
       print("Matrice du jeu : ${_kwakuro.board}");
     }
   }
+
+  /*-------------------------------------Fonctions-------------------------------------*/
+
+  Future<void> sendMatrix(Socket socket, List<List<Carre>> board) async {
+    for (final row in board) {
+      final jsonRow = jsonEncode(row.map((c) => c.toJson()).toList());
+      socket.write('$jsonRow\n');
+      await Future.delayed(const Duration(milliseconds: 20));
+    }
+  }
+
 }
