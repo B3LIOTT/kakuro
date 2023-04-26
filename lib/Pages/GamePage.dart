@@ -568,6 +568,8 @@ class _GamePageState extends State<GamePage> {
   }
 
   /*-------------------------------------Rejoindre de partie multi-------------------------------------*/
+  int _count = 0;
+  String buffer = "";
 
   void connexionHandlerFromJoin(String KEY, int PORT) {
     try {
@@ -602,19 +604,28 @@ class _GamePageState extends State<GamePage> {
 
       _nbRequest++;
     } else {
-      // Conversion de la liste d'entiers en matrice de jeu
-      final decodedJson = jsonDecode(data);
+      // Actualisation de la matrice du jeu
+      buffer += data;
+      _count++;
+      if(_count == _size) {
+        final jsonList = const LineSplitter().convert(buffer);
+        print(buffer);
+        List<List<Carre>> matrix = [];
 
-      final matrixData = decodedJson.map<List<Carre>>((innerListJson) =>
-          (innerListJson as List<dynamic>)
-              .map((myClassJson) =>
-              Carre.fromJson(myClassJson as Map<String, dynamic>))
-              .toList()
-      ).toList();
+        for (final json in jsonList) {
+          final List<Carre> row = [];
 
-      updateGame(matrixData);
+          for (final carreJson in jsonDecode(json)) {
+            final carre = Carre.fromJson(carreJson);
+            row.add(carre);
+          }
+          matrix.add(row);
+        }
+        _count = 0;
+        buffer = "";
+        updateGame(matrix);
+      }
       _isKakuroLoading = false;
-      print("Matrice du jeu : ${_kwakuro.board}");
     }
   }
 
