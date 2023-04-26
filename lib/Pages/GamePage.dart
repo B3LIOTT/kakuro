@@ -523,7 +523,7 @@ class _GamePageState extends State<GamePage> {
         final key = jsonEncode(KEY);
         socket.write(key);
 
-        await Future.delayed(const Duration(milliseconds: 1000));
+        await Future.delayed(const Duration(milliseconds: 500));
         // Envoi de la matrice de jeu au serveur privé pour qu'il la stocke et la diffuse aux autres joueurs qui arrivent
         final matrix = jsonEncode(_kwakuro.board.map((e) => e.map((e) => e.toJson()).toList()).toList());
         socket.write(matrix);
