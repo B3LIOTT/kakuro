@@ -36,7 +36,8 @@ class _StartPageState extends State<StartPage> {
   late double _currentOpacitySize;
   late List<String> _kakuroListBySize;
   late String _sourceText;
-  late bool _continueGame;
+  bool _continueGame = false;
+  bool _first = true;
 
   @override
   void initState() {
@@ -56,13 +57,10 @@ class _StartPageState extends State<StartPage> {
       "lib/assets/images/kakuro8x8.png",
       "lib/assets/images/kakuro8x8.png"
     ];
-    _continueGame = false;
-    if(widget._source == 0) {
-      checkGame();
-    }
   }
 
   void checkGame() {
+    _first = false;
     List<List<Carre>> board = UserPreferences.getGame();
     if (board.isNotEmpty) {
       showDialog<void>(
@@ -460,6 +458,9 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     initLocaliz();
+    if(_first) {
+      //checkGame();
+    }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(
         resizeToAvoidBottomInset: false,

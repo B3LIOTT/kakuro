@@ -88,9 +88,14 @@ class UserPreferences {
   static List<List<Carre>> getGame() {
     List<String> jsonGame = _prefs!.getStringList('game') ?? [];
     List<List<Carre>> game = [];
-    for (final jsonRow in jsonGame) {
-      final row = jsonDecode(jsonRow);
-      game.add(row.map((c) => Carre.fromJson(c)).toList());
+    for (final json in jsonGame) {
+      final List<Carre> row = [];
+
+      for (final carreJson in jsonDecode(json)) {
+        final carre = Carre.fromJson(carreJson);
+        row.add(carre);
+      }
+      game.add(row);
     }
     return game;
   }

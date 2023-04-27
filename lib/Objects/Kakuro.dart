@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:kakuro/Objects/UserPreferences.dart';
+
 import 'Carre.dart';
 
 class Kakuro {
@@ -10,6 +12,7 @@ class Kakuro {
   List possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   List valueUsed = [];
   List<List<int>> wrongL = [];
+  bool continueGame;
 
   List<List<Carre>> get getBoard {
     return board;
@@ -19,31 +22,35 @@ class Kakuro {
   /// size: taille du kakuro
   /// density: densité du kakuro
   /// board: tableau de carrés
-  Kakuro(this.size, this.density) {
-    board = List.generate(
-        size, (i) => List.filled(size, Carre(0, 0, 0), growable: false),
-        growable: false);
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        if (i == 0 || j == 0) {
-          // first line and first column are black squares
-          board[i][j] = Carre(-1, -1, -1);
-        } else if (i == size - 1 || j == size - 1) {
-          // last line and last column are black squares
-          board[i][j] = Carre(-1, -1, -1);
-        } else {
-          // other squares are white squares
-          if (board[i][j].value != -1) {
-            board[i][j] = Carre(0, 0, 0);
+  Kakuro(this.size, this.density, this.continueGame) {
+    if(!continueGame) {
+      board = List.generate(
+          size, (i) => List.filled(size, Carre(0, 0, 0), growable: false),
+          growable: false);
+      for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+          if (i == 0 || j == 0) {
+            // first line and first column are black squares
+            board[i][j] = Carre(-1, -1, -1);
+          } else if (i == size - 1 || j == size - 1) {
+            // last line and last column are black squares
+            board[i][j] = Carre(-1, -1, -1);
+          } else {
+            // other squares are white squares
+            if (board[i][j].value != -1) {
+              board[i][j] = Carre(0, 0, 0);
+            }
           }
         }
       }
+      generateBlackSquares(); // on génère les carrés noirs
+      fillWhiteSpaces(); // On s'assure qu'il n'existe pas de trop grandes séries de cases blanches
+      fillBoard(); // On remplit les cases blanches avec des chiffres
+      fillSums(); // On génère les sommes
+      removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
+    } else {
+      board = UserPreferences.getGame();
     }
-    generateBlackSquares(); // on génère les carrés noirs
-    fillWhiteSpaces(); // On s'assure qu'il n'existe pas de trop grandes séries de cases blanches
-    fillBoard(); // On remplit les cases blanches avec des chiffres
-    fillSums(); // On génère les sommes
-    removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
   }
 
   /// Fonction qui génère les carrés noirs (en fonction d'une densité donnée)
@@ -592,7 +599,7 @@ class Kakuro {
 void testTime(int n, int size, double density) {
   Stopwatch stopwatch = Stopwatch()..start();
   for (int i = 0; i < n; i++) {
-    Kakuro(size, density);
+    Kakuro(size, density, false);
   }
   print(
       'Temps moyen de génération de $n grilles de taille $size : ${stopwatch.elapsedMilliseconds / n} ms');

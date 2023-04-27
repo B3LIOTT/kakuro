@@ -45,7 +45,7 @@ class _GamePageState extends State<GamePage> {
       _density = widget._diff;// si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
-      genKakuro();
+      genKakuro(widget._continueGame);
     }
     if (widget._source == 1) {
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
@@ -68,10 +68,9 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  void genKakuro() {
-    _kwakuro = Kakuro(_size, _density);
+  void genKakuro(bool continueGame) {
     setState(() {
-      _kwakuro.board = _kwakuro.board;
+      _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
 
@@ -598,7 +597,7 @@ class _GamePageState extends State<GamePage> {
       // Initialisation du Kakuro
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
-      _kwakuro = Kakuro(_size, _density);
+      _kwakuro = Kakuro(_size, _density, false);
 
       _nbRequest++;
     } else {
