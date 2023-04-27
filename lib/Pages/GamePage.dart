@@ -464,9 +464,11 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    UserPreferences.setDensity(_density);
-    UserPreferences.setSize(_size);
-    UserPreferences.setGame(_kwakuro.board);
+    if(widget._source == 0) {
+      UserPreferences.setDensity(_density);
+      UserPreferences.setSize(_size);
+      UserPreferences.setGame(_kwakuro.board);
+    }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return WillPopScope(
         child:Scaffold(
