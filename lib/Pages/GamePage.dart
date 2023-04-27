@@ -450,7 +450,7 @@ class _GamePageState extends State<GamePage> {
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
         title: Text("VICTORY", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-        content: Text("GG! You complete this Kakuro ${widget._diff}-${widget._size}", style: const TextStyle(color: Colors.black54)),
+        content: Text("GG! You complete this Kakuro $_density-$_size", style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -484,7 +484,7 @@ class _GamePageState extends State<GamePage> {
               children: [
                 kakuro(),
                 (widget._source == 1)? Text("${widget._KEY}-${widget._PORT}", style: const TextStyle(fontSize: 20),) : Container(),
-                Text("${(widget._diff == 0.2)? AppLocalizations.of(context)?.hard : (widget._diff == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${widget._size}x${widget._size}"),
+                Text("${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size"),
               ],
             ),
           ),
@@ -505,7 +505,7 @@ class _GamePageState extends State<GamePage> {
   /*------------------------ Echange de données avec le serveur ------------------------*/
 
   late Socket socket;
-  final String _IP_SERVER = "192.168.43.42";
+  final String _IP_SERVER = "192.168.0.42";
   int _nbRequest = 0;
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
@@ -594,8 +594,10 @@ class _GamePageState extends State<GamePage> {
     if (_nbRequest == 0) {
       // Reception de la difficulté et de la taille
       final decodedJson = jsonDecode(data);
-      _density = decodedJson["density"];
-      _size = decodedJson["size"];
+      setState(() {
+        _density = decodedJson["density"];
+        _size = decodedJson["size"];
+      });
 
       // Initialisation du Kakuro
       _opacities = List.generate(_size * _size, (index) => 0.0);
@@ -635,7 +637,7 @@ class _GamePageState extends State<GamePage> {
     for (final row in board) {
       final jsonRow = jsonEncode(row.map((c) => c.toJson()).toList());
       socket.write('$jsonRow\n');
-      await Future.delayed(const Duration(milliseconds: 20));
+      await Future.delayed(const Duration(milliseconds: 100));
     }
   }
 
