@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Carre.dart';
 
 class UserPreferences {
   static SharedPreferences? _prefs;
@@ -70,5 +73,30 @@ class UserPreferences {
 
   static String getTheme(){
     return _prefs!.getString('theme') ?? 'default';
+  }
+  
+  static void setGame(List<List<Carre>> board) {
+    List<String> jsonGame = [];
+    for (final row in board) {
+      final jsonRow = jsonEncode(row.map((c) => c.toJson()).toList());
+      jsonGame.add(jsonRow);
+    }
+    _prefs!.setStringList('game', jsonGame);
+    print('Game saved');
+  }
+
+  static List<List<Carre>> getGame() {
+    List<String> jsonGame = _prefs!.getStringList('game') ?? [];
+    List<List<Carre>> game = [];
+    for (final jsonRow in jsonGame) {
+      final row = jsonDecode(jsonRow);
+      game.add(row.map((c) => Carre.fromJson(c)).toList());
+    }
+    return game;
+  }
+
+  static void clearGame() {
+    _prefs!.remove('game');
+    print('Game cleared');
   }
 }

@@ -16,8 +16,9 @@ class GamePage extends StatefulWidget {
   late final int _source;
   late final int _PORT;
   late final String _KEY;
+  late bool _continueGame;
 
-  GamePage(this._diff, this._size, this._KEY, this._PORT, this._source,
+  GamePage(this._diff, this._size, this._KEY, this._PORT, this._source, this._continueGame,
       {super.key});
 
   @override
@@ -49,6 +50,8 @@ class _GamePageState extends State<GamePage> {
     if (widget._source == 1) {
       connexionHandlerFromCreate(widget._KEY, widget._PORT);
     } else if (widget._source == 2) {
+      _density = 0.0;
+      _size = 0;
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
   }
@@ -462,6 +465,7 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserPreferences.setGame(_kwakuro.board);
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -541,14 +545,6 @@ class _GamePageState extends State<GamePage> {
     // Conversion de la liste d'entiers en matrice de jeu
     final decodedJson = jsonDecode(data);
 
-    final matrixData =  decodedJson.map<List<Carre>>((innerListJson) =>
-        (innerListJson as List<dynamic>)
-            .map((myClassJson) => Carre.fromJson(myClassJson as Map<String, dynamic>))
-            .toList()
-    ).toList();
-
-    updateGame(matrixData);
-    print("Matrice du jeu : ${_kwakuro.board}");
   }
 
   void updateGame(List<List<Carre>> matrix) {

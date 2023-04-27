@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
+import '../Objects/Carre.dart';
 import '../Objects/UserPreferences.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -35,6 +36,7 @@ class _StartPageState extends State<StartPage> {
   late double _currentOpacitySize;
   late List<String> _kakuroListBySize;
   late String _sourceText;
+  late bool _continueGame;
 
   @override
   void initState() {
@@ -54,10 +56,57 @@ class _StartPageState extends State<StartPage> {
       "lib/assets/images/kakuro8x8.png",
       "lib/assets/images/kakuro8x8.png"
     ];
+    _continueGame = false;
+    if(widget._source == 0) {
+      checkGame();
+    }
+  }
+
+  void checkGame() {
+    List<List<Carre>> board = UserPreferences.getGame();
+    if (board.isNotEmpty) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          backgroundColor: UserPreferences.bgColor,
+          title: Text("Partie précédente trouvée",
+              style: TextStyle(
+                  color: UserPreferences.btnColor,
+                  fontWeight: FontWeight.bold)),
+          content: Text(
+              "Voulez vous continuer votre partie ?\nSi vous répondez non elle sera écrasée",
+              style: const TextStyle(color: Colors.black54)),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () {
+                  UserPreferences.clearGame();
+                  Navigator.pop(context, 'NON');
+                },
+                child: Text('NON',
+                    style: TextStyle(
+                        color: UserPreferences.btnColor, fontSize: 20))),
+            TextButton(
+              onPressed: () {
+                  Navigator.pop(context, 'OUI');
+                  _continueGame = true;
+                  Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
+                },
+              child: Text('OUI',
+                  style:
+                      TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void initLocaliz() {
-    _diffList = [AppLocalizations.of(context)!.easy, AppLocalizations.of(context)!.medium, AppLocalizations.of(context)!.hard];
+    _diffList = [
+      AppLocalizations.of(context)!.easy,
+      AppLocalizations.of(context)!.medium,
+      AppLocalizations.of(context)!.hard
+    ];
 
     switch (widget._source) {
       case 0:
@@ -110,7 +159,8 @@ class _StartPageState extends State<StartPage> {
           ),
           diffSelector(),
           sizeSelector(),
-          _KeyOK? Icon(
+          _KeyOK
+              ? Icon(
                   Icons.check,
                   color: UserPreferences.btnColor,
                   size: 50,
@@ -389,17 +439,15 @@ class _StartPageState extends State<StartPage> {
             String KEY = json["key"];
             int PORT = json["port"] as int;
             await Future.delayed(const Duration(milliseconds: 200));
-            Navigator.of(context).push(
-                _gamePageRoute(KEY, PORT, widget._source));
-          }
-          else if (_sourceText == AppLocalizations.of(context)!.join) {
+            Navigator.of(context)
+                .push(_gamePageRoute(KEY, PORT, widget._source));
+          } else if (_sourceText == AppLocalizations.of(context)!.join) {
             String KEY = textFieldController.text.split("-")[0];
             int PORT = int.parse(textFieldController.text.split("-")[1]);
-            Navigator.of(context).push(
-                _gamePageRoute(KEY, PORT, widget._source));
-          }
-          else if (_sourceText == AppLocalizations.of(context)!.solo) {
-              Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
+            Navigator.of(context)
+                .push(_gamePageRoute(KEY, PORT, widget._source));
+          } else if (_sourceText == AppLocalizations.of(context)!.solo) {
+            Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
           }
           setState(() {
             _isSlelected = !_isSlelected;
@@ -416,7 +464,7 @@ class _StartPageState extends State<StartPage> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
-          body: SizedBox(
+        body: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child:
@@ -440,8 +488,8 @@ class _StartPageState extends State<StartPage> {
 
   Route _gamePageRoute(String key, int port, int source) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          GamePage(_diffListDouble[_diffInd], _sizeListInt[_sizeInd], key, port, source),
+      pageBuilder: (context, animation, secondaryAnimation) => GamePage(
+          _diffListDouble[_diffInd], _sizeListInt[_sizeInd], key, port, source, _continueGame),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
@@ -488,5 +536,4 @@ class _StartPageState extends State<StartPage> {
 
     return jsonData;
   }
-
 }
