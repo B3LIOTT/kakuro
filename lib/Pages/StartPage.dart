@@ -37,7 +37,6 @@ class _StartPageState extends State<StartPage> {
   late List<String> _kakuroListBySize;
   late String _sourceText;
   bool _continueGame = false;
-  bool _first = true;
 
   @override
   void initState() {
@@ -57,46 +56,6 @@ class _StartPageState extends State<StartPage> {
       "lib/assets/images/kakuro8x8.png",
       "lib/assets/images/kakuro8x8.png"
     ];
-  }
-
-  void checkGame() {
-    _first = false;
-    List<List<Carre>> board = UserPreferences.getGame();
-    if (board.isNotEmpty) {
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          backgroundColor: UserPreferences.bgColor,
-          title: Text("Partie précédente trouvée",
-              style: TextStyle(
-                  color: UserPreferences.btnColor,
-                  fontWeight: FontWeight.bold)),
-          content: Text(
-              "Voulez vous continuer votre partie ?\nSi vous répondez non elle sera écrasée",
-              style: const TextStyle(color: Colors.black54)),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () {
-                  UserPreferences.clearGame();
-                  Navigator.pop(context, 'NON');
-                },
-                child: Text('NON',
-                    style: TextStyle(
-                        color: UserPreferences.btnColor, fontSize: 20))),
-            TextButton(
-              onPressed: () {
-                  Navigator.pop(context, 'OUI');
-                  _continueGame = true;
-                  Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
-                },
-              child: Text('OUI',
-                  style:
-                      TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
-            ),
-          ],
-        ),
-      );
-    }
   }
 
   void initLocaliz() {
@@ -121,25 +80,104 @@ class _StartPageState extends State<StartPage> {
 
   List<Widget> childrenList(int source) {
     List<Widget> children = [];
-
     switch (source) {
       case 0:
-        children = [
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 1.5,
-            height: MediaQuery.of(context).size.height / 3,
-            child: AnimatedOpacity(
-              opacity: _currentOpacitySize,
-              duration: const Duration(milliseconds: 200),
-              child: Image.asset(
-                _kakuroListBySize[_sizeInd],
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-          diffSelector(),
-          sizeSelector(),
-        ];
+        UserPreferences.getGame().isEmpty
+            ? children = [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: AnimatedOpacity(
+                    opacity: _currentOpacitySize,
+                    duration: const Duration(milliseconds: 200),
+                    child: Image.asset(
+                      _kakuroListBySize[_sizeInd],
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                diffSelector(),
+                sizeSelector(),
+              ]
+            : children = [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.2,
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                            "PARTIE TROUVÉE",
+                            style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+                    Text(
+                        "Voulez vous continuer votre partie ?",
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 25
+                        )
+                    ),
+                    Text("Si vous répondez non elle sera écrasée",
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 18
+                        )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            decoration: BoxDecoration(
+                              color: UserPreferences.bgBtn,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: UserPreferences.btnColor,
+                                width: 2,
+                              ),
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                color: UserPreferences.btnColor,
+                                size: MediaQuery.of(context).size.width / 15,
+                              ),
+                              onPressed: () {
+                                UserPreferences.clearGame();
+                                setState(() {});
+                              },
+                            )),
+                        Container(
+                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            decoration: BoxDecoration(
+                              color: UserPreferences.bgBtn,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: UserPreferences.btnColor,
+                                width: 2,
+                              ),
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.check,
+                                color: UserPreferences.btnColor,
+                                size: MediaQuery.of(context).size.width / 15,
+                              ),
+                              onPressed: () {
+                                _continueGame = true;
+                                Navigator.of(context)
+                                    .push(_gamePageRoute("", 0, widget._source));
+                              },
+                            )),
+                      ],
+                    ),
+                  ]),
+                )
+              ];
         break;
       case 1:
         children = [
@@ -458,9 +496,6 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     initLocaliz();
-    if(_first) {
-      //checkGame();
-    }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -490,7 +525,12 @@ class _StartPageState extends State<StartPage> {
   Route _gamePageRoute(String key, int port, int source) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => GamePage(
-          _diffListDouble[_diffInd], _sizeListInt[_sizeInd], key, port, source, _continueGame),
+          _diffListDouble[_diffInd],
+          _sizeListInt[_sizeInd],
+          key,
+          port,
+          source,
+          _continueGame),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
