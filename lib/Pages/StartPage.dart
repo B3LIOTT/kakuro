@@ -107,43 +107,59 @@ class _StartPageState extends State<StartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                            "PARTIE TROUVÉE",
-                            style: const TextStyle(
-                                color: Colors.black54,
+                            AppLocalizations.of(context)!.game_found,
+                            style: TextStyle(
+                                color: UserPreferences.btnColor,
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold
-                            )
+                            ),
+                            textAlign: TextAlign.center,
                         ),
                     Text(
-                        "Voulez vous continuer votre partie ?",
-                        style: const TextStyle(
-                            color: Colors.black54,
+                        AppLocalizations.of(context)!.wish_to_continue,
+                        style: TextStyle(
+                            color: Color.fromRGBO(UserPreferences.btnColor.red, UserPreferences.btnColor.green, UserPreferences.btnColor.blue, 0.9),
                             fontSize: 25
-                        )
+                        ),
+                        textAlign: TextAlign.center,
                     ),
-                    Text("Si vous répondez non elle sera écrasée",
-                        style: const TextStyle(
-                            color: Colors.black54,
+                    Text(
+                      AppLocalizations.of(context)!.ifno,
+                        style: TextStyle(
+                            color: Color.fromRGBO(UserPreferences.btnColor.red, UserPreferences.btnColor.green, UserPreferences.btnColor.blue, 0.8),
                             fontSize: 18
-                        )
+                        ),
+                        textAlign: TextAlign.center,
+                    ),
+                    Text(
+                          "${UserPreferences.getSize}x${UserPreferences.getSize} - ${UserPreferences.getDensity == 0.8
+                              ? AppLocalizations.of(context)!.easy
+                              : UserPreferences.getDensity == 0.5
+                                  ? AppLocalizations.of(context)!.medium
+                                  : AppLocalizations.of(context)!.hard}",
+                      style: TextStyle(
+                          color: UserPreferences.btnColor,
+                          fontSize: 18
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
                             decoration: BoxDecoration(
-                              color: UserPreferences.bgBtn,
+                              color: const Color(0xFFE6B0B0),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: UserPreferences.btnColor,
+                                color: const Color(0xFFB64549),
                                 width: 2,
                               ),
                             ),
                             child: IconButton(
                               icon: Icon(
                                 Icons.clear,
-                                color: UserPreferences.btnColor,
+                                color: const Color(0xFFB64549),
                                 size: MediaQuery.of(context).size.width / 15,
                               ),
                               onPressed: () {
@@ -152,19 +168,19 @@ class _StartPageState extends State<StartPage> {
                               },
                             )),
                         Container(
-                            margin: const EdgeInsets.only(right: 20, left: 20),
+                            margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
                             decoration: BoxDecoration(
-                              color: UserPreferences.bgBtn,
+                              color: const Color(0xFFC4EDC8),
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: UserPreferences.btnColor,
+                                color: const Color(0xFF5ECC69),
                                 width: 2,
                               ),
                             ),
                             child: IconButton(
                               icon: Icon(
                                 Icons.check,
-                                color: UserPreferences.btnColor,
+                                color: const Color(0xFF5ECC69),
                                 size: MediaQuery.of(context).size.width / 15,
                               ),
                               onPressed: () {
@@ -531,7 +547,7 @@ class _StartPageState extends State<StartPage> {
                 ),
               ),
               midWidget(widget._source),
-              playButton(),
+                  UserPreferences.getGame().isEmpty ? playButton() : Container(),
             ])),
       );
     });

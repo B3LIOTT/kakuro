@@ -12,5 +12,8 @@
   "d_desc": "La difficulté du jeu dépend du nombre de cellules à remplir dans la grille. Plus il y a de cellules à remplir, plus le jeu sera difficile.",
   "k_desc": "Demandez le code de la partie à celui qui l'a créé, il est de la forme :\nXXXX-YYYY\navec X une lettre et Y un chiffre.",
   "rules": "RÈGLES",
-  "r_desc": "Chaque puzzle se compose d'une grille vide avec des indices de sommes à divers endroits. Le but est de remplir toutes les cases vides en utilisant les chiffres de 1 à 9 de sorte que la somme de chaque bloc horizontal soit égale à l'indice sur sa gauche, et la somme de chaque bloc vertical soit égale à l'indice en haut. De plus, aucun chiffre ne peut être utilisé plus d'une fois dans le même bloc."
+  "r_desc": "Chaque puzzle se compose d'une grille vide avec des indices de sommes à divers endroits. Le but est de remplir toutes les cases vides en utilisant les chiffres de 1 à 9 de sorte que la somme de chaque bloc horizontal soit égale à l'indice sur sa gauche, et la somme de chaque bloc vertical soit égale à l'indice en haut. De plus, aucun chiffre ne peut être utilisé plus d'une fois dans le même bloc.",
+  "game_found" : "PARTIE TROUVÉE !",
+  "wish_to_continue" : "Souhaitez-vous continuer votre partie ?",
+  "ifno" : "Si vous répondez non, celle-ci sera écrasée."
 }

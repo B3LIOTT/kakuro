@@ -54,5 +54,17 @@
   "r_desc": "Each puzzle consists of a blank grid with sum-clues in various places. The object is to fill all empty squares using numbers 1 to 9 so the sum of each horizontal block equals the clue on its left, and the sum of each vertical block equals the clue on its top. In addition, no number may be used in the same block more than once.",
     "@r_desc": {
         "description": "Rules description"
+    },
+  "game_found": "GAME FOUND !",
+    "@game_found": {
+        "description": "GAME FOUND text"
+    },
+  "wish_to_continue" : "Do you wish to continue ?",
+    "@wish_to_continue": {
+        "description": "Continue question"
+    },
+  "ifno" : "If you answer no, the game will be deleted.",
+    "@ifno": {
+        "description": "If no text"
     }
 }
