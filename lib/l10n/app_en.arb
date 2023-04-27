@@ -66,5 +66,21 @@
   "ifno" : "If you answer no, the game will be deleted.",
     "@ifno": {
         "description": "If no text"
+    },
+  "yes" : "YES",
+    "@yes": {
+        "description": "YES button"
+    },
+    "no" : "NO",
+    "@no": {
+        "description": "NO button"
+    },
+  "usure" : "Are you sure you want to create a new game ?",
+    "@usure": {
+        "description": "Are you sure question"
+    },
+  "usure_desc" : "The current game will be deleted.",
+    "@usure_desc": {
+        "description": "Are you sure description"
     }
 }

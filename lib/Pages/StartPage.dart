@@ -78,6 +78,33 @@ class _StartPageState extends State<StartPage> {
     }
   }
 
+  void uSure() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: UserPreferences.bgColor,
+        title: Text(AppLocalizations.of(context)!.usure, style:TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+        content: Text(AppLocalizations.of(context)!.usure_desc, style:const TextStyle(color: Colors.black54)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.no, style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+          ),
+          TextButton(
+            onPressed: ()
+            {
+              UserPreferences.clearGame();
+              Navigator.pop(context);
+              setState(() {
+                _continueGame = false;
+              });
+            },
+            child: Text(AppLocalizations.of(context)!.yes, style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+          )
+        ],
+      ),);
+  }
+
   List<Widget> childrenList(int source) {
     List<Widget> children = [];
     switch (source) {
@@ -163,7 +190,7 @@ class _StartPageState extends State<StartPage> {
                                 size: MediaQuery.of(context).size.width / 15,
                               ),
                               onPressed: () {
-                                UserPreferences.clearGame();
+                                uSure();
                                 setState(() {});
                               },
                             )),
