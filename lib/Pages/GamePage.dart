@@ -89,7 +89,7 @@ class _GamePageState extends State<GamePage> {
           color: UserPreferences.btnColor,
         ),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.popUntil(context, (route) => route.isFirst);
         },
       ),
     );
@@ -468,7 +468,8 @@ class _GamePageState extends State<GamePage> {
     UserPreferences.setSize(_size);
     UserPreferences.setGame(_kwakuro.board);
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
-      return Scaffold(
+      return WillPopScope(
+        child:Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
         body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -503,7 +504,11 @@ class _GamePageState extends State<GamePage> {
             ),
           ),
         ]),
-      );
+      ),
+      onWillPop: () async {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        return true;
+      });
     });
   }
 
