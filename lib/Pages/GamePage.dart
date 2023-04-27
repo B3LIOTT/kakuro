@@ -464,6 +464,8 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserPreferences.setDensity(_density);
+    UserPreferences.setSize(_size);
     UserPreferences.setGame(_kwakuro.board);
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return Scaffold(

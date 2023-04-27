@@ -169,6 +169,21 @@ class _StartPageState extends State<StartPage> {
                               ),
                               onPressed: () {
                                 _continueGame = true;
+                                switch(UserPreferences.getSize) {
+                                  case 8:
+                                    _sizeInd = 0;
+                                    break;
+                                  case 10:
+                                    _sizeInd = 1;
+                                    break;
+                                  case 12:
+                                    _sizeInd = 2;
+                                    break;
+                                  case 16:
+                                    _sizeInd = 3;
+                                    break;
+                                }
+                                _diffInd = (UserPreferences.getDensity == 0.8)? 0 : (UserPreferences.getDensity == 0.5)? 1 : 2;
                                 Navigator.of(context)
                                     .push(_gamePageRoute("", 0, widget._source));
                               },

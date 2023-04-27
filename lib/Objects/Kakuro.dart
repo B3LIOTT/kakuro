@@ -49,6 +49,8 @@ class Kakuro {
       fillSums(); // On génère les sommes
       removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
     } else {
+      size = UserPreferences.getSize;
+      density = UserPreferences.getDensity;
       board = UserPreferences.getGame();
     }
   }

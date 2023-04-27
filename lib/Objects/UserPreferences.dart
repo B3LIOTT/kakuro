@@ -104,4 +104,21 @@ class UserPreferences {
     _prefs!.remove('game');
     print('Game cleared');
   }
+
+  static int get getSize {
+    return _prefs!.getInt('size') ?? 8;
+  }
+
+  static void setSize(int size) {
+    _prefs!.setInt('size', size);
+  }
+
+  static double get getDensity {
+    return _prefs!.getDouble('diff') ?? 8;
+  }
+
+  static void setDensity(double diff) {
+    _prefs!.setDouble('diff', diff);
+  }
+
 }
