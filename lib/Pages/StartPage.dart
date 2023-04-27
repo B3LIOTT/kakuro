@@ -574,7 +574,7 @@ class _StartPageState extends State<StartPage> {
                 ),
               ),
               midWidget(widget._source),
-                  UserPreferences.getGame().isEmpty ? playButton() : Container(),
+                  (UserPreferences.getGame().isEmpty || widget._source != 0) ? playButton() : Container(),
             ])),
       );
     });
