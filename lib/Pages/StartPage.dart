@@ -543,9 +543,7 @@ class _StartPageState extends State<StartPage> {
           } else if (_sourceText == AppLocalizations.of(context)!.solo) {
             Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
           }
-          setState(() {
-            _isSlelected = !_isSlelected;
-          });
+          _isSlelected = !_isSlelected;
         },
       ),
     );
