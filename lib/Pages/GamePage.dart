@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/CustomBorder.dart';
 import 'package:kakuro/Objects/Kakuro.dart';
@@ -26,19 +28,25 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  late bool _isKakuroLoading;
+  bool _isKakuroLoading = true;
+  bool _done = false;
   late int _size;
   late double _density;
   late List<bool> _whatsSelected;
   late Kakuro _kwakuro;
   late List<double> _opacities;
   late Color _verifyColor;
+  late int _H;
+  late int _M;
+  late int _S;
 
   @override
   void initState() {
     super.initState();
     _verifyColor = Colors.green;
-    _isKakuroLoading = true;
+    _H = 0;
+    _M = 0;
+    _S = 0;
 
     if(widget._source != 2) {
       _size = widget._size;
@@ -54,6 +62,31 @@ class _GamePageState extends State<GamePage> {
       _size = 0;
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
+
+    _H = 0;
+    _M = 0;
+    _S = 0;
+    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      print('ok');
+      if (!_done) {
+        // cancel the timer
+        timer.cancel();
+      }
+      _updateTimer();
+    });
+  }
+
+  void _updateTimer() {
+    _S++;
+    if(_S == 60) {
+      _S = 0;
+      _M++;
+    }
+    if(_M == 60) {
+      _M = 0;
+      _H++;
+    }
+    setState((){});
   }
 
   void updateValue(int value) {
@@ -73,7 +106,6 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
-
 
   }
 
@@ -402,6 +434,7 @@ class _GamePageState extends State<GamePage> {
     if (_kwakuro.isSolution()) {
       setState(() {
         _verifyColor = Colors.green;
+        _done = true;
       });
       for (int index = 0; index < _opacities.length; index++) {
         _opacities[index] = 0.6;
@@ -430,7 +463,7 @@ class _GamePageState extends State<GamePage> {
         }
       }
       setState(() {});
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 700));
       for (List<int> li in _kwakuro.wrongL) {
         if (li[3] == 1) {
           for (int i = 0; i < li[2]; i++) {
@@ -447,6 +480,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   void GG() {
+    UserPreferences.clearGame();
     showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -490,6 +524,7 @@ class _GamePageState extends State<GamePage> {
             alignment: Alignment.center,
             child: Column(
               children: [
+                Text("$_H : $_M : $_S", style: const TextStyle(fontSize: 20),),
                 kakuro(),
                 (widget._source == 1)? Text("${widget._KEY}-${widget._PORT}", style: const TextStyle(fontSize: 20),) : Container(),
                 Text("${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size"),
@@ -632,6 +667,7 @@ class _GamePageState extends State<GamePage> {
         updateGame(matrix);
       }
       _isKakuroLoading = false;
+
     }
   }
 
