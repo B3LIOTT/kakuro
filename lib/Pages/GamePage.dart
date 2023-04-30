@@ -62,20 +62,21 @@ class _GamePageState extends State<GamePage> {
       _size = 0;
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
+  }
 
-    _H = 0;
-    _M = 0;
-    _S = 0;
+  void iniTimer(List<int> times) {
+    _H = times[0];
+    _M = times[1];
+    _S = times[2];
     Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       print('ok');
       if (!_done) {
-        // cancel the timer
+        _updateTimer();
+      } else {
         timer.cancel();
       }
-      _updateTimer();
     });
   }
-
   void _updateTimer() {
     _S++;
     if(_S == 60) {
@@ -106,7 +107,7 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
-
+    iniTimer([0,0,0]);
   }
 
   Widget returnBtn() {
@@ -667,7 +668,7 @@ class _GamePageState extends State<GamePage> {
         updateGame(matrix);
       }
       _isKakuroLoading = false;
-
+      iniTimer([0,0,0]);
     }
   }
 
