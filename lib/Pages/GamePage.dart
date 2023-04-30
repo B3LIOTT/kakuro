@@ -484,7 +484,7 @@ class _GamePageState extends State<GamePage> {
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
         title: Text("VICTORY", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-        content: Text("GG! You complete this Kakuro $_density-$_size", style: const TextStyle(color: Colors.black54)),
+        content: Text("GG! You complete this Kakuro ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}", style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
