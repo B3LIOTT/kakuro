@@ -121,4 +121,11 @@ class UserPreferences {
     _prefs!.setDouble('diff', diff);
   }
 
+  static List<int> get getTimer {
+    return _prefs!.getString('timer')?.split(':').map((e) => int.parse(e)).toList() ?? [0, 0, 0];
+  }
+
+  static void setTimer(List<int> timer) {
+    _prefs!.setString('timer', timer.map((e) => e.toString()).join(':'));
+  }
 }

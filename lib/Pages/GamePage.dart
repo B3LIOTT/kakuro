@@ -44,9 +44,6 @@ class _GamePageState extends State<GamePage> {
   void initState() {
     super.initState();
     _verifyColor = Colors.green;
-    _H = 0;
-    _M = 0;
-    _S = 0;
 
     if(widget._source != 2) {
       _size = widget._size;
@@ -107,7 +104,8 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
-    iniTimer([0,0,0]);
+    List<int> t_list = continueGame? UserPreferences.getTimer : [0,0,0];
+    iniTimer(t_list);
   }
 
   Widget returnBtn() {
@@ -503,6 +501,7 @@ class _GamePageState extends State<GamePage> {
       UserPreferences.setDensity(_density);
       UserPreferences.setSize(_size);
       UserPreferences.setGame(_kwakuro.board);
+      UserPreferences.setTimer([_H, _M, _S]);
     }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return WillPopScope(
