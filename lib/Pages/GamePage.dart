@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/CustomBorder.dart';
@@ -66,7 +65,6 @@ class _GamePageState extends State<GamePage> {
     _M = times[1];
     _S = times[2];
     Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      print('ok');
       if (!_done) {
         _updateTimer();
       } else {
@@ -120,6 +118,7 @@ class _GamePageState extends State<GamePage> {
           color: UserPreferences.btnColor,
         ),
         onPressed: () {
+          _done = true;
           Navigator.popUntil(context, (route) => route.isFirst);
         },
       ),
@@ -439,7 +438,7 @@ class _GamePageState extends State<GamePage> {
         _opacities[index] = 0.6;
       }
       setState(() {});
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 700));
       for (int index = 0; index < _opacities.length; index++) {
         _opacities[index] = 0.0;
       }
