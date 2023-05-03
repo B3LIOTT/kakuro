@@ -653,6 +653,7 @@ class _GamePageState extends State<GamePage> {
       }
       _isKakuroLoading = false;
       _timerWidget.startTimer();
+      _nbRequest++;
     } else {
       // Reception du message de fin de partie
       final jsonData = jsonDecode(data);
