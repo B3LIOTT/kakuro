@@ -47,7 +47,7 @@ class Kakuro {
       fillWhiteSpaces(); // On s'assure qu'il n'existe pas de trop grandes séries de cases blanches
       fillBoard(); // On remplit les cases blanches avec des chiffres
       fillSums(); // On génère les sommes
-      removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
+      //removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
     } else {
       size = UserPreferences.getSize;
       density = UserPreferences.getDensity;

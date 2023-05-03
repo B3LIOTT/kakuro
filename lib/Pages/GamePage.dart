@@ -419,7 +419,7 @@ class _GamePageState extends State<GamePage> {
       }
       setState(() {});
       await Future.delayed(const Duration(milliseconds: 200));
-      GG();
+      (widget._source == 1 || widget._source == 2)? GGonline() : GG();
     } else {
       setState(() {
         _verifyColor = Colors.red;
@@ -526,7 +526,7 @@ class _GamePageState extends State<GamePage> {
   /*------------------------ Echange de données avec le serveur ------------------------*/
 
   late Socket socket;
-  final String _IP_SERVER = "192.168.0.42";
+  final String _IP_SERVER = "10.0.2.2";
   int _nbRequest = 0;
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
@@ -618,7 +618,7 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, false);
 
       _nbRequest++;
-    } else {
+    } else if(_nbRequest == 1){
       // Actualisation de la matrice du jeu
       buffer += data;
       _count++;
@@ -642,6 +642,22 @@ class _GamePageState extends State<GamePage> {
       }
       _isKakuroLoading = false;
       _timerWidget.startTimer();
+    } else {
+      // Reception du message de fin de partie
+      final jsonData = jsonDecode(data);
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          backgroundColor: UserPreferences.bgColor,
+          title: Text("DEFEAT", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+          content: Text("[Display winner pseudo] finished ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}", style: const TextStyle(color: Colors.black54)),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+            ),
+          ],
+        ),);
     }
   }
 
@@ -653,6 +669,27 @@ class _GamePageState extends State<GamePage> {
       socket.write('$jsonRow\n');
       await Future.delayed(const Duration(milliseconds: 100));
     }
+  }
+
+  void GGonline() {
+    UserPreferences.clearGame();
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: UserPreferences.bgColor,
+        title: Text("VICTORY", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text("GG! You complete this Kakuro ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}", style: const TextStyle(color: Colors.black54)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+          ),
+        ],
+      ),);
+
+    // Envoi du message de fin de partie au serveur
+    final jsonData = jsonEncode(UserPreferences.getTimerString);
+    socket.write(jsonData);
   }
 
 }
