@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/CustomBorder.dart';
 import 'package:kakuro/Objects/Kakuro.dart';
+import 'package:kakuro/Objects/TimerWidget.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
 import '../Objects/Carre.dart';
@@ -28,21 +29,21 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   bool _isKakuroLoading = true;
-  bool _done = false;
   late int _size;
   late double _density;
   late List<bool> _whatsSelected;
   late Kakuro _kwakuro;
   late List<double> _opacities;
   late Color _verifyColor;
-  late int _H;
-  late int _M;
-  late int _S;
+  late TimerWidget _timerWidget;
+
 
   @override
   void initState() {
     super.initState();
     _verifyColor = Colors.green;
+    List<int> t_list = widget._continueGame? UserPreferences.getTimer : [0,0,0];
+    _timerWidget = TimerWidget(t_list[0], t_list[1], t_list[2]);
 
     if(widget._source != 2) {
       _size = widget._size;
@@ -58,31 +59,7 @@ class _GamePageState extends State<GamePage> {
       _size = 0;
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
-  }
-
-  void iniTimer(List<int> times) {
-    _H = times[0];
-    _M = times[1];
-    _S = times[2];
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (!_done) {
-        _updateTimer();
-      } else {
-        timer.cancel();
-      }
-    });
-  }
-  void _updateTimer() {
-    _S++;
-    if(_S == 60) {
-      _S = 0;
-      _M++;
-    }
-    if(_M == 60) {
-      _M = 0;
-      _H++;
-    }
-    setState((){});
+    _timerWidget.startTimer();
   }
 
   void updateValue(int value) {
@@ -102,8 +79,6 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
-    List<int> t_list = continueGame? UserPreferences.getTimer : [0,0,0];
-    iniTimer(t_list);
   }
 
   Widget returnBtn() {
@@ -118,7 +93,7 @@ class _GamePageState extends State<GamePage> {
           color: UserPreferences.btnColor,
         ),
         onPressed: () {
-          _done = true;
+          _timerWidget.stopTimer();
           Navigator.popUntil(context, (route) => route.isFirst);
         },
       ),
@@ -432,7 +407,7 @@ class _GamePageState extends State<GamePage> {
     if (_kwakuro.isSolution()) {
       setState(() {
         _verifyColor = Colors.green;
-        _done = true;
+        _timerWidget.stopTimer();
       });
       for (int index = 0; index < _opacities.length; index++) {
         _opacities[index] = 0.6;
@@ -500,7 +475,7 @@ class _GamePageState extends State<GamePage> {
       UserPreferences.setDensity(_density);
       UserPreferences.setSize(_size);
       UserPreferences.setGame(_kwakuro.board);
-      UserPreferences.setTimer([_H, _M, _S]);
+      UserPreferences.setTimer([_timerWidget.H, _timerWidget.M, _timerWidget.S]);
     }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return WillPopScope(
@@ -523,7 +498,7 @@ class _GamePageState extends State<GamePage> {
             alignment: Alignment.center,
             child: Column(
               children: [
-                Text("$_H : $_M : $_S", style: const TextStyle(fontSize: 20),),
+                _timerWidget,
                 kakuro(),
                 (widget._source == 1)? Text("${widget._KEY}-${widget._PORT}", style: const TextStyle(fontSize: 20),) : Container(),
                 Text("${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size"),
@@ -666,7 +641,7 @@ class _GamePageState extends State<GamePage> {
         updateGame(matrix);
       }
       _isKakuroLoading = false;
-      iniTimer([0,0,0]);
+      _timerWidget.startTimer();
     }
   }
 
