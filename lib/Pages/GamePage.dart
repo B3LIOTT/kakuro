@@ -557,10 +557,21 @@ class _GamePageState extends State<GamePage> {
   }
 
   void dataHandlerFromCreate(String data) {
-    // Fonction qui gère les données reçues du serveur privé (la matrice de jeu)
-
-    // Conversion de la liste d'entiers en matrice de jeu
-    final decodedJson = jsonDecode(data);
+    // Reception du message de fin de partie
+    final jsonData = jsonDecode(data);
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: UserPreferences.bgColor,
+        title: Text("DEFEAT", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text("[Display winner pseudo] finished ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in $jsonData", style: const TextStyle(color: Colors.black54)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+          ),
+        ],
+      ),);
 
   }
 
@@ -650,7 +661,7 @@ class _GamePageState extends State<GamePage> {
         builder: (BuildContext context) => AlertDialog(
           backgroundColor: UserPreferences.bgColor,
           title: Text("DEFEAT", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-          content: Text("[Display winner pseudo] finished ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}", style: const TextStyle(color: Colors.black54)),
+          content: Text("[Display winner pseudo] finished ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in $jsonData", style: const TextStyle(color: Colors.black54)),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
