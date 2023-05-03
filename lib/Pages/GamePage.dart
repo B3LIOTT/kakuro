@@ -559,6 +559,7 @@ class _GamePageState extends State<GamePage> {
   void dataHandlerFromCreate(String data) {
     // Reception du message de fin de partie
     final jsonData = jsonDecode(data);
+    _timerWidget.stopTimer();
     showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -657,6 +658,7 @@ class _GamePageState extends State<GamePage> {
     } else {
       // Reception du message de fin de partie
       final jsonData = jsonDecode(data);
+      _timerWidget.stopTimer();
       showDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -700,7 +702,7 @@ class _GamePageState extends State<GamePage> {
       ),);
 
     // Envoi du message de fin de partie au serveur
-    final jsonData = jsonEncode(UserPreferences.getTimerString);
+    final jsonData = jsonEncode("${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}");
     socket.write(jsonData);
   }
 
