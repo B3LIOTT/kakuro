@@ -629,7 +629,7 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, false);
 
       _nbRequest++;
-    } else if(_nbRequest == 1){
+    } else if(_nbRequest <= _size){
       // Actualisation de la matrice du jeu
       buffer += data;
       _count++;
