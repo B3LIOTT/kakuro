@@ -559,6 +559,7 @@ class _GamePageState extends State<GamePage> {
   void dataHandlerFromCreate(String data) {
     // Reception du message de fin de partie
     final jsonData = jsonDecode(data);
+    _timerWidget.stopTimer();
     showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
