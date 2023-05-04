@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
 import 'PaletteSettings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'RankingPage.dart';
 
 class TopMenu extends StatefulWidget {
