@@ -59,7 +59,17 @@ class _TimerWidgetState extends State<TimerWidget>{
 
   @override
   Widget build(BuildContext context) {
-    return Text("${widget._H} : ${widget._M} : ${widget._S}", style: const TextStyle(fontSize: 20),);
+    String text;
+    if (widget._H == 0){
+      if (widget._M == 0){
+        text = "${widget._S}S";
+      } else {
+        text = "${widget._M}M ${widget._S}S";
+      }
+    } else {
+      text = "${widget._H}H ${widget._M}M ${widget._S}S";
+    }
+    return Text(text, style: const TextStyle(fontSize: 16),);
   }
 }
 

@@ -20,7 +20,8 @@ class GamePage extends StatefulWidget {
   late final String _KEY;
   late bool _continueGame;
 
-  GamePage(this._diff, this._size, this._KEY, this._PORT, this._source, this._continueGame,
+  GamePage(this._diff, this._size, this._KEY, this._PORT, this._source,
+      this._continueGame,
       {super.key});
 
   @override
@@ -37,17 +38,18 @@ class _GamePageState extends State<GamePage> {
   late Color _verifyColor;
   late TimerWidget _timerWidget;
 
-
   @override
   void initState() {
     super.initState();
     _verifyColor = Colors.green;
-    List<int> t_list = widget._continueGame? UserPreferences.getTimer : [0,0,0];
+    List<int> t_list =
+        widget._continueGame ? UserPreferences.getTimer : [0, 0, 0];
     _timerWidget = TimerWidget(t_list[0], t_list[1], t_list[2]);
 
-    if(widget._source != 2) {
+    if (widget._source != 2) {
       _size = widget._size;
-      _density = widget._diff;// si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
+      _density = widget
+          ._diff; // si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
       genKakuro(widget._continueGame);
@@ -317,9 +319,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget kakuro() {
-    return Container(
-        height: MediaQuery.of(context).size.width-40,
-        margin: const EdgeInsets.only(top: 20, bottom: 20, right: 20, left: 20),
+    return Expanded(
         child: _isKakuroLoading
             ? Center(
                 child: CircularProgressIndicator(
@@ -327,7 +327,14 @@ class _GamePageState extends State<GamePage> {
               ))
             : InteractiveViewer(
                 panEnabled: true,
-                child: GridView.builder(
+                child: LayoutBuilder(
+                builder : (BuildContext context, BoxConstraints constraints) => Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(left:10,right:10),
+                width: constraints.maxHeight,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(0),
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _size * _size,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -335,12 +342,12 @@ class _GamePageState extends State<GamePage> {
                   itemBuilder: (BuildContext context, int index) {
                     return Center(child: carreKakuroGen(index));
                   },
-                )));
+                )))));
   }
 
   Widget numPad() {
     return Container(
-        margin: const EdgeInsets.only(right: 20, left: 20),
+        margin: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.08, left: MediaQuery.of(context).size.width * 0.08),
         decoration: BoxDecoration(
           color: UserPreferences.bgBtn,
           borderRadius: BorderRadius.circular(20),
@@ -382,7 +389,8 @@ class _GamePageState extends State<GamePage> {
 
   Widget verifyBtn() {
     return Container(
-        margin: const EdgeInsets.only(right: 20, left: 20),
+      height: MediaQuery.of(context).size.width / 8,
+        margin: const EdgeInsets.only(bottom:10),
         decoration: BoxDecoration(
           color: UserPreferences.bgBtn,
           shape: BoxShape.circle,
@@ -419,7 +427,7 @@ class _GamePageState extends State<GamePage> {
       }
       setState(() {});
       await Future.delayed(const Duration(milliseconds: 200));
-      (widget._source == 1 || widget._source == 2)? GGonline() : GG();
+      (widget._source == 1 || widget._source == 2) ? GGonline() : GG();
     } else {
       setState(() {
         _verifyColor = Colors.red;
@@ -458,68 +466,79 @@ class _GamePageState extends State<GamePage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text("VICTORY", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-        content: Text("GG! You complete this Kakuro ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}", style: const TextStyle(color: Colors.black54)),
+        title: Text("VICTORY",
+            style: TextStyle(
+                color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text(
+            "GG! You complete this Kakuro ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}",
+            style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+            child: Text('OK',
+                style:
+                    TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
           ),
         ],
-      ),);
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if(widget._source == 0) {
+    if (widget._source == 0) {
       UserPreferences.setDensity(_density);
       UserPreferences.setSize(_size);
       UserPreferences.setGame(_kwakuro.board);
-      UserPreferences.setTimer([_timerWidget.H, _timerWidget.M, _timerWidget.S]);
+      UserPreferences.setTimer(
+          [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
     }
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
       return WillPopScope(
-        child:Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: UserPreferences.bgColor,
-        body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Padding(
-            padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top + 15,
-                right: 20,
-                left: 20),
-            child: Stack(
-              alignment: Alignment.centerLeft,
-              children: [returnBtn(), TopMenu("GamePage")],
-            ),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: UserPreferences.bgColor,
+            body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 15,
+                    right: 20,
+                    left: 20,
+                    bottom: MediaQuery.of(context).size.height / 100,
+                ),
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [returnBtn(), TopMenu("GamePage")],
+                ),
+              ),
+              Expanded(
+                  child: Column(
+                    children: [
+                      _timerWidget,
+                      kakuro(),
+                      (widget._source == 1)
+                          ? Text(
+                              "${widget._KEY}-${widget._PORT}",
+                              style: const TextStyle(fontSize: 20),
+                            )
+                          : Container(),
+                      Text(
+                          "${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size"),
+                    ],
+                  ),
+                ),
+              Container(
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 100, bottom: MediaQuery.of(context).padding.bottom + 10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [verifyBtn(), numPad()]),
+              ),
+            ]),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                _timerWidget,
-                kakuro(),
-                (widget._source == 1)? Text("${widget._KEY}-${widget._PORT}", style: const TextStyle(fontSize: 20),) : Container(),
-                Text("${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size"),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(
-                  top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [verifyBtn(), numPad()]),
-            ),
-          ),
-        ]),
-      ),
-      onWillPop: () async {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        return true;
-      });
+          onWillPop: () async {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            return true;
+          });
     });
   }
 
@@ -531,7 +550,7 @@ class _GamePageState extends State<GamePage> {
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
     // Fonction qui gère les données reçues du serveur (le port et la clé du serveur privé)
-    while(_isKakuroLoading) {}
+    while (_isKakuroLoading) {}
     print("Serveur privé => $KEY-$PORT");
 
     // Connexion au serveur privé
@@ -564,16 +583,22 @@ class _GamePageState extends State<GamePage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text("DEFEAT", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-        content: Text("[Display winner pseudo] finished ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in $jsonData", style: const TextStyle(color: Colors.black54)),
+        title: Text("DEFEAT",
+            style: TextStyle(
+                color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text(
+            "[Display winner pseudo] finished ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in $jsonData",
+            style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+            child: Text('OK',
+                style:
+                    TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
           ),
         ],
-      ),);
-
+      ),
+    );
   }
 
   void updateGame(List<List<Carre>> matrix) {
@@ -630,11 +655,11 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, false);
 
       _nbRequest++;
-    } else if(_nbRequest <= _size){
+    } else if (_nbRequest <= _size) {
       // Actualisation de la matrice du jeu
       buffer += data;
       _count++;
-      if(_count == _size) {
+      if (_count == _size) {
         final jsonList = const LineSplitter().convert(buffer);
         print(buffer);
         List<List<Carre>> matrix = [];
@@ -663,15 +688,23 @@ class _GamePageState extends State<GamePage> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
           backgroundColor: UserPreferences.bgColor,
-          title: Text("DEFEAT", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-          content: Text("[Display winner pseudo] finished ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in $jsonData", style: const TextStyle(color: Colors.black54)),
+          title: Text("DEFEAT",
+              style: TextStyle(
+                  color: UserPreferences.btnColor,
+                  fontWeight: FontWeight.bold)),
+          content: Text(
+              "[Display winner pseudo] finished ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in $jsonData",
+              style: const TextStyle(color: Colors.black54)),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
-              child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+              child: Text('OK',
+                  style:
+                      TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
             ),
           ],
-        ),);
+        ),
+      );
     }
   }
 
@@ -691,19 +724,26 @@ class _GamePageState extends State<GamePage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text("VICTORY", style: TextStyle(color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
-        content: Text("GG! You complete this Kakuro ${(_density == 0.2)? AppLocalizations.of(context)?.hard : (_density == 0.5)? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}", style: const TextStyle(color: Colors.black54)),
+        title: Text("VICTORY",
+            style: TextStyle(
+                color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+        content: Text(
+            "GG! You complete this Kakuro ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}",
+            style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text('OK', style: TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+            child: Text('OK',
+                style:
+                    TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
           ),
         ],
-      ),);
+      ),
+    );
 
     // Envoi du message de fin de partie au serveur
-    final jsonData = jsonEncode("${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}");
+    final jsonData =
+        jsonEncode("${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}");
     socket.write(jsonData);
   }
-
 }
