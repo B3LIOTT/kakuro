@@ -7,6 +7,8 @@ import '../Objects/UserPreferences.dart';
 import 'PaletteSettings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'RankingPage.dart';
+
 class TopMenu extends StatefulWidget {
   late final String _source;
   TopMenu(this._source, {super.key});
@@ -50,44 +52,58 @@ class _TopMenuState extends State<TopMenu> {
     return StreamBuilder<bool>(
         stream: _clickController.stream,
         builder: (context, snapshot) {
-          return OpenContainer(
-            tappable: false,
-            closedElevation: 0,
-            closedColor: UserPreferences.bgColor,
-            closedShape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            transitionType: transitionType,
-            transitionDuration: const Duration(milliseconds: 600),
-            openBuilder: (BuildContext context, _) => const PaletteSettings(),
-            closedBuilder: (context, VoidCallback openContainer) => Container(
+          return Container(
               height: MediaQuery.of(context).size.width / 6,
               width: MediaQuery.of(context).size.width / 2,
               decoration: BoxDecoration(
                 color: UserPreferences.bgBtn,
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: ButtonBar(
                 alignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: UserPreferences.btnColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.leaderboard,
-                        color: Colors.white,
+                  OpenContainer(
+                    tappable: false,
+                    closedElevation: 0,
+                    closedColor: UserPreferences.bgColor,
+                    closedShape: const CircleBorder(),
+                    transitionType: transitionType,
+                    transitionDuration: const Duration(milliseconds: 500),
+                    openBuilder: (BuildContext context, _) => const RankingPage(),
+                    closedBuilder: (context, VoidCallback openContainer) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: UserPreferences.bgBtn,
                       ),
-                      onPressed: snapshot.hasData && snapshot.data == false
-                          ? () async {
-                              _clickController.add(true);
-                              await Future.delayed(
-                                  const Duration(milliseconds: 400));
-                              _clickController.add(false);
-                            }
-                          : null,
+                      child:  Container(
+                        decoration: BoxDecoration(
+                          color: UserPreferences.btnColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.leaderboard,
+                            color: Colors.white,
+                          ),
+                          onPressed: snapshot.hasData && snapshot.data == false
+                              ? () async {
+                            _clickController.add(true);
+                            setState(() {
+                              _menuAlignment = Alignment.center;
+                            });
+                            await Future.delayed(
+                                const Duration(milliseconds: 200));
+                            openContainer();
+                            await Future.delayed(
+                                const Duration(milliseconds: 200));
+                            setState(() {
+                              _menuAlignment = Alignment.centerRight;
+                            });
+                            _clickController.add(false);
+                          }
+                              : null,
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -102,68 +118,81 @@ class _TopMenuState extends State<TopMenu> {
                       ),
                       onPressed: snapshot.hasData && snapshot.data == false
                           ? () async {
-                              _clickController.add(true);
-                              setState(() {
-                                _menuAlignment = Alignment.center;
-                                switch(widget._source) {
-                                  case "GamePage":
-                                    _content = AppLocalizations.of(context)!.r_desc;
-                                    _title = AppLocalizations.of(context)!.rules;
-                                    break;
-                                  case "StartPage":
-                                    _content = AppLocalizations.of(context)!.d_desc;
-                                    _title = AppLocalizations.of(context)!.info;
-                                    break;
-                                  case "HomePage":
-                                    _content = AppLocalizations.of(context)!.c_desc;
-                                    _title = AppLocalizations.of(context)!.credits;
-                                    break;
-                                }
-                              });
-                              await Future.delayed(
-                                  const Duration(milliseconds: 200));
-                              showCredits();
-                              setState(() {
-                                _menuAlignment = Alignment.centerRight;
-                              });
-                              _clickController.add(false);
-                            }
+                        _clickController.add(true);
+                        setState(() {
+                          _menuAlignment = Alignment.center;
+                          switch(widget._source) {
+                            case "GamePage":
+                              _content = AppLocalizations.of(context)!.r_desc;
+                              _title = AppLocalizations.of(context)!.rules;
+                              break;
+                            case "StartPage":
+                              _content = AppLocalizations.of(context)!.d_desc;
+                              _title = AppLocalizations.of(context)!.info;
+                              break;
+                            case "HomePage":
+                              _content = AppLocalizations.of(context)!.c_desc;
+                              _title = AppLocalizations.of(context)!.credits;
+                              break;
+                          }
+                        });
+                        await Future.delayed(
+                            const Duration(milliseconds: 200));
+                        showCredits();
+                        setState(() {
+                          _menuAlignment = Alignment.centerRight;
+                        });
+                        _clickController.add(false);
+                      }
                           : null,
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: UserPreferences.btnColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: const ImageIcon(
-                        AssetImage('lib/assets/images/settings.png'),
-                        color: Colors.white,
+                  OpenContainer(
+                    tappable: false,
+                    closedElevation: 0,
+                    closedColor: UserPreferences.bgColor,
+                    closedShape: const CircleBorder(),
+                    transitionType: transitionType,
+                    transitionDuration: const Duration(milliseconds: 500),
+                    openBuilder: (BuildContext context, _) => const PaletteSettings(),
+                    closedBuilder: (context, VoidCallback openContainer) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: UserPreferences.bgBtn,
                       ),
-                      onPressed: snapshot.hasData && snapshot.data == false
-                          ? () async {
-                              _clickController.add(true);
-                              setState(() {
-                                _menuAlignment = Alignment.center;
-                              });
-                              await Future.delayed(
-                                  const Duration(milliseconds: 200));
-                              openContainer();
-                              await Future.delayed(
-                                  const Duration(milliseconds: 200));
-                              setState(() {
-                                _menuAlignment = Alignment.centerRight;
-                              });
-                              _clickController.add(false);
-                            }
-                          : null,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: UserPreferences.btnColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const ImageIcon(
+                            AssetImage('lib/assets/images/settings.png'),
+                            color: Colors.white,
+                          ),
+                          onPressed: snapshot.hasData && snapshot.data == false
+                              ? () async {
+                            _clickController.add(true);
+                            setState(() {
+                              _menuAlignment = Alignment.center;
+                            });
+                            await Future.delayed(
+                                const Duration(milliseconds: 200));
+                            openContainer();
+                            await Future.delayed(
+                                const Duration(milliseconds: 200));
+                            setState(() {
+                              _menuAlignment = Alignment.centerRight;
+                            });
+                            _clickController.add(false);
+                          }
+                              : null,
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
-          );
+              ));
         });
   }
 
