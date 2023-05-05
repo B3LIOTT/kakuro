@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Objects/Player.dart';
+import '../Objects/RankingRepo.dart';
 import '../Objects/UserPreferences.dart';
 
 class RankingPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _RankingPageState extends State<RankingPage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
+              child: RankingRepo.isConnected? ListView.builder(
                 itemBuilder: (context, index) {
                   return Padding(
                       padding: const EdgeInsets.all(10),
@@ -63,21 +64,21 @@ class _RankingPageState extends State<RankingPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          index as String,
+                          (index+1).toString(),
                           style: TextStyle(
                               color: UserPreferences.btnColor,
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "Pseudo",
+                          _rankList[index].username,
                           style: TextStyle(
                               color: UserPreferences.btnColor,
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "1000",
+                          _rankList[index].RP.toString(),
                           style: TextStyle(
                               color: UserPreferences.btnColor,
                               fontSize: 20,
@@ -88,7 +89,8 @@ class _RankingPageState extends State<RankingPage> {
                   ));
                 },
                 itemCount: _rankList.length,
-            )),
+            ) : const Center(child: Text("PA KONEKT")),
+            ),
           ])),
     );
   }
