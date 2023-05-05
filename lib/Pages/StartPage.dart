@@ -22,7 +22,8 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  late bool _isSlelected;
+  bool _isSlelected = false;
+  bool _isSlelected2 = false;
   final transitionType = ContainerTransitionType.fadeThrough;
   final TextEditingController textFieldController = TextEditingController();
   late bool _KeyOK;
@@ -42,7 +43,6 @@ class _StartPageState extends State<StartPage> {
   void initState() {
     super.initState();
     _KeyOK = false;
-    _isSlelected = false;
     _diffInd = 0;
     _sizeInd = 0;
     _sizeList = ["8x8", "10x10", "12x12", "16x16"];
@@ -109,7 +109,7 @@ class _StartPageState extends State<StartPage> {
     List<Widget> children = [];
     switch (source) {
       case 0:
-        UserPreferences.getGame().isEmpty
+        (UserPreferences.getGame().isEmpty)
             ? children = [
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 1.5,
@@ -548,6 +548,42 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
+  Widget rankedButton() {
+    return SizedBox(
+      height: 60,
+      width: MediaQuery.of(context).size.width / 2,
+      child: AnimatedButton(
+        height: 60,
+        width: MediaQuery.of(context).size.width / 2,
+        text: "RANKED",
+        selectedTextColor: UserPreferences.btnColor,
+        transitionType: TransitionType.LEFT_TO_RIGHT,
+        isSelected: _isSlelected2,
+        backgroundColor: UserPreferences.btnColor,
+        selectedBackgroundColor: UserPreferences.bgColor,
+        borderRadius: 15,
+        borderWidth: 2,
+        borderColor: UserPreferences.btnColor,
+        textStyle: TextStyle(
+            fontSize: 30,
+            letterSpacing: 1,
+            color: UserPreferences.bgColor,
+            fontWeight: FontWeight.w400),
+        onPress: () async {
+          setState(() {
+            _isSlelected2 = !_isSlelected2;
+          });
+          await Future.delayed(const Duration(milliseconds: 500));
+          //if(accès à la base de donnée) {
+          Navigator.of(context).push(_gamePageRoute("", 0, 10));
+          //} else { Popup: "Connexion impossible à la base de données" }
+
+          _isSlelected2 = !_isSlelected2;
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     initLocaliz();
@@ -571,7 +607,9 @@ class _StartPageState extends State<StartPage> {
                 ),
               ),
               midWidget(widget._source),
-                  (UserPreferences.getGame().isEmpty || widget._source != 0) ? playButton() : Container(),
+              (UserPreferences.getGame().isEmpty || widget._source != 0) ? playButton() : Container(),
+              const SizedBox(height: 10),
+              (UserPreferences.getGame().isEmpty && widget._source == 0) ? rankedButton() : Container()
             ])),
       );
     });

@@ -39,8 +39,8 @@ class _RankingPageState extends State<RankingPage> {
               margin: EdgeInsets.only(top:MediaQuery.of(context).padding.top+15, left:20),
               child: returnBtn(),
             ),
+
           ])),
     );
-    throw UnimplementedError();
   }
 }

@@ -6,9 +6,10 @@ import 'Objects/UserPreferences.dart';
 import 'Pages/HomePage.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // UI
@@ -18,6 +19,8 @@ void main() async {
   ]);
 
   await FlutterDisplayMode.setHighRefreshRate(); // Permet d'aller au dela de 60Hz
+
+  await Firebase.initializeApp(); // Firebase
 
   await UserPreferences().initPrefs();
 

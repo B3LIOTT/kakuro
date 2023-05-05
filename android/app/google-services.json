@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "325788857053",
+    "project_id": "kakuro-6d6f4",
+    "storage_bucket": "kakuro-6d6f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325788857053:android:28db2ff8bf664c1cc6a134",
+        "android_client_info": {
+          "package_name": "com.loutre.kakuro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325788857053-6h4q1rotsdq3dvjfjbirisrik304opc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnWIHnolrpW0kfDVEzFSXBDmvXPQYm5VQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325788857053-6h4q1rotsdq3dvjfjbirisrik304opc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

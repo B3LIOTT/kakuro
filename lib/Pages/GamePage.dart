@@ -61,7 +61,6 @@ class _GamePageState extends State<GamePage> {
       _size = 0;
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
-    _timerWidget.startTimer();
   }
 
   void updateValue(int value) {
@@ -81,6 +80,7 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
+    _timerWidget.startTimer();
   }
 
   Widget returnBtn() {
