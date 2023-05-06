@@ -108,9 +108,15 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           signInWithGoogle();
         },
-      ) : Icon(
+      ) : IconButton(
+        icon: Icon(
           Icons.check,
-          color: UserPreferences.btnColor,)
+          color: UserPreferences.btnColor,
+        ),
+        onPressed: () {
+          // Popup de Deconnexion
+        },
+      )
     );
   }
 
