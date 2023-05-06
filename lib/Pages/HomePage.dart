@@ -24,10 +24,12 @@ class _HomePageState extends State<HomePage> {
   final transitionType = ContainerTransitionType.fadeThrough;
   int _count = 0;
   StreamController<bool> _clickController = StreamController();
+  bool _isConnected = false;
 
   @override
   void initState() {
     super.initState();
+    _isConnected = (FirebaseAuth.instance.currentUser == null);
     _isSlelected = [false, false, false];
     _clickController.add(false);
   }
@@ -98,7 +100,7 @@ class _HomePageState extends State<HomePage> {
         color: UserPreferences.bgBtn,
         shape: BoxShape.circle,
       ),
-      child: IconButton(
+      child: !_isConnected? IconButton(
         icon: Icon(
           Icons.perm_identity,
           color: UserPreferences.btnColor,
@@ -106,7 +108,9 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           signInWithGoogle();
         },
-      ),
+      ) : Icon(
+          Icons.check,
+          color: UserPreferences.btnColor,)
     );
   }
 
