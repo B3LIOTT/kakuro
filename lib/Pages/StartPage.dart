@@ -587,7 +587,7 @@ class _StartPageState extends State<StartPage> {
                     style: TextStyle(
                         color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
                 content: Text(
-                    "You need to be connected to the internet to play ranked",
+                    "You need to be connected to the internet and to be connected via Google to play ranked",
                     style: const TextStyle(color: Colors.black54)),
                 actions: <Widget>[
                   TextButton(
@@ -599,6 +599,9 @@ class _StartPageState extends State<StartPage> {
                 ],
               ),
             );
+            setState(() {
+              _isSlelected2 = !_isSlelected2;
+            });
           }
 
           _isSlelected2 = !_isSlelected2;
