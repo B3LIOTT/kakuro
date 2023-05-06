@@ -6,11 +6,12 @@ import 'Player.dart';
 
 class RankingRepo {
   static final _db = FirebaseFirestore.instance.collection('Ranking');
+  static final _sorted_db = _db.orderBy("RP", descending: true);
 
   static bool get isConnected => _db.snapshots().isBroadcast;
 
   static Stream<List<Player>> get rankingList {
-    return _db.snapshots().map((snapshot) => snapshot.docs.map((doc) => Player(doc['username'], doc['RP'])).toList());
+    return _sorted_db.snapshots().map((snapshot) => snapshot.docs.map((doc) => Player(doc['username'], doc['RP'])).toList());
   }
 
   static Future<void> updatePlayer(Player player, int size, double density, List<int> timer) async {
