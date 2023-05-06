@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/CustomBorder.dart';
 import 'package:kakuro/Objects/Kakuro.dart';
+import 'package:kakuro/Objects/RankingRepo.dart';
 import 'package:kakuro/Objects/TimerWidget.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
 import '../Objects/Carre.dart';
+import '../Objects/Player.dart';
 import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,6 +33,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   bool _isKakuroLoading = true;
+  bool _isRanked = false;
   late int _size;
   late double _density;
   late List<bool> _whatsSelected;
@@ -41,6 +45,9 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
+    if(widget._source == 10) {
+      _isRanked = true;
+    }
     _verifyColor = Colors.green;
     List<int> t_list =
         widget._continueGame ? UserPreferences.getTimer : [0, 0, 0];
@@ -61,7 +68,6 @@ class _GamePageState extends State<GamePage> {
       _size = 0;
       connexionHandlerFromJoin(widget._KEY, widget._PORT);
     }
-    _timerWidget.startTimer();
   }
 
   void updateValue(int value) {
@@ -81,6 +87,7 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
+    _timerWidget.startTimer();
   }
 
   Widget returnBtn() {
@@ -460,7 +467,11 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  void GG() {
+  void GG() async {
+    if(_isRanked) { // Mise à jour de la base de donnée
+      final Player player = await RankingRepo.currentUser;
+        await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
+    }
     UserPreferences.clearGame();
     showDialog<void>(
       context: context,

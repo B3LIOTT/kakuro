@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>325788857053-5opss9vlhni2ebuvsrc9mpqq2j0kngru.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.325788857053-5opss9vlhni2ebuvsrc9mpqq2j0kngru</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCQFBby7y6f8A6PBqrpM9XpIJD_Z7UBpVA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>325788857053</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.loutre.kakuro</string>
+	<key>PROJECT_ID</key>
+	<string>kakuro-6d6f4</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kakuro-6d6f4.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:325788857053:ios:1879dc2b1dadec5cc6a134</string>
+</dict>
+</plist>
