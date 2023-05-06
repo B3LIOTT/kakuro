@@ -30,6 +30,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   bool _isKakuroLoading = true;
+  bool _isRanked = false;
   late int _size;
   late double _density;
   late List<bool> _whatsSelected;
@@ -41,6 +42,9 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
+    if(widget._source == 10) {
+      _isRanked = true;
+    }
     _verifyColor = Colors.green;
     List<int> t_list =
         widget._continueGame ? UserPreferences.getTimer : [0, 0, 0];
@@ -461,6 +465,9 @@ class _GamePageState extends State<GamePage> {
   }
 
   void GG() {
+    if(_isRanked) { // Mise à jour de la base de donnée
+
+    }
     UserPreferences.clearGame();
     showDialog<void>(
       context: context,

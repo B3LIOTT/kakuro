@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:animations/animations.dart';
@@ -6,8 +7,10 @@ import 'package:kakuro/Objects/AppProvider.dart';
 import 'package:kakuro/Pages/StartPage.dart';
 import 'package:provider/provider.dart';
 import '../Objects/UserPreferences.dart';
+import 'ConnectionPage.dart';
 import 'TopMenu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -89,6 +92,34 @@ class _HomePageState extends State<HomePage> {
             }));
   }
 
+  Widget connectionBtn() {
+    return Container(
+      decoration: BoxDecoration(
+        color: UserPreferences.bgBtn,
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        icon: Icon(
+          Icons.perm_identity,
+          color: UserPreferences.btnColor,
+        ),
+        onPressed: () {
+          signInWithGoogle();
+        },
+      ),
+    );
+  }
+
+  Future<void> signInWithGoogle() async {
+    GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
+    GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(builder: (context, appProvider, child) {
@@ -105,8 +136,10 @@ class _HomePageState extends State<HomePage> {
                     top: MediaQuery.of(context).padding.top + 15,
                     right: 20,
                     left: 20),
-                child: TopMenu("HomePage"),
-              ),
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [connectionBtn(), TopMenu("HomePage")],
+              )),
               Container(
                 color: UserPreferences.bgColor,
                 alignment: Alignment.center,
@@ -149,6 +182,26 @@ class _HomePageState extends State<HomePage> {
 
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Route _connectionPageRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          ConnectionPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),

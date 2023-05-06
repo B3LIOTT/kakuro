@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '325788857053',
     projectId: 'kakuro-6d6f4',
     storageBucket: 'kakuro-6d6f4.appspot.com',
+    androidClientId: '325788857053-vfsav80fngdlkblvurgs0oitcbilpstt.apps.googleusercontent.com',
     iosClientId: '325788857053-5opss9vlhni2ebuvsrc9mpqq2j0kngru.apps.googleusercontent.com',
     iosBundleId: 'com.loutre.kakuro',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '325788857053',
     projectId: 'kakuro-6d6f4',
     storageBucket: 'kakuro-6d6f4.appspot.com',
+    androidClientId: '325788857053-vfsav80fngdlkblvurgs0oitcbilpstt.apps.googleusercontent.com',
     iosClientId: '325788857053-5opss9vlhni2ebuvsrc9mpqq2j0kngru.apps.googleusercontent.com',
     iosBundleId: 'com.loutre.kakuro',
   );

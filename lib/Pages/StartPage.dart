@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:kakuro/Objects/RankingRepo.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
 import '../Objects/Carre.dart';
@@ -574,9 +575,30 @@ class _StartPageState extends State<StartPage> {
             _isSlelected2 = !_isSlelected2;
           });
           await Future.delayed(const Duration(milliseconds: 500));
-          //if(accès à la base de donnée) {
-          Navigator.of(context).push(_gamePageRoute("", 0, 10));
-          //} else { Popup: "Connexion impossible à la base de données" }
+          if(RankingRepo.isConnected) {
+            Navigator.of(context).push(_gamePageRoute("", 0, 10));
+          } else {
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                backgroundColor: UserPreferences.bgColor,
+                title: Text("ERROR",
+                    style: TextStyle(
+                        color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
+                content: Text(
+                    "You need to be connected to the internet to play ranked",
+                    style: const TextStyle(color: Colors.black54)),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: Text('OK',
+                        style:
+                        TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
+                  ),
+                ],
+              ),
+            );
+          }
 
           _isSlelected2 = !_isSlelected2;
         },

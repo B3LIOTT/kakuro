@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "325788857053-vfsav80fngdlkblvurgs0oitcbilpstt.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.loutre.kakuro",
-            "certificate_hash": "4da36f5d31f30fbf864ddde26e495205a89e9ddf"
-          }
-        },
-        {
           "client_id": "325788857053-ol5i7oq54srbk6ah4hnb14s7hkf8qmbr.apps.googleusercontent.com",
           "client_type": 3
         }
