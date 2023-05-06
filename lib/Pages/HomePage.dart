@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _isConnected = (FirebaseAuth.instance.currentUser == null);
+    _isConnected = (FirebaseAuth.instance.currentUser != null);
     _isSlelected = [false, false, false];
     _clickController.add(false);
   }
