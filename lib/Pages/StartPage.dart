@@ -599,11 +599,7 @@ class _StartPageState extends State<StartPage> {
                 ],
               ),
             );
-            setState(() {
-              _isSlelected2 = !_isSlelected2;
-            });
           }
-
           _isSlelected2 = !_isSlelected2;
         },
       ),
