@@ -557,7 +557,7 @@ class _GamePageState extends State<GamePage> {
   /*------------------------ Echange de données avec le serveur ------------------------*/
 
   late Socket socket;
-  final String _IP_SERVER = "10.0.2.2";
+  final String _IP_SERVER = "192.168.43.42";
   int _nbRequest = 0;
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
