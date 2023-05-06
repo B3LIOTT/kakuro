@@ -113,8 +113,11 @@ class _HomePageState extends State<HomePage> {
           Icons.check,
           color: UserPreferences.btnColor,
         ),
-        onPressed: () {
-          // Popup de Deconnexion
+        onPressed: () async {
+          await FirebaseAuth.instance.signOut();
+          setState(() {
+            _isConnected = (FirebaseAuth.instance.currentUser != null);
+          });
         },
       )
     );
@@ -127,7 +130,7 @@ class _HomePageState extends State<HomePage> {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-    FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
     setState(() {
       _isConnected = (FirebaseAuth.instance.currentUser != null);
     });
