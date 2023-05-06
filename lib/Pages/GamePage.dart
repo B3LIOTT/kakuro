@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kakuro/Objects/CustomBorder.dart';
 import 'package:kakuro/Objects/Kakuro.dart';
+import 'package:kakuro/Objects/RankingRepo.dart';
 import 'package:kakuro/Objects/TimerWidget.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
 import '../Objects/Carre.dart';
+import '../Objects/Player.dart';
 import '../Objects/UserPreferences.dart';
 import 'TopMenu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -464,9 +467,10 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
-  void GG() {
+  void GG() async {
     if(_isRanked) { // Mise à jour de la base de donnée
-
+      final Player player = await RankingRepo.currentUser;
+        await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
     }
     UserPreferences.clearGame();
     showDialog<void>(
