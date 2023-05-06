@@ -471,8 +471,9 @@ class _GamePageState extends State<GamePage> {
     if(_isRanked) { // Mise à jour de la base de donnée
       final Player player = await RankingRepo.currentUser;
         await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
+    }else {
+      UserPreferences.clearGame();
     }
-    UserPreferences.clearGame();
     showDialog<void>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
