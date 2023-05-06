@@ -128,6 +128,9 @@ class _HomePageState extends State<HomePage> {
       idToken: googleSignInAuthentication.idToken,
     );
     FirebaseAuth.instance.signInWithCredential(credential);
+    setState(() {
+      _isConnected = (FirebaseAuth.instance.currentUser != null);
+    });
   }
 
   @override
