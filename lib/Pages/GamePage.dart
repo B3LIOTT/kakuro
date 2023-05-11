@@ -486,7 +486,7 @@ class _GamePageState extends State<GamePage> {
             style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
             child: Text('OK',
                 style:
                     TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
