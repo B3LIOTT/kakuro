@@ -47,7 +47,7 @@ class Kakuro {
       fillWhiteSpaces(); // On s'assure qu'il n'existe pas de trop grandes séries de cases blanches
       fillBoard(); // On remplit les cases blanches avec des chiffres
       fillSums(); // On génère les sommes
-      //removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
+      removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
     } else {
       size = UserPreferences.getSize;
       density = UserPreferences.getDensity;
@@ -524,7 +524,6 @@ class Kakuro {
   /// @return true si le plateau est solution, false sinon
   bool solveKakuro() {
     for (int row = 0; row < size - 1; row++) {
-      print("row : $row");
       for (int col = 0; col < size - 1; col++) {
         if (board[row][col].value == 0) {
           List<int> possibleValues = getPossibleValuesv2(row, col);
