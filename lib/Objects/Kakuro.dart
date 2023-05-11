@@ -524,6 +524,7 @@ class Kakuro {
   /// @return true si le plateau est solution, false sinon
   bool solveKakuro() {
     for (int row = 0; row < size - 1; row++) {
+      print("row : $row");
       for (int col = 0; col < size - 1; col++) {
         if (board[row][col].value == 0) {
           List<int> possibleValues = getPossibleValuesv2(row, col);
@@ -621,6 +622,7 @@ void main() {
   stdout.write("\n");
   kakuro.printBoard();
   stdout.write(kakuro.isSolution());*/
+
   testTime(100, 8, 0.5);
   testTime(100, 10, 0.5);
   testTime(100, 12, 0.5);

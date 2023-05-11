@@ -55,8 +55,7 @@ class _GamePageState extends State<GamePage> {
 
     if (widget._source != 2) {
       _size = widget._size;
-      _density = widget
-          ._diff; // si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
+      _density = widget._diff; // si on veut rejoindre une partie (i.e widget._source == 2) l'initialisation se fera plus tard
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
       genKakuro(widget._continueGame);
@@ -83,8 +82,8 @@ class _GamePageState extends State<GamePage> {
   }
 
   void genKakuro(bool continueGame) {
+    _kwakuro = Kakuro(_size, _density, continueGame);
     setState(() {
-      _kwakuro = Kakuro(_size, _density, continueGame);
       _isKakuroLoading = false;
     });
     _timerWidget.startTimer();
@@ -394,6 +393,31 @@ class _GamePageState extends State<GamePage> {
         ));
   }
 
+  Widget solveBtn() {
+    return Container(
+        height: MediaQuery.of(context).size.width / 8,
+        margin: const EdgeInsets.only(bottom:10),
+        decoration: BoxDecoration(
+          color: UserPreferences.bgBtn,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: UserPreferences.btnColor,
+            width: 2,
+          ),
+        ),
+        child: IconButton(
+          icon: Icon(
+            Icons.help,
+            color: UserPreferences.btnColor,
+            size: MediaQuery.of(context).size.width / 15,
+          ),
+          onPressed: () {
+           _kwakuro.solveKakuro();
+           print(_kwakuro.board);
+           setState(() {});
+          },
+        ));
+  }
   Widget verifyBtn() {
     return Container(
       height: MediaQuery.of(context).size.width / 8,
@@ -543,7 +567,12 @@ class _GamePageState extends State<GamePage> {
                 margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 100, bottom: MediaQuery.of(context).padding.bottom + 10),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [verifyBtn(), numPad()]),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [verifyBtn(),(!_isRanked)? solveBtn() : Container()]
+                      ),
+                      numPad()]),
               ),
             ]),
           ),
