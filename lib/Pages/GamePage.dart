@@ -493,7 +493,7 @@ class _GamePageState extends State<GamePage> {
   void GG() async {
     if(_isRanked) { // Mise à jour de la base de donnée
       final Player player = await RankingRepo.currentUser;
-        await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
+      await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
     }else {
       UserPreferences.clearGame();
     }
@@ -505,7 +505,7 @@ class _GamePageState extends State<GamePage> {
             style: TextStyle(
                 color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
         content: Text(
-            "GG! You complete this Kakuro ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${UserPreferences.getTimerString}",
+            "GG! You complete this Kakuro ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${_timerWidget.H}:${_timerWidget.M}:${_timerWidget.S}",
             style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
@@ -772,7 +772,7 @@ class _GamePageState extends State<GamePage> {
             style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
             child: Text('OK',
                 style:
                     TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
