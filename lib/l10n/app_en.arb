@@ -81,6 +81,22 @@
     },
   "usure_desc" : "The current game will be deleted.",
     "@usure_desc": {
-        "description": "Are you sure description"
+      "description": "Are you sure description"
+    },
+  "game_finished_1" : "GG ! You completed this",
+  "@game_finished_1_desc" : {
+    "description" : "End game description 1"
+  },
+  "game_finished_2" : "Kakuro in",
+  "@game_finished_2_desc" : {
+    "description" : "End game description 2"
+  },
+  "victory" : "VICTORY",
+    "@victory_desc" : {
+        "description" : "Victory text"
+    },
+    "defeat" : "DEFEAT",
+    "@defeat_desc" : {
+        "description" : "Defeat text"
     }
 }

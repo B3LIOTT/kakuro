@@ -19,5 +19,9 @@
   "yes" : "OUI",
   "no" : "NON",
   "usure" : "Êtes-vous sûr de vouloir créer une nouvelle partie ?",
-  "usure_desc" : "La partie actuelle sera supprimée."
+  "usure_desc" : "La partie actuelle sera supprimée.",
+  "game_finished_1" : "Félicitations : Vous avez terminé ce Kakuro",
+  "game_finished_2" : "en",
+  "victory" : "VICTOIRE",
+  "defeat" : "DÉFAITE"
 }

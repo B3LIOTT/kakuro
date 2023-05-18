@@ -523,8 +523,8 @@ class Kakuro {
   /// Fonction qui permet de résoudre un plateau
   /// @return true si le plateau est solution, false sinon
   bool solveKakuro() {
-    for (int row = 0; row < size - 1; row++) {
-      for (int col = 0; col < size - 1; col++) {
+    for (int row = 0; row < size ; row++) {
+      for (int col = 0; col < size; col++) {
         if (board[row][col].value == 0) {
           List<int> possibleValues = getPossibleValuesv2(row, col);
           for (int value in possibleValues) {

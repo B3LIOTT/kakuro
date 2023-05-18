@@ -81,7 +81,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   void genKakuro(bool continueGame) {
-    _kwakuro = Kakuro(_size, _density, continueGame);
+    _kwakuro = Kakuro(_size+1, _density, continueGame);
     setState(() {
       _isKakuroLoading = false;
     });
@@ -501,11 +501,11 @@ class _GamePageState extends State<GamePage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text("VICTORY",
+        title: Text(AppLocalizations.of(context)!.victory,
             style: TextStyle(
                 color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
         content: Text(
-            "GG! You complete this Kakuro ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${_timerWidget.H}:${_timerWidget.M}:${_timerWidget.S}",
+            "${AppLocalizations.of(context)?.game_finished_1} ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size ${AppLocalizations.of(context)?.game_finished_2} ${_timerWidget.H}:${_timerWidget.M}:${_timerWidget.S}",
             style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
@@ -569,7 +569,7 @@ class _GamePageState extends State<GamePage> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [verifyBtn(),(!_isRanked)? solveBtn() : Container()]
+                        children: [(!_isRanked)? solveBtn() : Container(), verifyBtn()]
                       ),
                       numPad()]),
               ),
@@ -623,7 +623,7 @@ class _GamePageState extends State<GamePage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text("DEFEAT",
+        title: Text(AppLocalizations.of(context)!.defeat,
             style: TextStyle(
                 color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
         content: Text(
@@ -692,7 +692,7 @@ class _GamePageState extends State<GamePage> {
       // Initialisation du Kakuro
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
-      _kwakuro = Kakuro(_size, _density, false);
+      _kwakuro = Kakuro(_size+1, _density, false);
 
       _nbRequest++;
     } else if (_nbRequest <= _size) {
@@ -728,7 +728,7 @@ class _GamePageState extends State<GamePage> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
           backgroundColor: UserPreferences.bgColor,
-          title: Text("DEFEAT",
+          title: Text(AppLocalizations.of(context)!.defeat,
               style: TextStyle(
                   color: UserPreferences.btnColor,
                   fontWeight: FontWeight.bold)),
@@ -764,11 +764,11 @@ class _GamePageState extends State<GamePage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: UserPreferences.bgColor,
-        title: Text("VICTORY",
+        title: Text(AppLocalizations.of(context)!.victory,
             style: TextStyle(
                 color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
         content: Text(
-            "GG! You complete this Kakuro ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size in ${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}",
+            "${AppLocalizations.of(context)!.game_finished_1} ${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size ${AppLocalizations.of(context)!.game_finished_2} ${_timerWidget.H} : ${_timerWidget.M} : ${_timerWidget.S}",
             style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
