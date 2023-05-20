@@ -23,7 +23,7 @@ class Kakuro {
   /// density: densité du kakuro
   /// board: tableau de carrés
   Kakuro(this.size, this.density, this.continueGame) {
-    if(!continueGame) {
+    if (!continueGame) {
       board = List.generate(
           size, (i) => List.filled(size, Carre(0, 0, 0), growable: false),
           growable: false);
@@ -60,6 +60,21 @@ class Kakuro {
   /// Il y a une symétrie central des carrés noirs (180°)
   /// Les sommes de 1 chiffre sont interdites
   void generateBlackSquares() {
+    // Pour être sur qu'il n'y aura pas de cases vide, on met (density * (size - 2)²) * 20% carrés noirs
+    // placés aléatoirement
+    int nbBlackSquares = (density * (size - 2) * (size - 2) * 0.2).round();
+    int x0, y0;
+    for (int i = 0; i < nbBlackSquares; i++) {
+      x0 = Random().nextInt(size - 2) + 1;
+      y0 = Random().nextInt(size - 2) + 1;
+      if (board[x0][y0].value == 0) {
+        board[x0][y0] = Carre(-1, -1, -1);
+        board[size - 1 - x0][size - 1 - y0] = Carre(-1, -1, -1);
+      } else {
+        i--;
+      }
+    }
+
     int x = Random().nextInt(100);
     if (x < density * 100) {
       // on teste pour la première case de la première ligne
@@ -209,30 +224,27 @@ class Kakuro {
       }
     }
     // tant qu'il existe des cases blanches contraintes, on les remplit
-    while (isBoardConstrained()) {
-      for (int i = 1; i < size - 1; i++) {
-        for (int j = 1; j < size - 1; j++) {
-          if (isConstrained(i,j) != -1) {
-            board[i][j] = Carre(-1, -1, -1);
-            board[size - 2 - i + 1][size - 2 - j + 1] = Carre(-1, -1, -1);
-          }
-        }
-      }
+    List<int> constrained = isBoardConstrained();
+    while (constrained[0] != -1) {
+      board[constrained[0]][constrained[1]] = Carre(-1, -1, -1);
+      board[size - 2 - constrained[0] + 1][size - 2 - constrained[1] + 1] =
+          Carre(-1, -1, -1);
+      constrained = isBoardConstrained();
     }
   }
 
   /// Fonction permettant de verifier si le plateau est contraint ou non
-  /// 1 : plateau contraint
-  /// -1 : plateau non contraint
-  bool isBoardConstrained() {
+  /// (i,j) != (-1,-1) : carré contraint
+  /// (-1,-1) : carré non contraint
+  List<int> isBoardConstrained() {
     for (int i = 1; i < size - 1; i++) {
       for (int j = 1; j < size - 1; j++) {
         if (isConstrained(i, j) != -1) {
-          return true;
+          return [i, j];
         }
       }
     }
-    return false;
+    return [-1, -1];
   }
 
   /// Fonction permettant de vérifier si le carré est contraint ou non
@@ -282,7 +294,10 @@ class Kakuro {
       /* On crée la liste qui comporte les coordonnées du début du bloc et la taille du bloc*/
       List<int> list = [id, jd, taille];
       /*On retourne la liste*/
-      wrongL.add(list+[orientation]);// on ajoute la liste à la liste des blocs mal placés pour l'affichage graphique
+      wrongL.add(list +
+          [
+            orientation
+          ]); // on ajoute la liste à la liste des blocs mal placés pour l'affichage graphique
       return list;
     }
     /*Si l'orientation est verticale*/
@@ -304,15 +319,18 @@ class Kakuro {
       /* On crée la liste qui comporte les coordonnées du début du bloc et la taille du bloc*/
       List<int> list = [id, jd, taille];
       /*On retourne la liste*/
-      wrongL.add(list+[orientation]);// on ajoute la liste à la liste des blocs mal placés pour l'affichage graphique
+      wrongL.add(list +
+          [
+            orientation
+          ]); // on ajoute la liste à la liste des blocs mal placés pour l'affichage graphique
       return list;
     }
   }
 
   /// Fonction qui rempli les cases blanches du plateau avec des chiffres aléatoires
   bool fillBoard() {
-    for (int row = 0; row < size; row++) {
-      for (int col = 0; col < size; col++) {
+    for (int row = 1; row < size - 1; row++) {
+      for (int col = 1; col < size - 1; col++) {
         if (board[row][col].value == 0) {
           List<int> possibleValues = getPossibleValues(row, col);
           if (possibleValues.isEmpty) {
@@ -338,8 +356,10 @@ class Kakuro {
   /// @param col : coordonnée j du carré
   List<int> getPossibleValues(int row, int col) {
     List<int> possibleValues = List.generate(9, (i) => i + 1);
-    List<int> squaresBlockVertical = blockSizeCoo(row, col, 0);
-    List<int> squaresBlockHorizontal = blockSizeCoo(row, col, 1);
+    List<int> squaresBlockVertical = blockSizeCoo(
+        row, col, 0); // On récupère les coordonnées du bloc vertical
+    List<int> squaresBlockHorizontal = blockSizeCoo(
+        row, col, 1); // On récupère les coordonnées du bloc horizontal
     // On parcours les carrés du bloc vertical et on enlève les valeurs déjà présentes
     for (int i = squaresBlockVertical[0];
         i < squaresBlockVertical[0] + squaresBlockVertical[2];
@@ -361,9 +381,9 @@ class Kakuro {
 
   /// Fonction qui permet de compléter les Verticals et les Horizontals Sums en déduisant depuis les carrés blancs complétés
   void fillSums() {
-    for (int row = 0; row < size; row++) {
-      for (int col = 0; col < size; col++) {
-        if (board[row][col].value == -1) {
+    for (int row = 0; row < size - 1; row++) {
+      for (int col = 0; col < size - 1; col++) {
+        if ((row != 0 || col != 0) && board[row][col].value == -1) {
           int horizontalSum = 0;
           int verticalSum = 0;
 
@@ -426,10 +446,10 @@ class Kakuro {
   /// Fonction qui vérifie si le plateau est solution
   /// @return la liste vide si le plateau est solution, sinon la liste des coordonnées des blocs qui ne sont pas solution
   List<List<int>> checkSolution() {
-    wrongL.isNotEmpty? wrongL.clear() : null;
+    wrongL.isNotEmpty ? wrongL.clear() : null;
     List<List<int>> list = [];
-    for (int row = 0; row < size; row++) {
-      for (int col = 0; col < size; col++) {
+    for (int row = 1; row < size - 1; row++) {
+      for (int col = 1; col < size - 1; col++) {
         if (board[row][col].value == -1 &&
             (board[row][col].horizontalSum != -1 ||
                 board[row][col].verticalSum != -1)) {
@@ -437,13 +457,17 @@ class Kakuro {
             if (board[row][col].horizontalSum != blockSum(row, col, 1)) {
               List<int> list2 = [row, col];
               list.add(list2);
-            }else {wrongL.removeAt(wrongL.length-1);}
+            } else {
+              wrongL.removeAt(wrongL.length - 1);
+            }
           }
           if (board[row][col].verticalSum != -1) {
             if (board[row][col].verticalSum != blockSum(row, col, 0)) {
               List<int> list2 = [row, col];
               list.add(list2);
-            }else {wrongL.removeAt(wrongL.length-1);}
+            } else {
+              wrongL.removeAt(wrongL.length - 1);
+            }
           }
         }
       }
@@ -459,8 +483,8 @@ class Kakuro {
 
   /// Fonction qui vide les valeurs des carrés blancs
   void removeValues() {
-    for (int row = 0; row < size; row++) {
-      for (int col = 0; col < size; col++) {
+    for (int row = 1; row < size - 1; row++) {
+      for (int col = 1; col < size - 1; col++) {
         if (board[row][col].value != -1) {
           board[row][col].value = 0;
         }
@@ -468,65 +492,130 @@ class Kakuro {
     }
   }
 
+  /// Fonction qui détermine s'il n'y a qu'un seul carré blanc dans un bloc vertical
+  /// @param row : coordonnée i du bloc
+  /// @param col : coordonnée j du bloc
+  bool countWhiteSquaresV(int row, int col) {
+    // On parcourt le bloc et on compte petit à petit le nombre de carrés blancs
+    // Si on en trouve plus d'1, on retourne false
+    int count = 0;
+    List<int> vBlock = blockSizeCoo(row, col, 0);
+    for (int i = vBlock[0] + 1; i < vBlock[0] + vBlock[2]; i++) {
+      if (board[i][col].value == 0) {
+        count++;
+      }
+      if (count > 1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// Fonction qui détermine s'il n'y a qu'un seul carré blanc dans un bloc horizontal
+  /// @param row : coordonnée i du bloc
+  /// @param col : coordonnée j du bloc
+  bool countWhiteSquaresH(int row, int col) {
+    // On parcourt le bloc et on compte petit à petit le nombre de carrés blancs
+    // Si on en trouve plus d'1, on retourne false
+    int count = 0;
+    List<int> hBlock = blockSizeCoo(row, col, 1);
+    for (int j = hBlock[1] + 1; j < hBlock[1] + hBlock[2]; j++) {
+      if (board[row][j].value == 0) {
+        count++;
+      }
+      if (count > 1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// Fonction qui retourne la liste des valeurs possibles pour une case
+  /// En considérant cette fois les sommes horizontales et verticales
+  /// @param row : coordonnée i de la case
+  /// @param col : coordonnée j de la case
+  /// @return la liste des valeurs possibles pour la case
   List<int> getPossibleValuesv2(int row, int col) {
-    List<int> possibleValues = getPossibleValues(row, col);
-    List<int> squaresBlockHorizontal = blockSizeCoo(row, col, 1);
-    List<int> squaresBlockVertical = blockSizeCoo(row, col, 0);
+    List<int> possibleValues = getPossibleValues(
+        row, col); // Toutes les valeurs possibles pour la case
+    List<int> squaresBlockHorizontal =
+    blockSizeCoo(row, col, 1); // Coordonnées du bloc horizontal
+    List<int> squaresBlockVertical =
+    blockSizeCoo(row, col, 0); // Coordonnées du bloc vertical
     List<int> valuesToRemove = [];
-    // Pour chaque valeur possible, on vérifie si la somme des valeurs du bloc + la valeur que l'on souhaite tester
-    // est inférieure stricte (si elle n'est pas la dernière case) ou égale (si elle est la dernière case  à la somme du bloc
-    for (int value in possibleValues) {
-      // si c'est la dernière case du bloc horizontal
-      if (col == squaresBlockHorizontal[1] + squaresBlockHorizontal[2] - 1) {
-        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est égale à la somme du bloc
-        if (value + blockSum(row, col, 1) !=
+
+    // On teste d'abord pour le bloc horizontal
+    // On est dans le cas ou une seule case est vide
+    if (countWhiteSquaresH(row, col)) {
+      int sum = blockSum(row, col, 1);
+      for (int value in possibleValues) {
+        // Si la somme de cette case et du reste n'est pas égal à la somme du bloc, on l'enlève
+        if (sum + value !=
             board[squaresBlockHorizontal[0]][squaresBlockHorizontal[1]]
                 .horizontalSum) {
           valuesToRemove.add(value);
         }
       }
-      // si c'est la dernière case du bloc vertical
-      if (row == squaresBlockVertical[0] + squaresBlockVertical[2] - 1) {
-        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est égale à la somme du bloc
-        if (value + blockSum(row, col, 0) !=
-            board[squaresBlockVertical[0]][squaresBlockVertical[1]]
-                .verticalSum) {
-          valuesToRemove.add(value);
+    }
+    // On est dans le cas ou plusieurs cases sont vides
+    else {
+      int sum = blockSum(row, col, 1);
+      if (sum != 0) {
+        // On enlève les valeurs qui causent une somme supérieure à la somme du bloc
+        for (int value in possibleValues) {
+          if (sum + value >
+              board[squaresBlockHorizontal[0]][squaresBlockHorizontal[1]]
+                  .horizontalSum) {
+            valuesToRemove.add(value);
+          }
         }
       }
-      // si ce n'est pas la dernière case du bloc horizontal
-      if (col != squaresBlockHorizontal[1] + squaresBlockHorizontal[2] - 1) {
-        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est inférieure à la somme du bloc
-        if (value + blockSum(row, col, 1) >=
-            board[squaresBlockHorizontal[0]][squaresBlockHorizontal[1]]
-                .horizontalSum) {
-          valuesToRemove.add(value);
-        }
-      }
-      // si ce n'est pas la dernière case du bloc vertical
-      if (row != squaresBlockVertical[0] + squaresBlockVertical[2] - 1) {
-        // on vérifie que la somme des valeurs du bloc + la valeur que l'on souhaite tester est inférieure à la somme du bloc
-        if (value + blockSum(row, col, 0) >=
+    }
+
+    // On est dans le cas ou une seule case est vide
+    if (countWhiteSquaresV(row, col)) {
+      int sum = blockSum(row, col, 0);
+      // Si la somme de cette case et du reste n'est pas égal à la somme du bloc, on l'enlève
+      for (int value in possibleValues) {
+        if (sum + value !=
             board[squaresBlockVertical[0]][squaresBlockVertical[1]]
                 .verticalSum) {
           valuesToRemove.add(value);
         }
       }
     }
+    // On est dans le cas ou plusieurs cases sont vides
+    else {
+      // On enlève les valeurs qui causent une somme supérieure à la somme du bloc
+      int sum = blockSum(row, col, 0);
+      if (sum != 0) {
+        // On enlève les valeurs qui causent une somme supérieure à la somme du bloc
+        for (int value in possibleValues) {
+          if (sum + value >
+              board[squaresBlockVertical[0]][squaresBlockVertical[1]]
+                  .verticalSum) {
+            valuesToRemove.add(value);
+          }
+        }
+      }
+    }
+
     for (int value in valuesToRemove) {
       possibleValues.remove(value);
     }
-    //print("possibleValues : $possibleValues");
+
     return possibleValues;
   }
 
   /// Fonction qui permet de résoudre un plateau
   /// @return true si le plateau est solution, false sinon
   bool solveKakuro() {
-    for (int row = 0; row < size ; row++) {
-      for (int col = 0; col < size; col++) {
+    // Pour chaque case vide
+    for (int row = 1; row < size - 1; row++) {
+      for (int col = 1; col < size - 1; col++) {
         if (board[row][col].value == 0) {
           List<int> possibleValues = getPossibleValuesv2(row, col);
+          // on teste chaque valeur possible pour cette case
           for (int value in possibleValues) {
             board[row][col].value = value;
             if (solveKakuro()) {
@@ -542,6 +631,7 @@ class Kakuro {
     }
     return true;
   }
+
 
   /// Fonction qui permet d'afficher dans la console le plateau de jeu
   void printBoard() {
