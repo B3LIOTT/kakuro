@@ -6,13 +6,14 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:kakuro/Objects/RankingRepo.dart';
 import 'package:provider/provider.dart';
 import '../Objects/AppProvider.dart';
-import '../Objects/Carre.dart';
 import '../Objects/UserPreferences.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'GamePage.dart';
 import 'TopMenu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class StartPage extends StatefulWidget {
   late int _source;
@@ -37,7 +38,7 @@ class _StartPageState extends State<StartPage> {
   late List<String> _sizeList;
   late double _currentOpacityDiff;
   late double _currentOpacitySize;
-  late List<String> _kakuroListBySize;
+  late List<List> _kakuroListBySize;
   late String _sourceText;
   bool _continueGame = false;
 
@@ -53,10 +54,26 @@ class _StartPageState extends State<StartPage> {
     _currentOpacityDiff = 1.0;
     _currentOpacitySize = 1.0;
     _kakuroListBySize = [
-      "lib/assets/images/kakuro8x8.png",
-      "lib/assets/images/kakuro8x8.png",
-      "lib/assets/images/kakuro8x8.png",
-      "lib/assets/images/kakuro8x8.png"
+      [
+        "lib/assets/svgs/8x8_easy.svg",
+        "lib/assets/svgs/8x8_medium.svg",
+        "lib/assets/svgs/8x8_hard.svg"
+      ],
+      [
+        "lib/assets/svgs/8x8_easy.svg",
+        "lib/assets/svgs/8x8_medium.svg",
+        "lib/assets/svgs/8x8_hard.svg"
+      ],
+      [
+        "lib/assets/svgs/8x8_easy.svg",
+        "lib/assets/svgs/8x8_medium.svg",
+        "lib/assets/svgs/8x8_hard.svg"
+      ],
+      [
+        "lib/assets/svgs/8x8_easy.svg",
+        "lib/assets/svgs/8x8_medium.svg",
+        "lib/assets/svgs/8x8_hard.svg"
+      ]
     ];
   }
 
@@ -119,10 +136,12 @@ class _StartPageState extends State<StartPage> {
                   child: AnimatedOpacity(
                     opacity: _currentOpacitySize,
                     duration: const Duration(milliseconds: 200),
-                    child: Image.asset(
-                      _kakuroListBySize[_sizeInd],
+                    child: SvgPicture.asset(
+                      _kakuroListBySize[_sizeInd][_diffInd],
                       fit: BoxFit.contain,
-                    ),
+                      colorFilter: ColorFilter.mode(
+                          UserPreferences.btnColor, BlendMode.srcATop),
+                  ),
                   ),
                 ),
                 diffSelector(),
@@ -246,10 +265,12 @@ class _StartPageState extends State<StartPage> {
             child: AnimatedOpacity(
               opacity: _currentOpacitySize,
               duration: const Duration(milliseconds: 200),
-              child: Image.asset(
-                _kakuroListBySize[_sizeInd],
-                fit: BoxFit.contain,
-              ),
+                child: SvgPicture.asset(
+                  _kakuroListBySize[_sizeInd][_diffInd],
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                      UserPreferences.btnColor, BlendMode.srcATop),
+                ),
             ),
           ),
           diffSelector(),
