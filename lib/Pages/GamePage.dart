@@ -695,11 +695,11 @@ class _GamePageState extends State<GamePage> {
       _kwakuro = Kakuro(_size+1, _density, false);
 
       _nbRequest++;
-    } else if (_nbRequest <= _size) {
+    } else if (_nbRequest <= _size+1) {
       // Actualisation de la matrice du jeu
       buffer += data;
       _count++;
-      if (_count == _size) {
+      if (_count == _size+1) {
         final jsonList = const LineSplitter().convert(buffer);
         print(buffer);
         List<List<Carre>> matrix = [];
