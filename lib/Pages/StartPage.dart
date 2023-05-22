@@ -560,8 +560,7 @@ class _StartPageState extends State<StartPage> {
           } else if (_sourceText == AppLocalizations.of(context)!.join) {
             String KEY = textFieldController.text.split("-")[0];
             int PORT = int.parse(textFieldController.text.split("-")[1]);
-            Navigator.of(context)
-                .push(_gamePageRoute(KEY, PORT, widget._source));
+            Navigator.of(context).push(_gamePageRoute(KEY, PORT, widget._source));
           } else if (_sourceText == AppLocalizations.of(context)!.solo) {
             Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
           }
@@ -685,7 +684,7 @@ class _StartPageState extends State<StartPage> {
 
   /*-------------------------------------Creation de partie multi-------------------------------------*/
   late Socket socket;
-  final String _IP_SERVER = "192.168.43.42";
+  final String _IP_SERVER = "10.0.2.2";
   final int _MAIN_SERVER_PORT = 8080;
 
   dynamic createParty() async {

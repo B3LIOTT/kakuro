@@ -40,6 +40,7 @@ class _GamePageState extends State<GamePage> {
   late List<double> _opacities;
   late Color _verifyColor;
   late TimerWidget _timerWidget;
+  bool __ = true;
 
   @override
   void initState() {
@@ -81,7 +82,7 @@ class _GamePageState extends State<GamePage> {
   }
 
   void genKakuro(bool continueGame) {
-    _kwakuro = Kakuro(_size+1, _density, continueGame);
+    _kwakuro = Kakuro(_size+1, _density, continueGame, []);
     setState(() {
       _isKakuroLoading = false;
     });
@@ -521,7 +522,7 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget._source == 0) {
+    if (widget._source == 0 && !_isKakuroLoading) {
       UserPreferences.setDensity(_density);
       UserPreferences.setSize(_size);
       UserPreferences.setGame(_kwakuro.board);
@@ -557,8 +558,8 @@ class _GamePageState extends State<GamePage> {
                               style: const TextStyle(fontSize: 20),
                             )
                           : Container(),
-                      Text(
-                          "${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size"),
+                      !_isKakuroLoading? Text(
+                          "${(_density == 0.2) ? AppLocalizations.of(context)?.hard : (_density == 0.5) ? AppLocalizations.of(context)?.medium : AppLocalizations.of(context)?.easy} - ${_size}x$_size") : Container(),
                     ],
                   ),
                 ),
@@ -571,7 +572,8 @@ class _GamePageState extends State<GamePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [(!_isRanked)? solveBtn() : Container(), verifyBtn()]
                       ),
-                      numPad()]),
+                      numPad()
+                    ]),
               ),
             ]),
           ),
@@ -585,7 +587,7 @@ class _GamePageState extends State<GamePage> {
   /*------------------------ Echange de données avec le serveur ------------------------*/
 
   late Socket socket;
-  final String _IP_SERVER = "192.168.43.42";
+  final String _IP_SERVER = "10.0.2.2";
   int _nbRequest = 0;
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
@@ -644,7 +646,7 @@ class _GamePageState extends State<GamePage> {
   void updateGame(List<List<Carre>> matrix) {
     // Actualisation de la matrice du jeu
     setState(() {
-      _kwakuro.board = matrix;
+      _kwakuro = Kakuro(_size, _density, false, matrix);
     });
     print("Matrice du jeu mise à jour");
   }
@@ -692,16 +694,15 @@ class _GamePageState extends State<GamePage> {
       // Initialisation du Kakuro
       _opacities = List.generate(_size * _size, (index) => 0.0);
       _whatsSelected = List.filled(_size * _size, false);
-      _kwakuro = Kakuro(_size+1, _density, false);
 
       _nbRequest++;
-    } else if (_nbRequest <= _size+1) {
+    } else if (_nbRequest <= _size + 1) {
       // Actualisation de la matrice du jeu
       buffer += data;
+      print("New row : $_count");
       _count++;
-      if (_count == _size+1) {
+      if (_count == _size + 1) {
         final jsonList = const LineSplitter().convert(buffer);
-        print(buffer);
         List<List<Carre>> matrix = [];
 
         for (final json in jsonList) {
@@ -716,9 +717,11 @@ class _GamePageState extends State<GamePage> {
         _count = 0;
         buffer = "";
         updateGame(matrix);
+        setState(() {
+          _isKakuroLoading = false;
+        });
+        _timerWidget.startTimer();
       }
-      _isKakuroLoading = false;
-      _timerWidget.startTimer();
       _nbRequest++;
     } else {
       // Reception du message de fin de partie

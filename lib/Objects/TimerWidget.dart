@@ -35,9 +35,8 @@ class _TimerWidgetState extends State<TimerWidget>{
   }
 
   void iniTimer() {
-    while(widget._loading){}
     Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (!widget._done) {
+      if (!widget._done && !widget._loading) {
         _updateTimer();
       } else {
         timer.cancel();

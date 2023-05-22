@@ -7,6 +7,7 @@ import 'Carre.dart';
 
 class Kakuro {
   late List<List<Carre>> board;
+  late List<List<Carre>> reveivedBoard;
   int size;
   double density;
   List possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -22,8 +23,8 @@ class Kakuro {
   /// size: taille du kakuro
   /// density: densité du kakuro
   /// board: tableau de carrés
-  Kakuro(this.size, this.density, this.continueGame) {
-    if (!continueGame) {
+  Kakuro(this.size, this.density, this.continueGame, this.reveivedBoard) {
+    if (!continueGame && reveivedBoard.isEmpty) {
       board = List.generate(
           size, (i) => List.filled(size, Carre(0, 0, 0), growable: false),
           growable: false);
@@ -48,10 +49,12 @@ class Kakuro {
       fillBoard(); // On remplit les cases blanches avec des chiffres
       fillSums(); // On génère les sommes
       removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
-    } else {
+    } else if (continueGame) {
       size = UserPreferences.getSize;
       density = UserPreferences.getDensity;
       board = UserPreferences.getGame();
+    } else if (reveivedBoard.isNotEmpty) {
+      board = reveivedBoard;
     }
   }
 
@@ -691,7 +694,7 @@ class Kakuro {
 void testTime(int n, int size, double density) {
   Stopwatch stopwatch = Stopwatch()..start();
   for (int i = 0; i < n; i++) {
-    Kakuro(size, density, false);
+    Kakuro(size, density, false, []);
   }
   print(
       'Temps moyen de génération de $n grilles de taille $size : ${stopwatch.elapsedMilliseconds / n} ms');
