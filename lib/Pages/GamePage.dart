@@ -413,7 +413,6 @@ class _GamePageState extends State<GamePage> {
           ),
           onPressed: () {
            _kwakuro.solveKakuro();
-           print(_kwakuro.board);
            setState(() {});
           },
         ));
