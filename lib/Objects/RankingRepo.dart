@@ -14,7 +14,7 @@ class RankingRepo {
     return _sorted_db.snapshots().map((snapshot) => snapshot.docs.map((doc) => Player(doc['username'], doc['RP'])).toList());
   }
 
-  static Future<void> updatePlayer(Player player, int size, double density, List<int> timer, int score) async {
+  static Future<void> updatePlayer(Player player, int size, double density, List<int> timer, double score) async {
     int sec = timer[2] + timer[1] * 60 + timer[0] * 3600;
     //List<int> sizes = [8, 10, 12, 16];
     //List<double> densities = [0.8, 0.5, 0.2];

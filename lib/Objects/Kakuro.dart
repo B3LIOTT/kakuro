@@ -13,7 +13,7 @@ class Kakuro {
   List possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   List<List<int>> wrongL = [];
   bool continueGame;
-  int score = 0;
+  double score = 0;
   List<List<Carre>> get getBoard {
     return board;
   }
@@ -635,19 +635,18 @@ class Kakuro {
     return true;
   }
 
-
-  /// Fonction qui calcule un score basé sur le nombre de possibilités pour chaque case
+  /// Fonction qui calcule un score basé sur la densité et la taille
   /// @return le score du plateau
-  int calcScore() {
-    int score = 0;
-    for (int row = 1; row < size - 1; row++) {
-      for (int col = 1; col < size - 1; col++) {
-        if (board[row][col].value == 0) {
-          score += getPossibleValuesv2(row, col).length;
+  double calcScore() {
+    double numberOfWhiteSquares = 0;
+    for (int i = 1; i < size - 1; i++) {
+      for (int j = 1; j < size - 1; j++) {
+        if (board[i][j].value == 0) {
+          numberOfWhiteSquares++;
         }
       }
     }
-    return score;
+    return (size * size) + (10 * density - numberOfWhiteSquares);
   }
 
   /// Fonction qui permet d'afficher dans la console le plateau de jeu
