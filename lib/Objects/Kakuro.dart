@@ -710,6 +710,5 @@ void testTime(int n, int size, double density) {
   for (int i = 0; i < n; i++) {
     Kakuro(size, density, false, []);
   }
-  print(
-      'Temps moyen de génération de $n grilles de taille $size : ${stopwatch.elapsedMilliseconds / n} ms');
+  stdout.write("Temps moyen de génération : ${stopwatch.elapsedMilliseconds / n} ms\n");
 }

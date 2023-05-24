@@ -493,7 +493,7 @@ class _GamePageState extends State<GamePage> {
   void GG() async {
     if(_isRanked) { // Mise à jour de la base de donnée
       final Player player = await RankingRepo.currentUser;
-      await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S]);
+      await RankingRepo.updatePlayer(player, _size, _density, [_timerWidget.H, _timerWidget.M, _timerWidget.S], _kwakuro.score);
     }else {
       UserPreferences.clearGame();
     }
