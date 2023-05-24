@@ -1,4 +1,4 @@
-//import 'dart:math';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +19,7 @@ class RankingRepo {
     //List<int> sizes = [8, 10, 12, 16];
     //List<double> densities = [0.8, 0.5, 0.2];
     //final newRP = player.RP + (10 + 5*sizes.indexOf(size) + 3*densities.indexOf(density) +  60 / sqrt(sec)).round();
-    final newRP = player.RP + score/sec;
+    final newRP = player.RP + score/log(sec);
     await _db.doc(FirebaseAuth.instance.currentUser!.uid).update({
       'RP': newRP,
     });
