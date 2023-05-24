@@ -643,7 +643,7 @@ class Kakuro {
     for (int row = 1; row < size - 1; row++) {
       for (int col = 1; col < size - 1; col++) {
         if (board[row][col].value == 0) {
-          score += getPossibleValues(row, col).length;
+          score += getPossibleValuesv2(row, col).length;
         }
       }
     }
