@@ -19,7 +19,7 @@ class RankingRepo {
     //List<int> sizes = [8, 10, 12, 16];
     //List<double> densities = [0.8, 0.5, 0.2];
     //final newRP = player.RP + (10 + 5*sizes.indexOf(size) + 3*densities.indexOf(density) +  60 / sqrt(sec)).round();
-    final newRP = player.RP + score/log(sec);
+    final newRP = player.RP + (score/log(sec)).round();
     await _db.doc(FirebaseAuth.instance.currentUser!.uid).update({
       'RP': newRP,
     });
