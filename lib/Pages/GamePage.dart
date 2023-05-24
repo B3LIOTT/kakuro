@@ -601,7 +601,7 @@ class _GamePageState extends State<GamePage> {
   /*------------------------ Echange de données avec le serveur ------------------------*/
 
   late Socket socket;
-  final String _IP_SERVER = "10.0.2.2";
+  final String _IP_SERVER = "192.168.31.36";
   int _nbRequest = 0;
 
   void connexionHandlerFromCreate(String KEY, int PORT) {
@@ -647,7 +647,7 @@ class _GamePageState extends State<GamePage> {
             style: const TextStyle(color: Colors.black54)),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
             child: Text('OK',
                 style:
                     TextStyle(color: UserPreferences.btnColor, fontSize: 20)),
