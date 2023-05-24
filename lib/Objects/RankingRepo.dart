@@ -1,4 +1,4 @@
-import 'dart:math';
+//import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,8 +16,8 @@ class RankingRepo {
 
   static Future<void> updatePlayer(Player player, int size, double density, List<int> timer, int score) async {
     int sec = timer[2] + timer[1] * 60 + timer[0] * 3600;
-    List<int> sizes = [8, 10, 12, 16];
-    List<double> densities = [0.8, 0.5, 0.2];
+    //List<int> sizes = [8, 10, 12, 16];
+    //List<double> densities = [0.8, 0.5, 0.2];
     //final newRP = player.RP + (10 + 5*sizes.indexOf(size) + 3*densities.indexOf(density) +  60 / sqrt(sec)).round();
     final newRP = player.RP + score/sec;
     await _db.doc(FirebaseAuth.instance.currentUser!.uid).update({

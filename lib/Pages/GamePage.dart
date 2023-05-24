@@ -40,7 +40,6 @@ class _GamePageState extends State<GamePage> {
   late List<double> _opacities;
   late Color _verifyColor;
   late TimerWidget _timerWidget;
-  bool __ = true;
 
   @override
   void initState() {
