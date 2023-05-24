@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,6 +43,7 @@ class _StartPageState extends State<StartPage> {
   late List<List> _kakuroListBySize;
   late String _sourceText;
   bool _continueGame = false;
+  StreamController<bool> _clickController = StreamController();
 
   @override
   void initState() {
@@ -520,7 +523,7 @@ class _StartPageState extends State<StartPage> {
         ));
   }
 
-  Widget playButton() {
+  Widget playButton(snapshot) {
     return SizedBox(
       height: 60,
       width: MediaQuery.of(context).size.width / 2,
@@ -541,7 +544,9 @@ class _StartPageState extends State<StartPage> {
             letterSpacing: 1,
             color: UserPreferences.bgColor,
             fontWeight: FontWeight.w400),
-        onPress: () async {
+        onPress: snapshot.hasData && snapshot.data == false
+            ? () async {
+          _clickController.add(true);
           setState(() {
             _isSlelected = !_isSlelected;
           });
@@ -565,12 +570,13 @@ class _StartPageState extends State<StartPage> {
             Navigator.of(context).push(_gamePageRoute("", 0, widget._source));
           }
           _isSlelected = !_isSlelected;
-        },
+          _clickController.add(false);
+        } : null,
       ),
     );
   }
 
-  Widget rankedButton() {
+  Widget rankedButton(snapshot) {
     return SizedBox(
       height: 60,
       width: MediaQuery.of(context).size.width / 2,
@@ -591,7 +597,9 @@ class _StartPageState extends State<StartPage> {
             letterSpacing: 1,
             color: UserPreferences.bgColor,
             fontWeight: FontWeight.w400),
-        onPress: () async {
+        onPress: snapshot.hasData && snapshot.data == false
+            ? () async {
+          _clickController.add(true);
           setState(() {
             _isSlelected2 = !_isSlelected2;
           });
@@ -620,8 +628,9 @@ class _StartPageState extends State<StartPage> {
               ),
             );
           }
+          _clickController.add(false);
           _isSlelected2 = !_isSlelected2;
-        },
+        } : null,
       ),
     );
   }
@@ -649,9 +658,18 @@ class _StartPageState extends State<StartPage> {
                 ),
               ),
               midWidget(widget._source),
-              (UserPreferences.getGame().isEmpty || widget._source != 0) ? playButton() : Container(),
-              const SizedBox(height: 10),
-              (UserPreferences.getGame().isEmpty && widget._source == 0) ? rankedButton() : Container()
+              StreamBuilder<bool>(
+                  stream: _clickController.stream,
+                  builder: (context, snapshot) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        (UserPreferences.getGame().isEmpty || widget._source != 0) ? playButton(snapshot) : Container(),
+                        const SizedBox(height: 10),
+                        (UserPreferences.getGame().isEmpty && widget._source == 0) ? rankedButton(snapshot) : Container()
+                      ],
+                    );
+                  }),
             ])),
       );
     });
@@ -670,7 +688,6 @@ class _StartPageState extends State<StartPage> {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.ease;
-
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
