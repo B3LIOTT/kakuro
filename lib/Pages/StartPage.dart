@@ -198,6 +198,10 @@ class _StartPageState extends State<StartPage> {
                       children: [
                         Container(
                             margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
+                            constraints: const BoxConstraints(
+                              maxWidth: 60,
+                              maxHeight: 60,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFE6B0B0),
                               shape: BoxShape.circle,
@@ -207,10 +211,9 @@ class _StartPageState extends State<StartPage> {
                               ),
                             ),
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.clear,
-                                color: const Color(0xFFB64549),
-                                size: MediaQuery.of(context).size.width / 15,
+                                color: Color(0xFFB64549),
                               ),
                               onPressed: () {
                                 uSure();
@@ -219,6 +222,10 @@ class _StartPageState extends State<StartPage> {
                             )),
                         Container(
                             margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
+                            constraints: const BoxConstraints(
+                              maxWidth: 60,
+                              maxHeight: 60,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFC4EDC8),
                               shape: BoxShape.circle,
@@ -228,10 +235,9 @@ class _StartPageState extends State<StartPage> {
                               ),
                             ),
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.check,
-                                color: const Color(0xFF5ECC69),
-                                size: MediaQuery.of(context).size.width / 15,
+                                color: Color(0xFF5ECC69),
                               ),
                               onPressed: () {
                                 _continueGame = true;
@@ -524,9 +530,13 @@ class _StartPageState extends State<StartPage> {
   }
 
   Widget playButton(snapshot) {
-    return SizedBox(
+    return Container(
       height: 60,
       width: MediaQuery.of(context).size.width / 2,
+      constraints: const BoxConstraints(
+        maxWidth: 200,
+        maxHeight: 100,
+      ),
       child: AnimatedButton(
         height: 60,
         width: MediaQuery.of(context).size.width / 2,
@@ -577,9 +587,13 @@ class _StartPageState extends State<StartPage> {
   }
 
   Widget rankedButton(snapshot) {
-    return SizedBox(
+    return Container(
       height: 60,
       width: MediaQuery.of(context).size.width / 2,
+      constraints: const BoxConstraints(
+        maxWidth: 200,
+        maxHeight: 100,
+      ),
       child: AnimatedButton(
         height: 60,
         width: MediaQuery.of(context).size.width / 2,
