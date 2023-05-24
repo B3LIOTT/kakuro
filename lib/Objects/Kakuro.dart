@@ -65,7 +65,7 @@ class Kakuro {
   void generateBlackSquares() {
     // Pour être sur qu'il n'y aura pas de cases vide, on met (density * (size - 2)²) * 20% carrés noirs
     // placés aléatoirement
-    int nbBlackSquares = (density * (size - 2) * (size - 2) * 0.2).round();
+    int nbBlackSquares = (0.17 * density * (size - 2) * (size - 2)).round();
     int x0, y0;
     for (int i = 0; i < nbBlackSquares; i++) {
       x0 = Random().nextInt(size - 2) + 1;
