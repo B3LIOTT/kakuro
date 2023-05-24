@@ -11,10 +11,9 @@ class Kakuro {
   int size;
   double density;
   List possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  List valueUsed = [];
   List<List<int>> wrongL = [];
   bool continueGame;
-
+  int score = 0;
   List<List<Carre>> get getBoard {
     return board;
   }
@@ -49,6 +48,7 @@ class Kakuro {
       fillBoard(); // On remplit les cases blanches avec des chiffres
       fillSums(); // On génère les sommes
       removeValues(); // On supprime les chiffres pour laisser des cases blanches vides
+      score = calcScore();
     } else if (continueGame) {
       size = UserPreferences.getSize;
       density = UserPreferences.getDensity;
@@ -636,6 +636,20 @@ class Kakuro {
   }
 
 
+  /// Fonction qui calcule un score basé sur le nombre de possibilités pour chaque case
+  /// @return le score du plateau
+  int calcScore() {
+    int score = 0;
+    for (int row = 1; row < size - 1; row++) {
+      for (int col = 1; col < size - 1; col++) {
+        if (board[row][col].value == 0) {
+          score += getPossibleValues(row, col).length;
+        }
+      }
+    }
+    return score;
+  }
+
   /// Fonction qui permet d'afficher dans la console le plateau de jeu
   void printBoard() {
     for (int i = 0; i < size; i++) {
@@ -698,26 +712,4 @@ void testTime(int n, int size, double density) {
   }
   print(
       'Temps moyen de génération de $n grilles de taille $size : ${stopwatch.elapsedMilliseconds / n} ms');
-}
-
-/// Fonction main de tests
-void main() {
-  /*
-  var kakuro = Kakuro(12, 0.5);
-  kakuro.printBoard();
-  stdout.write(kakuro.isSolution());
-  kakuro.removeValues();
-  stdout.write("\n");
-  kakuro.printBoard();
-  stdout.write(kakuro.isSolution());
-  kakuro.solveKakuro();
-  stdout.write("\n");
-  kakuro.printBoard();
-  stdout.write(kakuro.isSolution());*/
-
-  testTime(100, 8, 0.5);
-  testTime(100, 10, 0.5);
-  testTime(100, 12, 0.5);
-  testTime(100, 14, 0.5);
-  testTime(100, 16, 0.5);
 }
