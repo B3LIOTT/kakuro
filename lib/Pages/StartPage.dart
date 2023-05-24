@@ -190,7 +190,7 @@ class _StartPageState extends State<StartPage> {
                                   : AppLocalizations.of(context)!.hard}",
                       style: TextStyle(
                           color: UserPreferences.btnColor,
-                          fontSize: 18
+                          fontSize: 18,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -395,7 +395,7 @@ class _StartPageState extends State<StartPage> {
               _diffList[_diffInd],
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: (MediaQuery.of(context).size.width / 12 > 50) ? 50 : MediaQuery.of(context).size.width / 12,
                 color: UserPreferences.btnColor,
                 fontWeight: FontWeight.w400,
               ),
@@ -465,7 +465,7 @@ class _StartPageState extends State<StartPage> {
               _sizeList[_sizeInd],
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: (MediaQuery.of(context).size.width / 12 > 50) ? 50 : MediaQuery.of(context).size.width / 12,
                 color: UserPreferences.btnColor,
                 fontWeight: FontWeight.w400,
               ),
@@ -518,16 +518,15 @@ class _StartPageState extends State<StartPage> {
   }
 
   Widget midWidget(int source) {
-    return Container(
-        color: UserPreferences.bgColor,
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height / 1.5,
-        width: MediaQuery.of(context).size.width,
+    return Expanded(
+        child : Container(
+            color: UserPreferences.bgColor,
+            alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: childrenList(source),
-        ));
+        )));
   }
 
   Widget playButton(snapshot) {
@@ -658,7 +657,7 @@ class _StartPageState extends State<StartPage> {
         resizeToAvoidBottomInset: false,
         backgroundColor: UserPreferences.bgColor,
         body: SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height-10,
             width: MediaQuery.of(context).size.width,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -666,7 +665,8 @@ class _StartPageState extends State<StartPage> {
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).padding.top + 15,
                     right: 20,
-                    left: 20),
+                    left: 20,
+                ),
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: [returnBtn(), TopMenu("StartPage")],
@@ -681,8 +681,7 @@ class _StartPageState extends State<StartPage> {
                       children: [
                         (UserPreferences.getGame().isEmpty || widget._source != 0) ? playButton(snapshot) : Container(),
                         const SizedBox(height: 10),
-                        (UserPreferences.getGame().isEmpty && widget._source == 0) ? rankedButton(snapshot) : Container()
-                      ],
+                        (UserPreferences.getGame().isEmpty && widget._source == 0) ? rankedButton(snapshot) : Container(),],
                     );
                   }),
             ])),
