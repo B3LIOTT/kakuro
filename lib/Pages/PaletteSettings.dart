@@ -82,14 +82,16 @@ class _PaletteSettingsState extends State<PaletteSettings> {
 
   Widget palette() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
+      constraints: const BoxConstraints(
+        maxWidth: 325,
+        maxHeight: 175,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: UserPreferences.bgBtn,
       ),
       child: GridView.count(
         crossAxisCount: 4,
-        shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(20),
         crossAxisSpacing: 15,
@@ -144,7 +146,7 @@ class _PaletteSettingsState extends State<PaletteSettings> {
               image: AssetImage(UserPreferences.logoPath),
               height: MediaQuery.of(context).size.height / 3.3),
         ),
-        palette()
+        palette(),
       ])),
     );
     throw UnimplementedError();

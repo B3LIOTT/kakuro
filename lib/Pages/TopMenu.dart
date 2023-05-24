@@ -52,8 +52,13 @@ class _TopMenuState extends State<TopMenu> {
         stream: _clickController.stream,
         builder: (context, snapshot) {
           return Container(
-              height: MediaQuery.of(context).size.width / 6,
+              height: MediaQuery.of(context).size.height / 12,
               width: MediaQuery.of(context).size.width / 2,
+              constraints: const BoxConstraints(
+                maxWidth: 200,
+                maxHeight: 100,
+                minHeight: 60,
+              ),
               decoration: BoxDecoration(
                 color: UserPreferences.bgBtn,
                 borderRadius: BorderRadius.circular(15),

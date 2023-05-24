@@ -41,9 +41,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget bouton(String text, int i, snapshot) {
-    return SizedBox(
+    return Container(
         height: 60,
         width: MediaQuery.of(context).size.width / 2,
+        constraints: const BoxConstraints(
+          maxWidth: 200,
+          maxHeight: 100,
+        ),
         child: AnimatedButton(
           height: 60,
           width: MediaQuery.of(context).size.width / 2,

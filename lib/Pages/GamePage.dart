@@ -357,6 +357,10 @@ class _GamePageState extends State<GamePage> {
           color: UserPreferences.bgBtn,
           borderRadius: BorderRadius.circular(20),
         ),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.3,
+          maxWidth: MediaQuery.of(context).size.height * 0.5,
+        ),
         child: GridView.count(
           crossAxisCount: 5,
           shrinkWrap: true,
@@ -377,13 +381,15 @@ class _GamePageState extends State<GamePage> {
                       ),
                     ),
                     child: IconButton(
-                      icon: Text(
+                      icon: LayoutBuilder(builder: (ctx, constraints) {
+                        return Text(
                         (index != 9) ? (index + 1).toString() : "X",
                         style: TextStyle(
                           color: UserPreferences.btnColor,
-                          fontSize: MediaQuery.of(context).size.width / 15,
+                          fontSize: constraints.maxHeight * 0.7,
                         ),
-                      ),
+                      );
+                      }),
                       onPressed: () {
                         updateValue(index + 1);
                       },
@@ -396,6 +402,12 @@ class _GamePageState extends State<GamePage> {
     return Container(
         height: MediaQuery.of(context).size.width / 8,
         margin: const EdgeInsets.only(bottom:10),
+        constraints: const BoxConstraints(
+          maxHeight: 60,
+          maxWidth: 60,
+          minHeight: 50,
+          minWidth: 50,
+        ),
         decoration: BoxDecoration(
           color: UserPreferences.bgBtn,
           shape: BoxShape.circle,
@@ -408,7 +420,6 @@ class _GamePageState extends State<GamePage> {
           icon: Icon(
             Icons.help,
             color: UserPreferences.btnColor,
-            size: MediaQuery.of(context).size.width / 15,
           ),
           onPressed: () {
            _kwakuro.solveKakuro();
@@ -419,6 +430,12 @@ class _GamePageState extends State<GamePage> {
   Widget verifyBtn() {
     return Container(
       height: MediaQuery.of(context).size.width / 8,
+        constraints: const BoxConstraints(
+          maxHeight: 60,
+          maxWidth: 60,
+          minHeight: 50,
+          minWidth: 50,
+        ),
         margin: const EdgeInsets.only(bottom:10),
         decoration: BoxDecoration(
           color: UserPreferences.bgBtn,
@@ -432,7 +449,6 @@ class _GamePageState extends State<GamePage> {
           icon: Icon(
             Icons.check,
             color: UserPreferences.btnColor,
-            size: MediaQuery.of(context).size.width / 15,
           ),
           onPressed: () {
             verify();

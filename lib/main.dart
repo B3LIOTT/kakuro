@@ -21,7 +21,7 @@ Future<void> main() async {
     DeviceOrientation.portraitDown
   ]);
 
-  await FlutterDisplayMode.setHighRefreshRate(); // Permet d'aller au dela de 60Hz
+  //await FlutterDisplayMode.setHighRefreshRate(); // Permet d'aller au dela de 60Hz
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // Permet d'initialiser Firebase
 
