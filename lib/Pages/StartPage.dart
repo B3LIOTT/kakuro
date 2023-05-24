@@ -78,6 +78,7 @@ class _StartPageState extends State<StartPage> {
         "lib/assets/svgs/8x8_hard.svg"
       ]
     ];
+    _clickController.add(false);
   }
 
   void initLocaliz() {
