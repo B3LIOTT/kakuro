@@ -43,6 +43,8 @@ class _StartPageState extends State<StartPage> {
   late List<List> _kakuroListBySize;
   late String _sourceText;
   bool _continueGame = false;
+  String noHyphenTxt = "";
+  String oldTxt = "";
   StreamController<bool> _clickController = StreamController();
 
   @override
@@ -313,10 +315,40 @@ class _StartPageState extends State<StartPage> {
                 textCapitalization: TextCapitalization.characters,
                 textAlign: TextAlign.center,
                 cursorColor: UserPreferences.btnColor,
+                maxLength: 9,
+                controller: textFieldController,
+                onChanged:(text) {
+                  setState(() {
+                    int position = textFieldController.selection.baseOffset;
+                    noHyphenTxt = text.replaceAll("-", "");
+                    if (noHyphenTxt.length > 4) {
+                      textFieldController.text = noHyphenTxt.substring(0, 4) + "-" + noHyphenTxt.substring(4, noHyphenTxt.length);
+                      try {
+                        if (position == 0 && oldTxt.length > text.length) {
+                          textFieldController.selection = TextSelection.fromPosition(const TextPosition(offset:0));
+                        }
+                        else {
+                          textFieldController.selection =
+                              TextSelection.fromPosition(
+                                  TextPosition(offset: position));
+                        }
+                      } catch (e) {
+                        textFieldController.selection = TextSelection.fromPosition(TextPosition(offset: position));
+                      }
+                    }
+                    else if (noHyphenTxt.length == 4 && oldTxt.length > text.length && textFieldController.text.contains("-")) {
+                        textFieldController.text = noHyphenTxt;
+                        textFieldController.selection = TextSelection.fromPosition(TextPosition(offset: position - 1));
+                    }
+                    if (!oldTxt.contains("-") && textFieldController.text.contains("-")) {
+                      textFieldController.selection = TextSelection.fromPosition(TextPosition(offset: position + 1));
+                    }
+                    oldTxt = textFieldController.text;
+                  });
+                },
                 style: const TextStyle(
                   fontSize: 35,
                 ),
-                controller: textFieldController,
                 decoration: InputDecoration(
                     alignLabelWithHint: true,
                     isDense: false,
