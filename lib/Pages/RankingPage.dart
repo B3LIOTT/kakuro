@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../Objects/Player.dart';
 import '../Objects/RankingRepo.dart';
 import '../Objects/UserPreferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RankingPage extends StatefulWidget {
   const RankingPage({super.key});
@@ -44,7 +45,7 @@ class _RankingPageState extends State<RankingPage> {
               child: Stack(
                 children: [
                   returnBtn(),
-                  Center(child:Text("Ranking", style: TextStyle(color: UserPreferences.btnColor, fontSize: 30, fontWeight: FontWeight.bold),)),
+                  Center(child:Text(AppLocalizations.of(context)!.ranking, style: TextStyle(color: UserPreferences.btnColor, fontSize: 30, fontWeight: FontWeight.bold),)),
                 ],
               ),
             ),
@@ -89,7 +90,15 @@ class _RankingPageState extends State<RankingPage> {
                   ));
                 },
                 itemCount: _rankList.length,
-            ) : const Center(child: Text("PA KONEKT")),
+            ) : Center(
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: CircularProgressIndicator(
+                    color: UserPreferences.btnColor,
+                  ),
+                )
+              )
             ),
           ])),
     );

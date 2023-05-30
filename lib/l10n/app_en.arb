@@ -43,7 +43,7 @@
     "@d_desc": {
         "description": "Difficulty description"
     },
-  "k_desc" : "Ask the person who created the game for the code, it is in the following format:\nXXXX-YYYY\nX being a number and Y being a letter.",
+  "k_desc" : "Request the code from the person who created the game, it is in the following format:\nXXXX-YYYY\nX being a number and Y being a letter.",
     "@k_desc": {
         "description": "Key description"
     },
@@ -98,5 +98,25 @@
     "defeat" : "DEFEAT",
     "@defeat_desc" : {
         "description" : "Defeat text"
+    },
+  "ranked" : "RANKED",
+    "@ranked_desc" : {
+        "description" : "Ranked text"
+    },
+  "error" : "ERROR",
+    "@error_desc" : {
+        "description" : "Error text"
+    },
+  "connection_requirement" : "You need to be connected to the internet and to link your Google account in order to play in ranked mode.",
+    "@connection_requirement_desc" : {
+        "description" : "Connection requirement text"
+    },
+  "ranking" : "RANKING",
+    "@ranking_desc" : {
+        "description" : "Ranking text"
+    },
+  "not_connected" : "You are not connected to the internet.",
+    "@not_connected_desc" : {
+        "description" : "Not connected text"
     }
 }

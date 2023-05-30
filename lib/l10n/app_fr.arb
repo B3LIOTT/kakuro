@@ -23,5 +23,9 @@
   "game_finished_1" : "Félicitations : Vous avez terminé ce Kakuro",
   "game_finished_2" : "en",
   "victory" : "VICTOIRE",
-  "defeat" : "DÉFAITE"
+  "defeat" : "DÉFAITE",
+  "ranked" : "CLASSÉ",
+  "error" : "ERREUR",
+  "connection_requirement" : "Vous devez être connecté à internet et lier votre compte Google pour jouer en ligne",
+  "ranking" : "CLASSEMENT"
 }

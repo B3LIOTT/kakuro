@@ -629,7 +629,7 @@ class _StartPageState extends State<StartPage> {
       child: AnimatedButton(
         height: 60,
         width: MediaQuery.of(context).size.width / 2,
-        text: "RANKED",
+        text: AppLocalizations.of(context)!.ranked,
         selectedTextColor: UserPreferences.btnColor,
         transitionType: TransitionType.LEFT_TO_RIGHT,
         isSelected: _isSlelected2,
@@ -657,11 +657,11 @@ class _StartPageState extends State<StartPage> {
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 backgroundColor: UserPreferences.bgColor,
-                title: Text("ERROR",
+                title: Text(AppLocalizations.of(context)!.error,
                     style: TextStyle(
                         color: UserPreferences.btnColor, fontWeight: FontWeight.bold)),
                 content: Text(
-                    "You need to be connected to the internet and to be connected via Google to play ranked",
+                    AppLocalizations.of(context)!.connection_requirement,
                     style: const TextStyle(color: Colors.black54)),
                 actions: <Widget>[
                   TextButton(

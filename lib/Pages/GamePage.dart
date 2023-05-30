@@ -140,15 +140,16 @@ class _GamePageState extends State<GamePage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(3),
+          padding: EdgeInsets.all(1/_size*20),
           child: Align(
             alignment: Alignment.topRight,
-            child: Text(
-              c.horizontalSum.toString(),
-              style: TextStyle(
-                fontSize: 104 / _size,
-              ),
-            ),
+            child: LayoutBuilder(builder: (ctx, constraints) {
+              return Text(
+                c.horizontalSum.toString(),
+                style: TextStyle(
+                  fontSize: constraints.maxHeight * 0.4,
+                ),
+              ); }),
           ),
         ),
       );
@@ -176,15 +177,16 @@ class _GamePageState extends State<GamePage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(3),
+          padding: EdgeInsets.all(1/_size * 20),
           child: Align(
             alignment: Alignment.bottomLeft,
-            child: Text(
-              c.verticalSum.toString(),
-              style: TextStyle(
-                fontSize: 104 / _size,
-              ),
-            ),
+            child: LayoutBuilder(builder: (ctx, constraints) {
+              return Text(
+                c.verticalSum.toString(),
+                style: TextStyle(
+                  fontSize: constraints.maxHeight * 0.4,
+                ),
+              ); }),
           ),
         ),
       );
@@ -272,7 +274,13 @@ class _GamePageState extends State<GamePage> {
                     ),
                   ),
                   Center(
-                    child: Text(c.value.toString()),
+                    child: LayoutBuilder(builder: (ctx, constraints) {
+                      return Text(
+                        (c.value==0)?'':c.value.toString(),
+                        style: TextStyle(
+                          fontSize: constraints.maxHeight * 0.5,
+                        ),
+                      ); }),
                   )
                 ],
               )),
@@ -292,27 +300,29 @@ class _GamePageState extends State<GamePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(3),
+              padding: EdgeInsets.all(1/_size * 20),
               child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Text(
-                  c.verticalSum.toString(),
-                  style: TextStyle(
-                    fontSize: 104 / _size,
-                  ),
-                ),
+                child: LayoutBuilder(builder: (ctx, constraints) {
+                  return Text(
+                    c.verticalSum.toString(),
+                    style: TextStyle(
+                      fontSize: constraints.maxHeight * 0.4,
+                    ),
+                  ); }),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(3),
+              padding: EdgeInsets.all(1/_size * 20),
               child: Align(
                 alignment: Alignment.topRight,
-                child: Text(
-                  c.horizontalSum.toString(),
-                  style: TextStyle(
-                    fontSize: 104 / _size,
+                child: LayoutBuilder(builder: (ctx, constraints) {
+                return Text(
+                c.horizontalSum.toString(),
+                style: TextStyle(
+                fontSize: constraints.maxHeight * 0.4,
                   ),
-                ),
+                ); }),
               ),
             )
           ],
