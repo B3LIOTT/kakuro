@@ -8,7 +8,7 @@ class RankingRepo {
   static final _db = FirebaseFirestore.instance.collection('Ranking');
   static final _sorted_db = _db.orderBy("RP", descending: true);
 
-  static bool get isConnected => _db.snapshots().isBroadcast;
+  static bool get isConnected => (FirebaseAuth.instance.currentUser != null);
 
   static Stream<List<Player>> get rankingList {
     return _sorted_db.snapshots().map((snapshot) => snapshot.docs.map((doc) => Player(doc['username'], doc['RP'])).toList());
