@@ -1,14 +1,22 @@
 import 'dart:math';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'Player.dart';
 
 class RankingRepo {
   static final _db = FirebaseFirestore.instance.collection('Ranking');
   static final _sorted_db = _db.orderBy("RP", descending: true);
+  static final Connectivity _connectivity = Connectivity();
 
-  static bool get isConnected => (FirebaseAuth.instance.currentUser != null);
+  static Future<bool> isConnected() async {
+    late ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    result = await _connectivity.checkConnectivity();
+    print(result);
+    return (result != ConnectivityResult.none);
+  }
 
   static Stream<List<Player>> get rankingList {
     return _sorted_db.snapshots().map((snapshot) => snapshot.docs.map((doc) => Player(doc['username'], doc['RP'])).toList());

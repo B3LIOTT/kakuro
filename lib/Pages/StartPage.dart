@@ -650,7 +650,8 @@ class _StartPageState extends State<StartPage> {
             _isSlelected2 = !_isSlelected2;
           });
           await Future.delayed(const Duration(milliseconds: 500));
-          if(RankingRepo.isConnected && FirebaseAuth.instance.currentUser != null) {
+          bool con = await RankingRepo.isConnected();
+          if(con && FirebaseAuth.instance.currentUser != null) {
             Navigator.of(context).push(_gamePageRoute("", 0, 10));
           } else {
             showDialog<void>(

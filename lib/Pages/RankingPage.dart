@@ -13,6 +13,18 @@ class RankingPage extends StatefulWidget {
 }
 
 class _RankingPageState extends State<RankingPage> {
+  bool con = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkCon();
+  }
+
+  Future<void> checkCon() async {
+    con = await RankingRepo.isConnected();
+    setState((){});
+  }
 
   Widget returnBtn() {
     return Container(
@@ -50,7 +62,7 @@ class _RankingPageState extends State<RankingPage> {
               ),
             ),
             Expanded(
-              child: RankingRepo.isConnected? ListView.builder(
+              child: con? ListView.builder(
                 itemBuilder: (context, index) {
                   return Padding(
                       padding: const EdgeInsets.all(10),
