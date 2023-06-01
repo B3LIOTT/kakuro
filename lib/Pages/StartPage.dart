@@ -748,7 +748,7 @@ class _StartPageState extends State<StartPage> {
 
   /*-------------------------------------Creation de partie multi-------------------------------------*/
   late Socket socket;
-  final String _IP_SERVER = "192.168.31.36";
+  final String _IP_SERVER = "192.168.43.42";
   final int _MAIN_SERVER_PORT = 8080;
 
   dynamic createParty() async {
