@@ -7,7 +7,7 @@ import 'Carre.dart';
 
 class Kakuro {
   late List<List<Carre>> board;
-  late List<List<Carre>> reveivedBoard;
+  late List<List<Carre>> receivedBoard;
   int size;
   double density;
   List possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -22,8 +22,8 @@ class Kakuro {
   /// size: taille du kakuro
   /// density: densité du kakuro
   /// board: tableau de carrés
-  Kakuro(this.size, this.density, this.continueGame, this.reveivedBoard) {
-    if (!continueGame && reveivedBoard.isEmpty) {
+  Kakuro(this.size, this.density, this.continueGame, this.receivedBoard) {
+    if (!continueGame && receivedBoard.isEmpty) {
       board = List.generate(
           size, (i) => List.filled(size, Carre(0, 0, 0), growable: false),
           growable: false);
@@ -53,8 +53,8 @@ class Kakuro {
       size = UserPreferences.getSize;
       density = UserPreferences.getDensity;
       board = UserPreferences.getGame();
-    } else if (reveivedBoard.isNotEmpty) {
-      board = reveivedBoard;
+    } else if (receivedBoard.isNotEmpty) {
+      board = receivedBoard;
     }
   }
 
